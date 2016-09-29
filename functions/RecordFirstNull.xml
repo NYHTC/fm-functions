@@ -1,0 +1,45 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="47" functionArity="3" visible="True" parameters="_field;start;end" name="RecordFirstNull">
+		<Calculation><![CDATA[// RecordFirstNull ( _field; start; end )
+// version 1.0, Erik Shagdar, NYHTC
+
+/* 
+	Assuming all the records in the current set are such that all non-null values for a field come before all null values, find the first record that has a null value for the specified field. 
+
+	Uses the binary search algorithm where the first null record is the specified value. Has Big-O of log ( n )
+
+
+NOTE:
+	the set must be sorted by the _field for this function to work properly
+
+
+VERSION HISTORY:
+	1.0 - 2016-09-01 ( eshagdar ): first created.
+*/
+
+
+Let ( [
+		start = If ( IsEmpty ( start ); 1; start );
+		end = If ( IsEmpty ( end ); Get ( FoundCount ); end );
+		mid = Floor ( ( start + end ) / 2 );
+
+		midWanted = IsEmpty ( GetNthRecord ( _field ; mid ) )
+	];
+
+	Case ( 
+		not midWanted and mid = end;
+		"";     /* there is no wanted record */
+
+		not midWanted;
+		RecordFirstNull ( _field; mid + 1; end );     /* search to the right of the middle */
+
+		mid = start and midWanted;
+		mid;     /* found it */
+
+		// so mid wanted and mid ≠ start
+		RecordFirstNull ( _field; start; mid )     /* search to the left of the middle */
+	)	
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

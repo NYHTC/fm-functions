@@ -1,0 +1,21 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="60" functionArity="0" visible="True" parameters="" name="UniqueID">
+		<Calculation><![CDATA[// UniqueID (  )
+// version 1.1, NYHTC
+
+/*
+	This custom function is a reserved keyword function and can be used as a wrapper (like an alias) or reference to any other custom function used to generate a UUID (Universally unique identifier)
+	http://en.wikipedia.org/wiki/Uuid
+	http://filemakerstandards.org/pages/viewpage.action?pageId=557138
+
+
+HISTORY:
+	1.1 - 2015-11-16 ( eshagdar ): updated from UUIDTimeNIC to UUIDTimeDevice.
+	1.0 - 201x-xx-xx ( xxxx ): created
+ */
+
+
+UUIDTimeDevice    /* change this to another UUID function if desired */]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

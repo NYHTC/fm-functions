@@ -1,0 +1,45 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="20" functionArity="1" visible="True" parameters="dict" name="DictFirst">
+		<Calculation><![CDATA[// DictFirst( dict )
+// version 1.4, NYHTC
+
+/*
+	Gets the NAME of the first key-value pair from a Dictionary object. 
+
+
+REQUIRES:
+	DictUnescape
+
+
+HISTORY:
+	1.4 - 2015-12-01 ( eshagdar ): added requirements section
+	1.3 - 201x-xx-xx ( xxxxx ): Reformatted to match newer standards.
+	1.2 - 201x-xx-xx ( xxxxx ): Reformatted to match standards.
+	1.1 - 201x-xx-xx ( xxxxx ): Properly unescapes the name of the item, since returning the escaped name is wrong. 
+	1.0 - 201x-xx-xx ( xxxxx ): first created.
+*/
+
+
+Let ( [
+		startValue = "<:"
+		; endValue = ":="
+		; positionOfStartValue = Position ( dict ; startValue ; 1 ; 1 )
+		; endOfStartValue = 
+			If ( positionOfStartValue > 0 
+				; positionOfStartValue  + Length( startvalue )
+				; -1 
+			)
+		; beginningOfEndValue = Position ( dict; endValue; endOfStartValue; 1 )
+		; found = beginningOfEndValue > -1 and endOfStartValue > -1
+		; lengthFoundValue = beginningOfEndValue - endOfStartValue
+		; foundValue = Middle ( dict; endOfStartValue ; lengthFoundValue )
+	];
+
+	If ( found 
+		; DictUnescape( foundValue ) 
+		; "" 
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

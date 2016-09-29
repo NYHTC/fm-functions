@@ -1,0 +1,37 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="58" functionArity="3" visible="True" parameters="sourceText;beforeText;afterText" name="TextBetween">
+		<Calculation><![CDATA[// TextBetween ( sourceText; beforeText; afterText )
+// version 1.1, Daniel A. Shockley
+
+/* 
+	Extracts text found between (not including) the before and after text. If before and after are not present, return nothing. 
+
+
+HISTORY: 
+	1.1 - reformatted calc for legibility. 
+	1.0 - original version. 
+*/
+
+Let ( [ 
+		foundTextBegins = 
+			Middle ( 
+				sourceText
+				; Position ( sourceText; beforeText; 1; 1 ) + Length ( beforeText )
+				; Length ( sourceText ) 
+			)
+		];
+
+	Case ( 
+		PatternCount ( sourceText; beforeText ) = 0
+		; ""
+		;
+		PatternCount ( foundTextBegins; afterText ) = 0
+		; ""
+		;
+		Left ( foundTextBegins; Position ( foundTextBegins; afterText; 1; 1 ) - 1 )
+	)
+
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

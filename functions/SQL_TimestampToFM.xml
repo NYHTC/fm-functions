@@ -1,0 +1,53 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="53" functionArity="1" visible="True" parameters="sqlTimestamp" name="SQL_TimestampToFM">
+		<Calculation><![CDATA[// SQL_TimestampToFM ( sqlTimestamp )
+// version 1.2, Erik Shagdar, NYHTC
+
+/*
+	Converts a SQL timestamp into a FileMaker timestamp
+
+
+VERSION HISTORY:
+	1.2 - 2016-06-27-dshockley: declaration fixed. 
+	1.1 - Reformatted to match newer standards.
+	1.0 - Created, modified function from SQL_DateToFM
+*/
+
+
+Let ( [
+	sqlTimestamp = 
+		If ( LeftWords ( sqlTimestamp; 1 ) ≠ "DATE";
+			sqlTimestamp;
+			RightWords ( sqlTimestamp; WordCount ( sqlTimestamp ) - 1 )
+		);
+	sqlTimestamp = 
+		Substitute ( 
+			sqlTimestamp; 
+			[ "-"; "¶" ];
+			[ " "; ¶ ];
+			[ ":"; ¶ ]
+		 );
+	fmTimestamp = 
+		If ( IsEmpty ( sqlTimestamp ); 
+			GetAsTimestamp ( "" ); 
+			Timestamp ( 
+				Date ( 
+					GetValue ( sqlTimestamp; 2 ); 
+					GetValue ( sqlTimestamp; 3 ); 
+					GetValue ( sqlTimestamp; 1 ) 
+				);
+				Time (
+					GetValue ( sqlTimestamp; 4 ); 
+					GetValue ( sqlTimestamp; 5 ); 
+					GetValue ( sqlTimestamp; 6 )
+				)
+			)
+		)
+	]; 
+
+	fmTimestamp
+
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

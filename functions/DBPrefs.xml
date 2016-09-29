@@ -1,0 +1,33 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="17" functionArity="1" visible="True" parameters="prefName" name="DBPrefs">
+		<Calculation><![CDATA[// DBPrefs ( prefName )
+// version 1.0, Andrew Morgan, Dan Shockley, Erik Shagdar, NYHTC
+
+/*
+	Send in a preference name. Expects a _DBPrefs_Data fucntion to exist.
+	Returns a value of preference.
+
+
+REQUIRES:
+	_DBPrefs_Data
+	DictGet
+
+
+HISTORY ( recent at top ):
+	1.0 - 2015-10-13 ( amorgan ): first created
+*/
+
+
+Let ( [
+		  prefName = If ( IsEmpty ( prefName ) ; "help" ; prefName )
+		; dictPrefs = _DBPrefs_Data
+	];
+
+	If ( prefName = "help"
+		; "Below is a list of available commands¶¶" & DictListKeys ( dictPrefs )
+		; DictGet ( dictPrefs ; prefName )
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

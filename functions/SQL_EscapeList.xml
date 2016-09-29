@@ -1,0 +1,39 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="388" functionArity="1" visible="True" parameters="listOfValues" name="SQL_EscapeList">
+		<Calculation><![CDATA[// SQL_EscapeList ( listOfValues )
+// version 1.2, Erik Shagdar, NYHTC
+
+/* 
+	Escapes a list of string to work within SQL
+
+
+REQUIRES:
+	SQL_EscapeString
+	ValueRemove
+
+
+VERSION HISTORY:
+	1.0 - 2016-04-21 ( eshagdar ): initial version.
+*/
+
+
+Let ( [
+		firstRawValue = GetValue ( listOfValues; 1 );
+		firstEscapedValue = 
+			If ( IsEmpty ( firstRawValue ); 
+				""; 
+				SQL_EscapeString ( firstRawValue ) 
+			);
+
+		remainingValues = 
+			If ( IsEmpty ( listOfValues ); 
+				""; 
+				ValueRemove ( listOfValues ; firstRawValue ) 
+			)
+	];
+
+	firstEscapedValue & If ( IsEmpty ( remainingValues ); ""; ", " & SQL_EscapeList ( remainingValues ) )
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

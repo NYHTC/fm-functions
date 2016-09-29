@@ -1,0 +1,37 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="29" functionArity="1" visible="True" parameters="fieldRef" name="FieldNameShort">
+		<Calculation><![CDATA[// FieldNameShort ( fieldRef )
+// version 1.2, Erik Shagdar
+
+/*
+	Get the simple field name (without the Table name and double-colon included ). Can pass in either a reference to the field OR a fully-qualified name as a string. 
+
+
+HISTORY:
+	1.2 - 201x-xx-xx ( eshagdar ): Reformatted to match newer standards.
+	1.1 - 201x-xx-xx ( xxxxx ): 
+	1.0 - 201x-xx-xx ( xxxxx ): first created.
+*/
+
+
+Let( [
+	fieldNameFull = 
+		If ( Length( FieldType ( Get( FileName ) ; fieldRef ) ) > 0
+			/* if the 'FieldType' function gets a value, then the 'fieldRef' passed in was a STRING, not a field reference, so just use it as sent. */
+			; fieldRef
+
+			/* need to get the NAME as a string from the reference. */
+			; GetFieldName ( fieldRef )
+		)
+
+	];
+
+	Right ( 
+		fieldNameFull
+		; Length ( fieldNameFull ) - Position ( fieldNameFull; "::"; 1; 1 ) - 1 
+	)
+
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

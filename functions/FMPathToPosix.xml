@@ -1,0 +1,40 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="37" functionArity="1" visible="True" parameters="fmPath" name="FMPathToPosix">
+		<Calculation><![CDATA[// FMPathToPosix ( fmPath )
+// version 1.3, Shockley/Shagdar, NYHTC
+
+/* 
+	Convert ANY FileMaker-style path to POSIX path:
+	handles file, filemac, filewin, image, imagemac, imagein
+	the 'fmPath' parameter MUST be an ABSOLUTE path, not relative, nor network URL
+
+
+HISTORY:
+	1.3 - 201x-xx-xx ( xxxxx ): Reformatted to match newer standards.
+	1.2 - 2015-02-23 ( eshagdar ): reformatted
+	1.1 - 201x-xx-xx ( xxxxx ): 
+	1.0 - 201x-xx-xx ( xxxxx ): first created.
+*/
+
+
+Let ( [
+		separator = "/";
+		prefix = Left ( fmPath; Position ( fmPath; ":"; 1; 1 ) );
+		prefixLength = 
+			If ( PatternCount ( "¶file:¶filemac:¶filewin:¶image:¶imagemac:¶imagewin:¶"; "¶" & prefix & "¶") > 0
+				; Length ( prefix )
+				; 0 
+			);
+		driveAndPath = Right ( fmPath; Length ( fmPath ) - prefixLength - 1 );
+		driveName = Left ( driveAndPath; Position ( driveAndPath; separator; 1; 1) - 1 )
+
+	]; 
+
+	If ( "/" & driveName & "/" <> Get( SystemDrive )
+		; "/Volumes/" & driveName & Right ( driveAndPath; Length ( driveAndPath ) - Position ( driveAndPath; separator; 1; 1 ) + 1 )
+		; Right ( driveAndPath; Length ( driveAndPath ) - Position ( driveAndPath; separator; 1; 1 ) + 1 )
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

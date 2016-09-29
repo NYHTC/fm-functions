@@ -1,0 +1,32 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="2" functionArity="2" visible="True" parameters="recordOrgNum;recordPubFlag" name="_Access_canView">
+		<Calculation><![CDATA[// _Access_canView ( recordOrgNum, recordPubFlag )
+// version 1.3, NYHTC
+
+/*
+	Determine if the user can view a record, setting the OrgNum (and creating a record FOR that), as needed.
+
+
+REQUIRES:
+	_Access_MultiTenant_isActive
+
+
+HISTORY
+	1.3 - 201x-xx-xx ( xxxxx ): remove all SQL since it fails in Find mode. Compare record's OrgNum to session's OrgNum ( in a00_TimesSq ).
+	1.2 - 201x-xx-xx ( xxxxx ): Set local file's global orgNum if needed ( create Interface record if one doesn't exist, otherwise just set it ).
+	1.1 - 201x-xx-xx ( xxxxx ): 
+	1.0 - 201x-xx-xx ( xxxxx ): first created.
+*/
+
+
+If ( not _Access_MultiTenant_isActive; 
+	True; 
+	
+	not IsEmpty ( recordOrgNum  ) 
+		and recordOrgNum = _ext_00ZZ_SESSION::zgAutoOrgNum
+		and recordPubFlag ≠ 4
+
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

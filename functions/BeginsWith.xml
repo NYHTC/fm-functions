@@ -1,0 +1,18 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="14" functionArity="2" visible="True" parameters="someText;prefixText" name="BeginsWith">
+		<Calculation><![CDATA[// BeginsWith ( someText; prefixText )
+// version 1.0, Daniel A. Shockley, NYHTC
+
+/*
+	Determine if the someText begins with prefixText
+
+
+HISTORY:
+	1.0 - 201x-xx-xx ( dshockley ): first created.
+*/
+
+
+Left ( someText; Length( prefixText ) ) = prefixText]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

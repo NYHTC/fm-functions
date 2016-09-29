@@ -1,0 +1,140 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="36" functionArity="1" visible="True" parameters="fmPath" name="FMPathToOS">
+		<Calculation><![CDATA[// FMPathToOS ( fmPath )
+// version 1.6, Tom Robinson, http://www.tomrobinson.co.nz/
+
+/*
+	Convert from FileMaker filepath to OS filepath (HFS or NTFS)
+
+	Convert the results from Get(FilePath) (‘file:’), a path in a file container field (‘filemac:’, ‘filewin:’), or an image container field (‘imagemac:’, ‘imagewin:’) to a form suitable for AppleScript, DOS, etc.  Handles both absolute and relative paths.
+
+
+EXAMPLE:
+	Container field on  OS Ⅹ (‘image:’ and ‘size:’ are ignored):
+		Input:	imagemac:/tom/Me Myself I/Programs/FileMaker Pro/Custom Functions/FilePathToOS/iphone%2F3g.jpg
+		Output:	tom:Me Myself I:Programs:FileMaker Pro:Custom Functions:FilePathToOS:iphone/3g.jpg
+
+	Get(FilePath) on OS Ⅹ:
+		Input:	file:/tom/Me Myself I/Programs/FileMaker Pro/Custom Functions/FilePathToOS/FilePathToOS%2FTest.fp7
+		Output:	tom:Me Myself I:Programs:FileMaker Pro:Custom Functions:FilePathToOS:FilePathToOS/Test.fp7
+
+	Get(TemporaryPath) on OS Ⅹ:
+		Input:	/Amphe/private/var/tmp/folders/501/TemporaryItems/FileMaker/
+		Output:	Amphe:private:var:tmp:folders:501:TemporaryItems:FileMaker:
+
+	Container field on Windows (‘image:’ and ‘size:’ are ignored):
+		Input:	imagewin:/C:/Documents and Settings/Administrator/My Documents/FilePathToOS/iphone3gwin.jpg
+		Output:	C:\Documents and Settings\Administrator\My Documents\FilePathToOS\iphone3gwin.jpg
+
+	Get(FilePath) on Windows:
+		Input:	file:/C:/Documents and Settings/Administrator/My Documents/FilePathToOS/FilePathToOS Windows Test.fp7
+		Output:	C:\Documents and Settings\Administrator\My Documents\FilePathToOS\FilePathToOS Windows Test.fp7
+
+	Get(TemporaryPath) on Windows:
+		Input:	/C:/Documents and Settings/Administrator/Local Settings/Temp/
+		Output:	C:\Documents and Settings\Administrator\Local Settings\Temp\
+
+
+HISTORY:
+	1.6 - 2015-05-29 ( dshockley ): if there are TWO leading slashes, do NOT remove one - only remove leading slash when converting to Windows if it is alone. 
+	1.5 - 2015-02-23 ( eshagdar ): reformatted
+	1.4 - 2010-07-14: (by Daniel A. Shockley): changed prefix test to use Left instead of PatternCount (no more need to prefix ¶); 
+	1.3 - 2010-07-14: (by Daniel A. Shockley): used variables for separators
+	1.2 - 2010-07-14: (by Daniel A. Shockley): renamed "result" variable to "modPath" to avoid confusion
+	1.1 - 2010-07-14: (by Daniel A. Shockley): formatted code (added spaces where helpful for legibility)
+	1.0 - 201x-xx-xx ( xxxxx ): taken from http://www.tomrobinson.co.nz/
+	0.0 - 2008-08-14, Tom Robinson
+*/
+
+
+If ( Abs ( Get ( SystemPlatform ) ) = 1;  /* OS Ⅹ */
+	Let ( [
+			sepfm = "/";
+			sepmac = ":";
+			modPath = fmPath; 
+	
+			pathpos = Case (
+				/* 1st choice */
+				"filemac:" = Left ( modPath; 8 )
+				; 8
+				;
+
+				/* 2nd choice */
+				"imagemac:" = Left ( modPath; 9 )
+				; 9
+				;
+
+				/* Last usual choice */
+				"file:" = Left ( modPath; 5 )
+				; 5
+				;
+
+				/* No identifier ( e.g. Get ( TemporaryPath ) ) */ 
+				0
+			);
+
+			/* Everything post identifier to end of string */
+			modPath = Right ( modPath; Length ( modPath ) - pathpos );
+
+			/* Reduce to first value in string */
+			modPath = GetValue ( modPath; 1 );
+
+			/* Switch leading slash ( FM absolute) for nothing (HFS absolute), and no leading slash (FM relative) for a colon (HFS relative) */
+			modPath = 
+				If ( Left ( modPath; 1 ) = sepfm
+					; Right ( modPath; Length ( modPath ) - 1 )
+					; sepmac & modPath 
+				);  
+
+			/* Convert slashes to colons, encoded slashes to slashes */
+			modPath = 
+				Substitute ( 
+					modPath
+					; [ sepfm; sepmac ]
+					; [ "%2F";"/" ]
+				)
+		]
+		; modPath
+	)
+
+
+;  /* Else Windoze */
+
+	Let ( [
+			sepfm = "/";
+			sepwin = "\\";
+			modPath= fmPath;
+	
+			pathpos = Case (
+				"filewin:" = Left ( modPath; 8 )       /* 1st choice */
+				; 8
+				;
+				"imagewin:" = Left ( modPath; 9 )  /* 2nd choice */
+				; 9
+				;
+				"file:" = Left ( modPath; 5 )            /* Last usual choice */
+				; 5
+				;
+				0                                                  /* No identifier (e.g. Get(TemporaryPath)) */
+			);
+			modPath = Right ( modPath; Length ( modPath ) - pathpos );          /* Everything post identifier to end of string */
+			modPath = GetValue ( modPath ; 1 );                                               /* Reduce to first value in string */
+
+			/* Remove SINGLE leading slash if present */
+			modPath = If ( Left ( modPath; 1 ) = sepfm and Middle ( modPath; 2; 1 ) ≠ sepfm
+				; Right ( modPath; Length ( modPath ) - 1 )
+				; modPath 
+			);
+
+			/* Convert slashes to backslashes */
+			modPath = Substitute ( 
+				modPath
+				; [ sepfm; sepwin ]
+			)
+		]
+		; modPath
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

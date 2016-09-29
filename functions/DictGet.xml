@@ -1,0 +1,46 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="21" functionArity="2" visible="True" parameters="dict;name" name="DictGet">
+		<Calculation><![CDATA[// DictGet ( dict; name )
+// version 1.2, SixFriedRice.com
+
+/*
+	Gets the specified key name's value from a SixFriedRice.com-style dictionary.
+
+
+HISTORY:
+	1.2 - Reformatted to match newer standards.
+	1.1 - Reformatted calc to fit standards. Still uses hard-coded escape/unescape so it can stand alone. 
+	1.0 - 201x-xx-xx ( xxxxx ): first created.
+*/
+
+
+Let( [
+		match =
+			"<:" 
+			& Substitute ( 
+				name 
+				; [ "="; "/=" ]
+				; [ ":"; "/:" ] 
+				; [ ">"; "/>" ]
+				; [ "<"; "/<" ]
+			) & ":="
+		; pstart = Position ( dict; match; 1; 1 )
+		; start = pstart + Length ( match )
+		; end = Position ( dict ; ":>"; start; 1 )
+		; len = If ( end = 0; 999999999; end - start )
+	];
+
+	If ( pstart = 0
+		; ""
+		; Substitute ( 
+			Middle ( dict; start; len)
+			; [ "/:"; ":" ]
+			; [ "/="; "=" ] 
+			; [ "/>"; ">" ] 
+			; [ "/<"; "<" ]
+		)
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

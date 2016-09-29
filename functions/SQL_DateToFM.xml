@@ -1,0 +1,31 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="50" functionArity="1" visible="True" parameters="sqlDate" name="SQL_DateToFM">
+		<Calculation><![CDATA[// SQL_DateToFM ( sqlDate )
+// version 1.1, Daniel A. Shockley, NYHTC
+
+/*
+	Convert SQL date to FileMaker date.
+
+
+HISTORY:
+	1.1 - 201x-xx-xx ( xxxxx ): Returns an empty date when the SQL date is an empty string, instead of a "?"
+	1.0 - 201x-xx-xx ( dshockley ): first created.
+*/
+
+
+Let ( [
+		sqlDate = 
+			If ( LeftWords ( sqlDate; 1 ) ≠ "DATE"
+				; sqlDate
+				; RightWords ( sqlDate; WordCount ( sqlDate ) - 1 )
+			)
+		; sqlDate = Substitute( sqlDate; "-"; "¶" )
+		; fmDate = If ( IsEmpty ( sqlDate ); GetAsDate ( "" ); Date ( GetValue ( sqlDate; 2 ); GetValue ( sqlDate; 3 ); GetValue ( sqlDate; 1 ) ) )
+	]; 
+
+	fmDate
+
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

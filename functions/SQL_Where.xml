@@ -1,0 +1,66 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="410" functionArity="3" visible="True" parameters="fieldRef;operator;someValue" name="SQL_Where">
+		<Calculation><![CDATA[// SQL_Where ( fieldRef ; operator ; someValue )
+// version 1.0, Daniel A. Shockley, Erik Shagdar
+
+/* 
+	Gets a 'where' clause (for use following WHERE, AND, OR) with the quoted short field name of the field reference, the operator, and then properly escape (or not) the value based on the field's Type. 
+
+
+REQUIRE: 
+	SQL_Date
+	SQL_EscapeString
+	SQL_Field
+	SQL_Timestamp
+
+
+HISTORY: 
+	1.0 (2016-06-27-dshockley): first created.
+*/
+
+
+
+Let ( [ 
+	fieldType = FieldType ( Get ( FileName ) ; GetFieldName ( fieldRef ) ) 
+	; EqualSign = "="
+	; codeForOp = 
+		Case ( 
+			Length ( someValue ) = 0 and Trim ( operator ) = EqualSign
+			; "IS NULL"
+			; 
+			Length ( someValue ) = 0 and Trim ( operator ) = "<>"
+			; "IS NOT NULL"
+			; 
+			Trim ( operator )
+			)
+	; codeForValue = 
+		Case ( 
+			Length ( someValue ) = 0 and Trim ( operator ) = EqualSign
+			; ""
+			; 
+			Length ( someValue ) = 0 and Trim ( operator ) = "<>"
+			; ""
+			; 
+			Trim ( operator ) = "LIKE"
+			; SQL_EscapeString ( Trim ( someValue ) )
+			; 
+			Position ( fieldType ; "Text" ; 1 ; 1 ) 
+			; SQL_EscapeString ( someValue )
+			; 
+			Position ( fieldType ; "Date" ; 1 ; 1 ) 
+			; SQL_Date ( someValue )
+			; 
+			Position ( fieldType ; "Timestamp" ; 1 ; 1 ) 
+			; SQL_Timestamp ( someValue )
+			; 
+			someValue
+			)
+]; 
+	SQL_Field ( fieldRef )
+	&  " "
+	& codeForOp
+	& " "
+	& codeForValue
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

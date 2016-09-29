@@ -1,0 +1,54 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="16" functionArity="1" visible="True" parameters="options" name="CallStack">
+		<Calculation><![CDATA[// CallStack ( options )
+// version 1.2, Shockley/Shagdar, NYHTC
+
+/* 
+	Append this to params when calling ANY script. It sends in the call stack of scripts so a script knows the entire stack of parent scripts that called it. Note that in typical use the 'options' parameter will be empty. 
+
+
+REQUIRES:
+	#
+	DictGet
+	ListConcat
+
+
+HISTORY: 
+	1.2 - 2016-09-19 ( eshagdar ): support for 'DisplayCurrent' option. updated documentation.
+	1.1 - 2016-09-13 ( eshagdar ): use the layout name if there is no script name ( callstack is attached to a button that triggers a script ).
+	1.0 - 2015-06-10 ( xxxxx ): first created.
+*/
+
+
+
+If (
+	/* display the current callstack in a human-friendly way */
+	options = "DisplayCurrent";
+	If ( IsEmpty ( $CallingFileName );
+		DictGet ( CallStack ( "" ); "CallingFileName" ) & " - " & DictGet ( CallStack ( "" ); "CallingScriptName" );
+		ListConcat (  $CallingFileName; $CallingScriptName ; " - " )
+	);
+
+	/* append callstack */
+		# ( "CallingFileName"; 
+			List ( 
+				Get ( FileName ); 
+				$CallingFileName 
+			)  
+		) 
+	&	# ( "CallingScriptName"; 
+			List ( 
+				GetValue ( 
+					List ( 
+						Get ( ScriptName ); 
+						"[L] " & Get ( LayoutName ) 
+					); 
+					1 
+				); 
+				$CallingScriptName 
+			) 
+		)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

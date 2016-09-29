@@ -1,0 +1,25 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="26" functionArity="1" visible="True" parameters="input" name="DictUnescape">
+		<Calculation><![CDATA[// DictUnescape ( input )
+// version 1.1, SixFriedRice.com
+
+/*
+	Unescapes a name/value (aka key/value) string extracted from a SixFriedRice.com-style dictionary.
+
+
+HISTORY:
+	1.1 - 201x-xx-xx ( eshagdar ): Reformatted to match newer standards.
+	1.0 - 201x-xx-xx ( xxxxx ): SixFriedRice.com
+*/
+
+
+Substitute ( 
+	input; 
+	[ "/:"; ":" ]; 
+	[ "/="; "=" ] ; 
+	[ "/>"; ">" ] ; 
+	[ "/<" ; "<" ] 
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

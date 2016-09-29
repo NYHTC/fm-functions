@@ -1,0 +1,61 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="131" functionArity="1" visible="True" parameters="text" name="TrimWS">
+		<Calculation><![CDATA[// TrimWS ( text )
+// version 1.5, Debi Fuchs, debi@aptworks.com
+
+/* 
+	Trims all  leading and trailing whitespace
+
+
+HISTORY:
+	1.5 - 2016-09-07 ( eshagdar ): Updating with modern documentation. 
+	1.4 - 2014-12-14 (dshockley ): Fixed the test for NO non-WS characters. 1.3 - 201x-xx-xx ( xxxxx ): This will now reurn NULL. Previous versions would have FAILED to trim the only-whitespace down to NULL. 
+	1.2 - 2014-10-21 ( dshockley ): get each whitespace character by ASCII code; reformatted calc and added comments. 
+	1.1 - 2014-09-19 ( eshagdar ): updated to remove line feeds ( char 10 )
+	1.0 - 2008-08-20 ( Debi Fuchs ): original name "Supertrim" - Debi Fuchs of Aptworks Consulting, http://www.briandunning.com/cf/904
+
+
+EXAMPLE:
+	Input:	Supertrim("  John  Smith¶")
+	Output:	"John  Smith"
+
+
+ORIGINAL DOC:
+	CUSTOM FUNCTION: Supertrim ( text )
+	© 2004 Debi Fuchs of Aptworks Consulting, debi@aptworks.com
+
+	Speedily (and with no recursion) remove leading and trailing white space (including spacing, tabs and returns) from a text string.
+
+	NOTE: Similar to TrimAll, except that it also removes tabs and returns (in addition to spaces), and it does not touch any spacing WITHIN the string. 
+*/
+
+
+Let ( [
+		/* Determine value of original string with ALL whitespace characters removed. */
+		noWS = 
+			Substitute ( 
+				text; 
+				[ Char ( 202 ); "" ]; 
+				[ Char ( 32 ); "" ];    /* space */
+				[ Char ( 9 ); "" ];    /* tab */
+				[ Char ( 13 ); "" ];    /* carriage return */
+				[ Char ( 10 ); "" ]    /* line feed */
+			);
+
+		/* Determine position of first non-ws character in original string. */
+		posFirstNonWS = Position ( text; Left( noWS; 1 ); 0; 1 );
+		
+		/* Determine position of last non-whitespace character in original string. */
+		posLastNonWS = Position ( text; Right( noWS; 1 ); Length( text ); -1 )
+	];
+
+	If ( IsEmpty ( posFirstNonWS ) or posFirstNonWS = 0
+		/* There are NO non-whitespace characters, so return NULL string. */
+		; ""
+
+		/* Return portion from 1st non-WS to last non-WS. */
+		; Middle ( text; posFirstNonWS; posLastNonWS - posFirstNonWS + 1 )
+	)
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

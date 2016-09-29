@@ -1,0 +1,66 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="6" functionArity="1" visible="True" parameters="options" name="_AuditHistoryScriptParams">
+		<Calculation><![CDATA[// _AuditHistoryScriptParams ( options )
+// version 1.1, Erik Shagdar, NYHTC
+
+
+/*
+	Provide parameters for the generate auditlog history script in a00_TIMESSQUARE.
+	Make sure the the fields exists before attempting to evaluate them.
+
+
+REQUIRES:
+	#
+	Audit_PrefRead
+	CallStack
+
+
+HISTORY
+	1.1 - 2016-09-20 ( eshagdar ): added callstack and calcRecID
+	1.0 - 2016-04-27 ( eshagdar ): first created.
+*/
+
+
+Let ( [
+		DG_fieldList = List ( "zRecordID"; "" );    /* this is a list so that future possible names are easier to add */
+		SSP_fieldList = List ( "SyncDeK_RecId"; "zzAudit_UUID" );
+
+
+		dgPk = 
+			Case ( 
+				/* table specific exceptions should go here */
+
+				EvaluationError ( GetField ( Get ( LayoutTableName ) & "::" & GetValue ( DG_fieldList; 1 ) ) ) = 0;
+				GetField ( Get ( LayoutTableName ) & "::" & GetValue ( DG_fieldList; 1 ) );
+
+				""
+			);
+
+		uuid = 
+			Case ( 
+				/* table specific exceptions should go here */
+
+				EvaluationError ( GetField ( Get ( LayoutTableName ) & "::" & GetValue ( SSP_fieldList; 1 ) ) ) = 0;
+				GetField ( Get ( LayoutTableName ) & "::" & GetValue ( SSP_fieldList; 1 ) );
+
+				EvaluationError ( GetField ( Get ( LayoutTableName ) & "::" & GetValue ( SSP_fieldList; 2 ) ) ) = 0;
+				GetField ( Get ( LayoutTableName ) & "::"  & GetValue ( SSP_fieldList; 2 ) );
+
+				""
+			)
+	];
+
+
+		# ( "DbName"; Get ( FileName ) )
+	&	# ( "TableName"; Get ( LayoutTableName ) )
+	&	# ( "DG_PrimaryKeyValue"; dgPk )
+	&	# ( "SSP_UUIDValue"; uuid )
+	&	# ( "CalcRecID"; GetField ( Audit_PrefRead ( "CalcRecID" ) ) )
+	&	CallStack ( "" )
+
+
+
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

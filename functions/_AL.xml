@@ -1,0 +1,58 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="5" functionArity="0" visible="True" parameters="" name="_AL">
+		<Calculation><![CDATA[// _AL (  )
+// version 1.1, NYHTC
+
+/*
+	Returns params for ActionLog
+
+
+REQUIRED:
+	#
+	CallStack
+
+
+HISTORY:
+	1.1 - 201x-xx-xx ( xxxxx ): Pass in the dictionary as well. 
+	1.0 - 201x-xx-xx ( xxxxx ): first created.
+*/
+
+
+//1
+Get ( FileName ) & ¶ & 
+//2
+Get ( ScriptName ) & ¶ & 
+//3
+Get ( AccountName ) & ¶ & 
+//4
+Get ( UserName ) & ¶ & 
+//5
+Get ( LayoutName ) & ¶ & 
+//6
+GetLayoutID ( "current" ) & ¶ & 
+//7
+Get ( CurrentTimeStamp ) & ¶ & 
+//8
+Get ( ApplicationVersion ) & ¶ & 
+//9
+Substitute ( Get ( ScriptParameter ) ; ¶ ; " | " ) & ¶ & 
+//10
+Get ( WindowMode ) & ¶ & 
+//11
+Get ( SystemVersion ) & ¶ 
+
+
+&	# ( "ParamsAL_areDict"; True )
+&	# ( "FileName"; Get ( FileName ) )
+&	# ( "ScriptName"; Get ( ScriptName ) )
+&	# ( "AccountName"; Get ( AccountName ) )
+&	# ( "UserName"; Get ( UserName ) )
+&	# ( "LayoutName"; Get ( LayoutName ) )
+&	# ( "LayoutID"; GetLayoutID ( "current" ) )
+&	# ( "CurrentTimeStamp"; Get ( CurrentTimeStamp ) )
+&	# ( "ScriptParameter"; Get ( ScriptParameter ) )
+&	# ( "WindowMode"; Get ( WindowMode ) )
+&	CallStack ( "" )]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

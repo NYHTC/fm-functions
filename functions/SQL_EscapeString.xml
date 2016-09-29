@@ -1,0 +1,28 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="51" functionArity="1" visible="True" parameters="someString" name="SQL_EscapeString">
+		<Calculation><![CDATA[// SQL_EscapeString ( someString )
+// version 1.2, Daniel A. Shockley
+
+/* 
+	Escapes a string to work within SQL
+
+
+VERSION HISTORY:
+	1.2 - Reformatted to match newer standards.
+	1.1 - Don't just wrap in single quotes, escape internal single-quotes. This is enough for literal strings. Can get more involved with LIKE statements where wildcards can be a factor. There are probably other situations with more advanced SQL statements, as well. 
+	1.0 - initial version.
+*/
+
+
+Let([
+		_sq = "'"
+		; escapedString = _sq & Substitute ( someString; _sq; _sq & _sq ) & _sq
+
+	];
+
+	escapedString
+
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

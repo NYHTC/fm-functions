@@ -1,0 +1,29 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="38" functionArity="1" visible="True" parameters="fmPath" name="FMPathToPosixOrWinPath">
+		<Calculation><![CDATA[// FMPathToPosixOrWinPath ( fmPath )
+// version 1.0, Shockley/Shagdar, NYHTC
+
+/* 
+	Convert ANY FileMaker-style path to POSIX path (Mac) or Windows path (if on Windows):
+	handles file, filemac, filewin, image, imagemac, imagein
+	the 'fmPath' parameter MUST be an ABSOLUTE path, not relative, nor network URL
+
+
+REQUIRES: 
+	FMPathToPosix
+	FMPathToOS
+
+
+HISTORY: 
+	1.0 - 2015-02-23 ( dshockley ): first created. 
+
+*/
+
+
+If ( Abs ( Get ( SystemPlatform ) ) = 1  /* OS Ⅹ */
+	; FMPathToPosix ( fmPath )
+	; FMPathToOS ( fmPath )
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

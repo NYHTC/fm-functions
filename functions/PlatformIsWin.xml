@@ -1,0 +1,18 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="45" functionArity="0" visible="True" parameters="" name="PlatformIsWin">
+		<Calculation><![CDATA[// PlatformIsWin (  )
+// version 1.0, Daniel A. Shockley, NYHTC
+
+/*
+	Return True if on Windows
+
+
+HISTORY:
+	1.0 - 2015-xx-xx ( dshockley ): first created.
+*/
+
+
+Abs ( Get ( SystemPlatform ) ) = 2]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

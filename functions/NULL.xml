@@ -1,0 +1,18 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="41" functionArity="0" visible="True" parameters="" name="NULL">
+		<Calculation><![CDATA[// NULL (  )
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	Sets a NULL to a constant value of ""
+
+
+HISTORY:
+	1.0 - 2015-xx-xx ( eshagdar ): first created.
+*/
+
+
+""]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

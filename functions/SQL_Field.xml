@@ -1,0 +1,61 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="336" functionArity="1" visible="True" parameters="fieldOrFieldName" name="SQL_Field">
+		<Calculation><![CDATA[// SQL_Field ( fieldOrFieldName )
+// version 1.0, Dan Smith, http://www.fmfunctions.com/fid/344
+
+/* 
+	Gets the short field name of the field reference and then puts quotes around it for use in SQL queries. 
+
+
+HISTORY: 
+	1.0 (2016-06-27-dshockley): Pulled from fmfunctions.com site; renamed; Re-formatted for HTC standards. Original name was 'SQLField', created by Kevin Frank, with modifications by Dan Smith. 
+*/
+
+
+
+/* SQLField ( fieldOrFieldName )
+PURPOSE:
+Quote a field name for use in a FileMaker SQL statement. Prevent hard-coding it's value.
+PARAMETERS:
+fieldOrFieldName (field, txt) field or field name to extract field name from. It can be from any TableOccurence, as that portion of the field name is removed.
+DEPENDENCIES:
+FileMaker Pro 10+
+REVISIONS:
+2011-MAR-25    - Created by Kevin Frank http://www.filemakerhacks.com/?p=1065
+2011-JUL-01    - Dan Smith dansmith65@gmail.com
+	- renamed from GFN to SQLField
+	- added to documentation section
+2012-AUG-10    - allow parameter to be a field or field name, change parameter name accordingly
+####################################################################################################*/
+// ===================================
+/*
+	This function is published on FileMaker Custom Functions
+	to check for updates and provide feedback and bug reports
+	please visit http://www.fmfunctions.com/fid/344
+	Prototype: SQLField ( fieldOrFieldName )
+	Function Author: Daniel Smith (http://www.fmfunctions.com/mid/375)
+	Last updated: 08 February 2013
+	Version: 1
+*/
+// ===================================
+
+
+
+Let (
+[
+	~fieldName = If(
+		IsValid( GetFieldName( fieldOrFieldName ) ) ;
+		GetFieldName( fieldOrFieldName ) ;
+		fieldOrFieldName
+	) ;
+	~separator = Position ( ~fieldName ; "::" ; 1 ; 1 ) ;
+	~fieldNameOnly = If(
+		~separator ;
+		Right ( ~fieldName ; Length ( ~fieldName ) - ~separator - 1 ) ;
+		~fieldName
+	)
+] ;
+	Quote ( ~fieldNameOnly )
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

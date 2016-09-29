@@ -1,0 +1,55 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="416" functionArity="2" visible="True" parameters="someText;options" name="ClipboardSetText">
+		<Calculation><![CDATA[// ClipboardSetText ( someText ; options )
+// version 1.0, Daniel A. Shockley, NYHTC
+
+/* 
+	Depending on the client platform, put the specified text into the clipboard. Returns True if succeeded, False if it did not. 
+
+
+WARNING:
+	RICH TEXT DOES NOT WORK! DO NOT USE! (some issue with plugin and understanding format)
+
+
+PLUGIN:
+	BaseElements
+
+
+HISTORY: 
+	1.0 - ( 2016-07-21-dshockley ): first created.
+*/
+
+
+Let ( [ 
+		  clipboardFormats = BE_ClipboardFormats
+		; isWin = Abs ( Get ( SystemPlatform ) ) = 2
+		; isMac =  Abs ( Get ( SystemPlatform ) ) = 1
+		; isOther = not isWin and not isMac
+		; sendRichText = PatternCount ( options; "SendRichText" ) > 0
+
+		; macRichText = "public.rtf"
+		; macPlainText = "public.utf8-plain-text"
+
+		; winRichText = "Rich Text Format"
+		; winUnicodeText = "CF_UNICODETEXT"
+	]; 
+
+	Case ( 
+		isWin and sendRichText
+		; BE_SetClipboardText ( someText ; winRichText )
+		; 
+		isWin
+		; BE_SetClipboardText ( someText ; winUnicodeText )
+		; 
+		isMac and sendRichText
+		; BE_SetClipboardText ( someText ; macRichText )
+		; 
+		isMac
+		; BE_SetClipboardText ( someText ; macPlainText )
+		; 
+		False
+		)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

@@ -1,0 +1,18 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="42" functionArity="0" visible="True" parameters="" name="PlatformIsiOS">
+		<Calculation><![CDATA[// PlatformIsiOS (  )
+// version 1.0, Daniel A. Shockley, NYHTC
+
+/*
+	Return True if on iOS
+
+
+HISTORY:
+	1.0 - 2015-xx-xx ( dshockley ): first created.
+*/
+
+
+Abs ( Get ( SystemPlatform ) ) = 3]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

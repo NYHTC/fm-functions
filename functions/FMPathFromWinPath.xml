@@ -1,0 +1,42 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="34" functionArity="1" visible="True" parameters="someWinPath" name="FMPathFromWinPath">
+		<Calculation><![CDATA[// FMPathFromWinPath ( someWinPath )
+// version 1.2, Daniel A. Shockley, NYHTC
+
+/*
+	Convert Windows path to FileMaker path (without the FileMaker prefixes: file, filemac, filewin, image, imagemac, imagein )
+
+
+EXAMPLE:  
+	SYSTEM PATH:	F:\Users\j_doe\Documents\test.xls
+	CONVERTS TO:	/F:/Users/j_doe/Documents/test.xls
+
+	SYSTEM PATH:	\\SharedDrive\Users\j_doe\Documents\test.xls
+	CONVERTS TO:	//SharedDrive/Users/j_doe/Documents/test.xls
+
+
+HISTORY: 
+	1.2 - 2015-06-19 ( dshockley ): NULL path results a NULL path.
+	1.1 - 2015-0x-xx ( xxxxx ): 
+	1.0 - 2015-05-29 ( dshockley ): original version
+*/
+
+
+If ( IsEmpty ( someWinPath )
+	; ""
+	; Let ( [
+		backslash = Char ( 92 ) 
+		; leadingSlashIfNeeded = 
+			If ( not IsEmpty ( Filter ( Left ( Upper ( someWinPath ); 1 ) ; "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ) ) 
+					and Middle ( someWinPath; 2; 2 ) = ":" & backslash
+				; "/"  /* If it starts with an alphabetical letter followed by colon-and-backslash, then it DOES need a leading slash added */
+				; ""  /* if not, it already has 2 leading backslashes, which will be changed to slashes. */
+			)
+		]; 
+
+		leadingSlashIfNeeded & Substitute ( someWinPath; backslash; "/" )
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

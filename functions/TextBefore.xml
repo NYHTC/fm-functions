@@ -1,0 +1,17 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="57" functionArity="2" visible="True" parameters="someText;beforeThis" name="TextBefore">
+		<Calculation><![CDATA[// TextBefore ( someText, beforeThis )
+// version 1.0, Daniel A. Shockley
+
+/*
+	Returns the text from someText that is before the string 'beforeThis'. Returns "" if the beforeThis is not present.
+*/
+
+
+If ( PatternCount ( someText; beforeThis ) = 0
+	; ""
+	; Left ( someText; Position ( someText; beforeThis; 1; 1 ) - 1 ) 
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

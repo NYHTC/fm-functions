@@ -1,0 +1,22 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="44" functionArity="0" visible="True" parameters="" name="PlatformIsServer">
+		<Calculation><![CDATA[// PlatformIsServer (  )
+// version 1.0, Daniel A. Shockley, NYHTC
+
+/*
+	Return True if on Server
+
+
+NOTE:
+	The platform is ACTUALLY either Mac or Windows, this is really a different APP. 
+
+
+HISTORY:
+	1.0 - 2015-xx-xx ( dshockley ): first created.
+*/
+
+
+GetAsBoolean ( PatternCount ( Get ( ApplicationVersion ) ; "Server" ) )]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

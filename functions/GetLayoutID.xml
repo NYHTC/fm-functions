@@ -1,0 +1,57 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="39" functionArity="1" visible="True" parameters="layout" name="GetLayoutID">
+		<Calculation><![CDATA[// GetLayoutID ( layout )
+// version 1.1, NYHTC
+
+/*
+	Get the ID of the specified ( or current ) layout
+
+
+VERSION HISTORY:
+	1.1 - 201x-xx-xx ( xxxxx ): Reformatted to match newer standards.
+	1.0 - 201x-xx-xx ( xxxxx ): first created.
+*/
+
+
+Let ( [
+	
+	theLayout = 
+		If ( layout ="current" ; 
+			Get ( LayoutName ) ; 
+			layout 
+		);
+	theLayoutNames = LayoutNames ( Get ( FileName ) );
+	currentLayoutPosition = 
+		PatternCount ( 
+			Middle ( theLayoutNames ; 1 ; 
+			Position ( theLayoutNames ; theLayout ; 1 ; 1 ) ) ;
+			"¶" 
+		) + 1 ;
+
+	layoutIDs = LayoutIDs ( Get ( FileName ) ) ;
+	numberOfLayouts = Get ( LayoutCount ) ; 
+	layoutID = 
+		Case ( 
+			currentLayoutPosition = 1 ; 
+			LeftWords ( layoutIDs ; 1 ) ;
+
+			currentLayoutPosition < numberOfLayouts ; 
+			Middle ( 
+				layoutIDs ; 
+				Position ( layoutIDs ; "¶" ; 1 ; currentLayoutPosition -1 ) ; 
+				Position ( layoutIDs ; "¶" ; 1 ; currentLayoutPosition ) - Position ( layoutIDs ; "¶" ; 1 ; currentLayoutPosition -1 ) 
+			) ;
+
+			Middle ( 
+				layoutIDs ; 
+				Position ( layoutIDs ; "¶" ; 1 ; currentLayoutPosition -1 ) ; 
+				Length ( layoutIDs ) 
+			) 
+		) 
+	];
+
+	GetAsNumber ( layoutID ) 
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

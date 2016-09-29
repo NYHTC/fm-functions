@@ -1,0 +1,39 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="32" functionArity="1" visible="True" parameters="somePosix" name="FMPathFromPosix">
+		<Calculation><![CDATA[// FMPathFromPosix ( somePosix )
+// version 1.2, Daniel A. Shockley, NYHTC
+
+/* 
+	Convert POSIX path to FileMaker path (without the FileMaker prefixes:
+	file, filemac, filewin, image, imagemac, imagein
+
+
+HISTORY: 
+	1.2 - 2015-06-19 ( dshockley): NULL path results a NULL path.
+	1.1 - 201x-xx-xx ( xxxxx ): reformatted.
+	1.0 - 201x-xx-xx ( xxxxx ): first created.
+*/
+
+
+Let ( [
+	volDir = "/Volumes/"
+	]; 
+
+	Case ( 
+		IsEmpty ( somePosix )
+		; ""
+		; 
+
+		Left ( somePosix; Length ( volDir ) ) = volDir 
+		/* the Posix path includes the "/Volumes" directory, so it is NOT on the boot drive, and volume name is already in path after volDir */
+		; Right ( somePosix; Length ( somePosix ) - Length ( volDir ) + 1 ) 
+		; 
+
+		/* the Posix path does NOT include the Volumes directory, so it is referring to the system drive, which needs to be added */
+		Get ( SystemDrive ) & Right ( somePosix; Length ( somePosix ) - 1 ) 
+
+		)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

@@ -1,0 +1,88 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="422" functionArity="3" visible="True" parameters="firstList;secondList;options" name="ListConcat">
+		<Calculation><![CDATA[// ListConcat ( firstList; secondList; options )
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	Given 2 lists, concatinate their values
+
+
+REQUIRES:
+	DictContains
+	DictGet
+	DictRemove
+	ValueRemove
+
+
+HISTORY:
+	1.0 - 2016-09-19 ( eshagdar ): first created.
+*/
+
+
+If ( options = "help" or DictGet ( options; "help" );
+	List ( 
+		"This functions takes 2 lists and concatenates them. Below are optional keys that can be specified in teh 'options' param:";
+		"  rowSep - output string between each row";
+		"  colSep - string between the two value";
+		"  prefix - string before each value of the first list";
+		"  suffix - string after the second value in the second list";
+		" ";
+		"  help - display this message";
+		"  listNames - names of the keys to use for the two lists. The 2 lists should exist in the options param"
+	);
+
+
+	Let ( [	
+			rowSep = If ( DictContains ( options; "rowSep" ); DictGet ( options; "rowSep" ); ¶ );
+			colSep = If ( DictContains ( options; "colSep" ); DictGet ( options; "colSep" ); " " );
+
+			prefix = If ( DictContains ( options; "prefix" ); DictGet ( options; "prefix" ); "" );
+			suffix = If ( DictContains ( options; "suffix" ); DictGet ( options; "suffix" ); "" );
+
+			listNames = DictGet ( options; "listNames" );
+
+			firstList = 
+				If ( not IsEmpty ( firstList ); 
+					firstList; 
+					DictGet ( options; GetValue ( listNames; 1 ) )
+				);
+			secondList = 
+				If ( not IsEmpty ( secondList ); 
+					secondList; 
+					DictGet ( options; GetValue ( listNames; 2 ) )
+				);
+
+
+			firstVal_firstList = GetValue ( firstList; 1 );
+			firstVal_secondList = GetValue ( secondList; 1 );
+
+			remain_firstList = ValueRemove ( firstList ; firstVal_firstList );
+			remain_secondList = ValueRemove ( secondList ; firstVal_secondList );
+			remain_options = 
+				If ( IsEmpty ( listNames );
+					options;
+					DictRemove ( 
+						DictRemove ( 
+							DictRemove ( options; listNames ); 
+							GetValue ( listNames; 1 ) 
+						); 
+						GetValue ( listNames; 2 ) 
+					)
+				);
+
+
+			firstResult = prefix & firstVal_firstList & colSep & firstVal_secondList & suffix;
+			remainResult = 
+				If ( not IsEmpty ( remain_firstList ) 
+						or not IsEmpty ( remain_secondList );
+					rowSep & ListConcat ( remain_firstList; remain_secondList; remain_options );
+					""
+				)
+		];
+
+		firstResult & remainResult
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

@@ -1,0 +1,46 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="3" functionArity="0" visible="True" parameters="" name="«function name»">
+		<Calculation><![CDATA[// «function name»
+// version «current version», «original author», «original organization/company/website»
+
+/*
+	«function description»
+
+
+TODO:
+	- «some todo item»
+	- «another todo item»
+
+
+NOTE:
+	«any important note about this function»
+
+
+WARNING:
+	«any important warnings about this function»
+
+
+EXAMPLE:
+	Input:	«sample call to the function»
+	Output:	«returned result»
+
+
+PLUGIN:
+	«name of plugin»
+
+
+REQUIRES:
+	«required function name without parameters ( sorted alphabetically )»
+	«another required function name»
+
+
+HISTORY:
+	1.1 - «ISO8601 date» ( «author» ): «version changes»
+	1.0 - «ISO8601 date» ( «author» ): first created.
+*/ 
+
+
+«function logic»]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

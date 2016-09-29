@@ -1,0 +1,25 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="19" functionArity="1" visible="True" parameters="input" name="DictEscape">
+		<Calculation><![CDATA[// DictEscape ( input )
+// version 1.1, NYHTC
+
+/*
+	Escapes a string (key or value) so it can be used in a SixFriedRice.com-style dictionary.
+
+
+HISTORY:
+	1.1 - 201x-xx-xx ( eshagdar ): Reformatted to match newer standards.
+	1.0 - 201x-xx-xx ( xxxxx ): SixFriedRice.com
+*/
+
+
+Substitute ( 
+	input
+	; [ "="; "/=" ]
+	; [ ":"; "/:" ]
+	; [ ">"; "/>" ]
+	; [ "<"; "/<" ]
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

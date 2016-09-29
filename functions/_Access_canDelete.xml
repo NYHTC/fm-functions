@@ -1,0 +1,73 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="1" functionArity="1" visible="True" parameters="tocName" name="_Access_canDelete">
+		<Calculation><![CDATA[// _Access_canDelete ( tocName )
+// version 1.3, NYHTC
+
+/* 
+	This Case statement takes the place of the 'limited...' calc in Manage Security > Privilege Set > Record Custom Privileges > Delete. The reason it can no longer be in Security is that once SyncDeK is active, NO one should be allowed to directly delete records. Instead, ability to 'logical delete' records is determined by whether the user can edit the SyncDeK_pubFlag field. However, that is either YES or NO (modifiable or view-only), without being conditional. SO, we have to leave SyncDeK_pubFlag modifiable, but the script that does deletions checks THIS custom function before trying to edit pubFlag. 
+
+	So, the default for this calc is TRUE, since users that cannot delete AT ALL should have pubFlag set to view-only. 
+
+	Only need to put here conditions where we want to turn delete OFF. For example, we might want to, for specific privilege sets and base table combo, not allow deletion if the record is more than 12 hours old. That might look like this: 
+
+
+	Case ( 
+		ValueIsInList ( "Rider Access¶Data Entry Only"; Get ( CurrentPrivilegeSetName ) ) 
+			and 
+		baseTableName = TableNameOfField ( ST_SomeTable::aST__PrimaryKey; "T"; ""; "" ) 
+		; zST_CrTStmp + 12 * 3600 > get ( currenthosttimestamp )
+		;
+		True
+		)
+
+
+NOTE:
+	Do NOT include field-specific tests in the top level of the Case statement since that may cause errors when in other tables. Instead, place that within a SUB  IF or CASE statement for the result for a given combo of PrivSet and Table. 
+
+
+REQUIRES:
+	_Access_MultiTenant_isActive
+	Audit_PrefRead
+	FM.basetable
+
+
+HISTORY
+	1.3 - 201x-xx-xx ( xxxxx ): remove all SQL since it fails in Find mode. Compare record's OrgNum to session's OrgNum ( in a00_TimesSq ).
+	1.2 - 201x-xx-xx ( xxxxx ): Set local file's global orgNum if needed ( create Interface record if one doesn't exist, otherwise just set it ).
+	1.1 - 201x-xx-xx ( xxxxx ): 
+	1.0 - 201x-xx-xx ( xxxxx ): first created.
+*/ 
+
+
+Let ( [
+		baseTableName = 
+			If ( IsEmpty ( tocName ); 
+				Get ( LayoutTableName ); 
+				FM.basetable ( tocName )
+			);
+		tocName = 
+			If ( IsEmpty ( tocName ); 
+				baseTableName; 
+				tocName 
+			)
+	];
+
+/* BEGIN: Database-Specific Code: */
+	Case ( 
+		not _Access_MultiTenant_isActive ;    /* Multi-Tenant is off */
+		True ;
+
+		get ( WindowMode ) = 1 ;    /* In find mode */
+		True ; 
+
+		GetField ( Audit_PrefRead ( "OrgMatch" ) ) ;    /* My record */
+		True ;
+
+		False
+	)
+/* END OF: Database-Specific Code: */
+
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

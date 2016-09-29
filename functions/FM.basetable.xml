@@ -1,0 +1,74 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="31" functionArity="1" visible="True" parameters="_tableName" name="FM.basetable">
+		<Calculation><![CDATA[// FM.basetable ( _tableName )
+// version 1.0, Fabrice Nordmann, http://www.fmfunctions.com/fid/328
+
+/* 
+	Returns the base table name of a table occurrence
+
+
+WARNING:
+	must be on FM 12+
+
+
+REQUIRES:
+	ExecuteSQL
+
+
+HISTORY:
+	1.0 - xxxx-xx-xx ( fnordmann ): taken from http://www.fmfunctions.com/fid/328
+
+
+ORIGINAL DOCUMENTATION:
+
+FM.basetable ( _tableName )
+
+by Fabrice Nordmann, 1-more-thing
+
+http://www.1-more-thing.com
+http://www.twitter.com/1morethingtweet
+
+
+Design function.
+Returns the base table name of a table occurrence
+
+Parameter : can be a table name, a table ID, or a full field name
+
+FileMaker 12 required.
+
+v1 - Apr 2012
+
+*/
+
+
+Let ([
+		_tableName = _tableName ; // so you can easily copy to dataviewer or calculation box
+		_tableName = GetValue ( Substitute ( _tableName ; "::" ; ¶ ) ; 1 ) ;
+		_tableName = Substitute ( FilterValues ( TableNames ( Get ( FileName )) ; _tableName ) ; ¶ ; "" ) ; //to adjust the case
+		_info = 
+			if ( Filter ( _tableName ; 1234567890 ) = _tableName ;
+				ExecuteSQL ("SELECT BaseTableName FROM FileMaker_Tables WHERE TableID='" & _tableName & "'" ; ¶ ; "" ) ; // match by ID
+				ExecuteSQL ("SELECT BaseTableName FROM FileMaker_Tables WHERE TableName='" & _tableName & "'" ; ¶ ; "" ) // match by Name
+			)
+];
+
+_info
+)
+
+// ===================================
+/*
+
+		This function is published on FileMaker Custom Functions
+		to check for updates and provide feedback and bug reports
+		please visit http://www.fmfunctions.com/fid/328
+
+		Prototype: FM.baseTable( _tableName )
+		Function Author: Fabrice (http://www.fmfunctions.com/mid/37)
+		Last updated: 05 April 2012
+		Version: 1
+
+*/
+// ===================================]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

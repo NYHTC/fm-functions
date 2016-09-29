@@ -1,0 +1,52 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="12" functionArity="1" visible="True" parameters="name" name="#P">
+		<Calculation><![CDATA[// #P ( name )
+// version 1.2, SixFriedRice.com
+
+/*
+	Entirely self-contained calc that gets a specified key name's value from ScriptParameter when it is a  SixFriedRice.com-style dictionary.
+
+
+HISTORY:
+	1.2 - 201x-xx-xx ( eshagdar ): Reformatted to match newer standards.
+	1.1 - 201x-xx-xx ( xxxxx ): Reformatted to match standards.
+	1.0 - 201x-xx-xx ( xxxxx ): Taken from SixFriedRice.com
+*/
+
+
+Let ( [
+		dict = Get ( ScriptParameter )
+	];
+
+	Let ( [
+			match = 
+				"<:" 
+				& Substitute ( 
+					name
+					; [ "="; "/=" ] 
+					; [ ":"; "/:" ] 
+					; [ ">"; "/>" ] 
+					; [ "<"; "/<" ] 
+				) 
+				& ":="
+			; pstart = Position ( dict; match; 1; 1)
+			; start = pstart + Length(match)
+			; end = Position ( dict ; ":>"; start; 1)
+			; len = If ( end = 0; 999999999; end - start)
+		];
+
+		If ( pstart = 0
+			; ""
+			; Substitute( 
+				Middle ( dict; start; len )
+				; [ "/:"; ":" ]
+				; [ "/="; "=" ]
+				; [ "/>"; ">" ]
+				; [ "/<"; "<" ] 
+			)
+		)
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

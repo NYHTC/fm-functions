@@ -1,0 +1,24 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="10" functionArity="1" visible="True" parameters="options" name="TableNotMultiTenant">
+		<Calculation><![CDATA[// TableNotMultiTenant ( options )
+// version 1.2, Erik Shagdar
+
+/*
+	Returns True when a table should be exempted from searching consideration
+
+
+VERSION HISTORY:
+	1.2 - 2016-09-19 ( eshagdar ): check for if field exists via IsValidExpression
+	1.1 - 2016-07-06 ( eshagdar ): renamed '_TableNotMultiTenant' to 'TableNotMultiTenant'.
+	1.0 - Initial version
+*/
+
+
+not _Access_MultiTenant_isActive
+  or 
+EvaluationError ( Evaluate ( Audit_PrefRead ( "OrgNum" ) ) ) = 102
+  or
+not IsValidExpression ( Audit_PrefRead ( "OrgNum" ) )]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

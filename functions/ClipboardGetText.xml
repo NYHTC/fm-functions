@@ -1,0 +1,70 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="417" functionArity="1" visible="True" parameters="options" name="ClipboardGetText">
+		<Calculation><![CDATA[// ClipboardGetText ( options )
+// version 1.0, Daniel A. Shockley, NYHTC
+
+/* 
+	Depending on the client platform, put the specified text into the clipboard. 
+
+
+WARNING:
+	RICH TEXT DOES NOT WORK! DO NOT USE! (some issue with plugin and understanding format)
+
+
+PLUGIN:
+	BaseElements
+
+
+HISTORY: 
+	1.0 - ( 2016-07-21-dshockley ): first created.
+*/
+
+
+Let ( [ 
+		  clipboardFormats = BE_ClipboardFormats
+		; isWin = Abs ( Get ( SystemPlatform ) ) = 2
+		; isMac =  Abs ( Get ( SystemPlatform ) ) = 1
+		; isOther = not isWin and not isMac
+		; tryToGetRichText = PatternCount ( options; "TryToGetRichText" ) > 0
+		; paddedFormats = "¶" & clipboardFormats & "¶"
+
+		; macRichText = "public.rtf"
+		; macPlainText1 = "public.utf8-plain-text"
+		; macPlainText2 = "public.utf16-plain-text"
+
+		; winRichText = "Rich Text Format"
+		; winUnicodeText = "CF_UNICODETEXT"
+		; winPlainText1 = "CF_TEXT"
+		; winPlainText2 = "CF_OEMTEXT"
+	]; 
+
+	/* Get text from the clipboard, in descending priority order (Unicode over plain). */
+
+	Case ( 
+		isWin and tryToGetRichText and PatternCount ( paddedFormats ; "¶" & winRichText & "¶" )
+		; BE_ClipboardText ( winRichText )
+		; 
+		isWin and PatternCount ( paddedFormats ; "¶" & winUnicodeText & "¶" )
+		; BE_ClipboardText ( winUnicodeText )
+		; 
+		isWin and PatternCount ( paddedFormats ; "¶" & winPlainText1 & "¶" )
+		; BE_ClipboardText ( winPlainText1 )
+		; 
+		isWin and PatternCount ( paddedFormats ; "¶" & winPlainText2 & "¶" )
+		; BE_ClipboardText ( winPlainText2 )
+		; 
+		isMac and tryToGetRichText and PatternCount ( paddedFormats ; "¶" & macRichText & "¶" )
+		; BE_ClipboardText ( macRichText )
+		; 
+		isMac and PatternCount ( paddedFormats ; "¶" & macPlainText1 & "¶" )
+		; BE_ClipboardText ( macPlainText1 )
+		; 
+		isMac and PatternCount ( paddedFormats ; "¶" & macPlainText2 & "¶" )
+		; BE_ClipboardText ( macPlainText2 )
+		; 
+		""
+		)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

@@ -1,0 +1,42 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="405" functionArity="2" visible="True" parameters="fieldRef_Link;keyForLink" name="SelectorSelect">
+		<Calculation><![CDATA[// SelectorSelect ( fieldRef_Link; keyForLink )
+// version 1.2, Daniel A. Shockley, John Vasiliadis, NYHTC
+
+/* 
+	This is used to set the local variable for selection/editing via Selector-Connector.
+
+
+HISTORY:
+	1.2 - 2016-09-06 ( dshockley ): now preserves return-delimited list of keys (avoid the FM bug "convert-returns-to-spaces").
+	1.1 - 2016-xx-xx ( dshockley ): 
+	1.0 - 2016-03-01 ( dshockley ): first created.
+*/
+
+
+Let ( [ 
+	  fieldName_Link = GetFieldName ( fieldRef_Link )
+	; fieldName_Link = GetValue ( Substitute ( fieldName_Link; "::"; "¶" ); 2 )  /*  Convert to short field name, from which the variable name is built. */
+
+	; fieldNameSuffix = "_Link"
+
+	; fieldNameWithoutLinkSuffix = Left ( fieldName_Link; Length ( fieldName_Link ) - Length ( fieldNameSuffix ) )
+	; varPrefix = "$Selector_"
+	; varName = varPrefix & fieldNameWithoutLinkSuffix
+	; codeTemplate = "Let ( " & varName & " = __VALUES__; True ) " 
+	; charDQ = "\""
+	; keyValueOrList = If ( ValueCount ( keyForLink ) = 1 
+			; Quote ( keyForLink )
+			; "List ( " & charDQ & Substitute ( keyForLink ; [ "¶" ; charDQ & "; " & charDQ ] ) & charDQ & " )"
+			)
+	; codeToSetVar = Substitute ( codeTemplate ; "__VALUES__" ; keyValueOrList )
+	; setVarToKey = Evaluate ( codeToSetVar )
+
+	]; 
+
+	True 
+
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

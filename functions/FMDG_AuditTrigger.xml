@@ -1,0 +1,21 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="9" functionArity="2" visible="True" parameters="zRecordID;options" name="FMDG_AuditTrigger">
+		<Calculation><![CDATA[// FMDG_AuditTrigger ( zRecordID; options )
+// version 2.0, Erik Shagdar, NYHTC
+
+/*
+	Determine if DataGuard should be triggered.
+
+
+HISTORY:
+	2.0 - 2016-09-22 ( eshagdar ): deprecated
+	1.2 - 2016-07-07 ( eshagdar ): use 'Audit_RetainSelf' function instead of checking for account.
+	1.1 - 2016-07-06 ( eshagdar ): renamed '_FMDG_AuditTrigger' to 'FMDG_AuditTrigger'.
+	1.0 - 2016-04-20 ( eshagdar ): Initial Version
+*/
+
+
+True]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

@@ -1,0 +1,43 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="23" functionArity="1" visible="True" parameters="dict" name="DictListKeys">
+		<Calculation><![CDATA[// DictListKeys( dict )
+// version 1.2, Daniel A. Shockley, NYHTC
+
+/*
+	Lists all of the keys present in a dictionary object (as used by SixFriedRice.com).
+
+
+REQUIRES:
+	DictFirst
+	DictRemove
+
+
+HISTORY:
+	1.2 - Reformatted to match newer standards.
+	1.1 - Reformatted calc to fit standards. 
+	1.0 - 201x-xx-xx ( xxxxx ): first created.
+*/
+
+
+Let( [
+		firstKeyName = DictFirst( dict )
+		/* Need to get next key so that we know whether to put in the line return (if no next, don't put in the separator) */
+		; nextKeyName = 
+			If ( Length( firstKeyName ) > 0
+				; DictFirst ( DictRemove ( dict; firstKeyName ) )
+				; "" 
+			)
+	];
+
+	If( Length( firstKeyName ) > 0
+		; firstKeyName 
+		& If ( Length( nextKeyName ) = 0
+			; ""
+			; "¶" & DictListKeys ( DictRemove( dict; firstKeyName ) ) 
+		)
+		; ""
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

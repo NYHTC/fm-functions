@@ -1,0 +1,24 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="52" functionArity="2" visible="True" parameters="theField;theList" name="SQL_FieldInList">
+		<Calculation><![CDATA[// SQL_FieldInList ( theField ; theList )
+// version: 1.0, Daniel A. Shockley
+
+/*
+	Stub function (so it appears with other SQL functions) that calls the ThisFieldInListSQL function by Kevin Frank. 
+	See: http://www.filemakerhacks.com/?p=5013
+
+
+REQUIRES:
+	ThisFieldInListSQL
+
+
+HISTORY:
+	1.1 - 2016-05-02 ( eshagdar ): added documentation
+	1.0 - first created
+*/
+
+
+ThisFieldInListSQL ( theField ; theList )]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

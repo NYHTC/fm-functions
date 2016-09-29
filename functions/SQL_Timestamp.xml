@@ -1,0 +1,35 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="411" functionArity="1" visible="True" parameters="someTimestamp" name="SQL_Timestamp">
+		<Calculation><![CDATA[// SQL_Timestamp ( someTimestamp )
+// version 1.0, NYHTC
+
+/* 
+	Converts a FileMaker timestamp to one for SQL. 
+
+
+HISTORY: 
+	1.0 (2016-06-27-dshockley): First created. 
+*/
+
+
+
+Let ( [
+	SQ = "'" // single-quote
+]; 
+	"TIMESTAMP " 
+	& SQ 
+	& Year ( someTimestamp ) 
+	& "-" 
+	& Right ( "0" & Month( someTimestamp ); 2 ) 
+	& "-" 
+	& Right ( "0" & Day ( someTimestamp ); 2 ) 
+	& " " 
+	& Right ( "0" & Hour ( someTimestamp ); 2 ) 
+	& ":" 
+	& Right ( "0" & Minute ( someTimestamp ); 2 ) 
+	& ":" 
+	& Right ( "0" & Seconds ( someTimestamp ); 2 ) 
+	& SQ
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

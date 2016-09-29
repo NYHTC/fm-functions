@@ -1,0 +1,24 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="404" functionArity="1" visible="True" parameters="options" name="SelectorParamsFinishCreate">
+		<Calculation><![CDATA[// SelectorParamsFinishCreate ( options )
+// version 1.1, Daniel A. Shockley, NYHTC
+
+/* 
+	Sends needed params to the SelectorCreateFinish script. 
+
+
+REQUIRES:
+	#
+	CallStack
+
+
+HISTORY:
+	1.0 - 2016-04-29 ( dshockley ): - first created.
+*/
+
+
+	# ( "OriginalLayoutNumber"; $selectorOriginalLayoutNumber )
+&	CallStack ( "" )]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

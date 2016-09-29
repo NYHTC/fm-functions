@@ -1,0 +1,18 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="43" functionArity="0" visible="True" parameters="" name="PlatformIsMac">
+		<Calculation><![CDATA[// PlatformIsMac (  )
+// version 1.0, Daniel A. Shockley, NYHTC
+
+/*
+	Return True if on a Mac
+
+
+HISTORY:
+	1.0 - 2015-xx-xx ( dshockley ): first created.
+*/
+
+
+Abs ( Get ( SystemPlatform ) ) = 1]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
