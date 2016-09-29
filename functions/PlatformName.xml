@@ -5,7 +5,7 @@
 
 
 /* 
-VERSION HISTORY: 
+HISTORY: 
 	1.1 - 201x-xx-xx ( xxxxx ): removed misleading "Server" result, since Platform is the OS. Server is the Application version, although it is perhaps useful for grouping for the PlatformIsServer custom function to return True based on the Application. You would then sometimes still need to know Mac versus Windows. 
 	1.0 - 201x-xx-xx ( dshockley ): first created.
 */

@@ -1,16 +1,16 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="63" functionArity="2" visible="True" parameters="valueList;itemValue" name="ValueRemove">
 		<Calculation><![CDATA[// ValueRemove ( valueList; itemValue )
-// version 1.2, Erik Shagdar
+// version 1.2, Daniel Shockley, NYHTC
 
 /*
 	Removes every occurrence of itemValue from valueList. 
 
 
 HISTORY: 
-	1.2 - 2016-04-21 ( eshagdar ): fixed memory leak bug if both the list and value  are empty
-	1.1 - 2015-10-16 ( eshagdar ): fixed bug where consecutive items were not removed
-	1.0 - xxxx-xx-xx ( dshockley ): first created
+	1.2 - 2016-04-21 ( eshagdar ): fixed memory leak bug if both the list and value are empty.
+	1.1 - 2015-10-16 ( eshagdar ): fixed bug where consecutive items were not removed.
+	1.0 - xxxx-xx-xx ( dshockley ): first created.
 */
 
 

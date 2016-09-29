@@ -8,12 +8,12 @@
 
 
 HISTORY: 
-	1.0 (2016-06-27-dshockley): Pulled from fmfunctions.com site; renamed; Re-formatted for HTC standards. Original name was 'SQLField', created by Kevin Frank, with modifications by Dan Smith. 
-*/
+	1.0 - 2016-06-27 ( dshockley ): Pulled from fmfunctions.com site; renamed; Re-formatted for HTC standards. Original name was 'SQLField', created by Kevin Frank, with modifications by Dan Smith. 
 
 
+ORIGINAL DOCUMENTATION:
 
-/* SQLField ( fieldOrFieldName )
+SQLField ( fieldOrFieldName )
 PURPOSE:
 Quote a field name for use in a FileMaker SQL statement. Prevent hard-coding it's value.
 PARAMETERS:
@@ -26,9 +26,9 @@ REVISIONS:
 	- renamed from GFN to SQLField
 	- added to documentation section
 2012-AUG-10    - allow parameter to be a field or field name, change parameter name accordingly
-####################################################################################################*/
-// ===================================
-/*
+####################################################################################################
+ ===================================
+
 	This function is published on FileMaker Custom Functions
 	to check for updates and provide feedback and bug reports
 	please visit http://www.fmfunctions.com/fid/344
@@ -36,26 +36,27 @@ REVISIONS:
 	Function Author: Daniel Smith (http://www.fmfunctions.com/mid/375)
 	Last updated: 08 February 2013
 	Version: 1
+
+ ===================================
 */
-// ===================================
 
 
+Let ( [
+		~fieldName = 
+			If ( IsValid( GetFieldName( fieldOrFieldName ) ) ;
+				GetFieldName( fieldOrFieldName ) ;
+				fieldOrFieldName
+			) ;
+		~separator = Position ( ~fieldName ; "::" ; 1 ; 1 ) ;
+		~fieldNameOnly = 
+			If ( ~separator ;
+				Right ( ~fieldName ; Length ( ~fieldName ) - ~separator - 1 ) ;
+				~fieldName
+			)
+	] ;
 
-Let (
-[
-	~fieldName = If(
-		IsValid( GetFieldName( fieldOrFieldName ) ) ;
-		GetFieldName( fieldOrFieldName ) ;
-		fieldOrFieldName
-	) ;
-	~separator = Position ( ~fieldName ; "::" ; 1 ; 1 ) ;
-	~fieldNameOnly = If(
-		~separator ;
-		Right ( ~fieldName ; Length ( ~fieldName ) - ~separator - 1 ) ;
-		~fieldName
-	)
-] ;
 	Quote ( ~fieldNameOnly )
+
 )]]></Calculation>
 	</CustomFunction>
 </fmxmlsnippet>

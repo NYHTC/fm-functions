@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="410" functionArity="3" visible="True" parameters="fieldRef;operator;someValue" name="SQL_Where">
 		<Calculation><![CDATA[// SQL_Where ( fieldRef ; operator ; someValue )
-// version 1.0, Daniel A. Shockley, Erik Shagdar
+// version 1.0, Daniel A. Shockley, Erik Shagdar, NYHTC
 
 /* 
 	Gets a 'where' clause (for use following WHERE, AND, OR) with the quoted short field name of the field reference, the operator, and then properly escape (or not) the value based on the field's Type. 
@@ -15,9 +15,8 @@ REQUIRE:
 
 
 HISTORY: 
-	1.0 (2016-06-27-dshockley): first created.
+	1.0 - 2016-06-27 ( dshockley ): first created.
 */
-
 
 
 Let ( [ 
@@ -55,12 +54,14 @@ Let ( [
 			; 
 			someValue
 			)
-]; 
+	]; 
+
 	SQL_Field ( fieldRef )
 	&  " "
 	& codeForOp
 	& " "
 	& codeForValue
-)]]></Calculation>
+)]]>
+		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>

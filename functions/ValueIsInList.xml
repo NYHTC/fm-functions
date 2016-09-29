@@ -1,18 +1,19 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="62" functionArity="2" visible="True" parameters="someValueList;someValue" name="ValueIsInList">
 		<Calculation><![CDATA[// ValueIsInList (someValueList, someValue )
-// version 1.1, Erik Shagdar, Dan Shockley
+// version 1.1, Erik Shagdar, Dan Shockley, NYHTC
 
 /*
 	Simple test to be sure a VALUE is in a list using an exact match. 
 
 
-VERSION HISTORY
-	1.1 - ( eshagdar ): Uses Position instead of patternCount for slightly faster performance
-	1.0 - ( dshockley ): Original Version
+HISTORY:
+	1.1 - 201x-xx-xx ( eshagdar ): uses Position instead of patternCount for slightly faster performance
+	1.0 - 201x-xx-xx ( dshockley ): first created.
 */
 
 
-Position ( "¶" & someValueList & "¶"; "¶" & someValue & "¶"; 1; 1 ) > 0]]></Calculation>
+Position ( "¶" & someValueList & "¶"; "¶" & someValue & "¶"; 1; 1 ) > 0]]>
+		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>

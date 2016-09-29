@@ -8,14 +8,12 @@
 
 
 HISTORY: 
-	1.0 (2016-06-27-dshockley): First created. 
+	1.0 - 2016-06-27 ( dshockley ): first created.
 */
 
 
+Let ( [ SQ = "'" // single-quote ]; 
 
-Let ( [
-	SQ = "'" // single-quote
-]; 
 	"TIMESTAMP " 
 	& SQ 
 	& Year ( someTimestamp ) 
@@ -30,6 +28,7 @@ Let ( [
 	& ":" 
 	& Right ( "0" & Seconds ( someTimestamp ); 2 ) 
 	& SQ
+	
 )]]></Calculation>
 	</CustomFunction>
 </fmxmlsnippet>

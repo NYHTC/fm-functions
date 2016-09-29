@@ -1,45 +1,52 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="59" functionArity="2" visible="True" parameters="theField;theList" name="ThisFieldInListSQL">
 		<Calculation><![CDATA[// ThisFieldInListSQL ( theField ; theList )
-// version: 2012-05-20, Kevin Frank
+// version 1.0, Kevin Frank
 
 /* 
-	Original Header:
-			Date:  20 May 2012  
-			Author:  Kevin Frank
-			Explanation:  generates the entire IN clause to follow a WHERE in a SQL query
-														elements will be wrapped in quotes ONLY if the field is a TEXT field
+	Generates the entire IN clause to follow a WHERE in a SQL query elements will be wrapped in quotes ONLY if the field is a TEXT field
 
-			Usage:  ThisFieldInListSQL ( theField ; theList )
 
-			Example #1:  where id is a NUMBER field, given a value list "Foo" containing 1¶2¶3,  
-						ThisFieldInListSQL ( 
-							 orders::id ; 
-							 ValueListItems ( Get ( FileName ) ; "Foo" ) 
-						) 
-			Returns:  id IN ( 1,2,3 )
+HISTORY:
+	1.0 - 201x-xx-xx ( xxxxx ): taken from Kevin Frank.
+	0.0 - 2012-05-20 ( kfrank ): published.
 
-			Example #2:  where id is a TEXT field, given a value list "Foo" containing 1¶2¶3,  
-						ThisFieldInListSQL ( 
-							 orders::id ; 
-							 ValueListItems ( Get ( FileName ) ; "Foo" ) 
-						) 
-			Returns:  id IN ( '1','2','3' )
 
-			Note: The Quote() function "escapes" problematical characters and SQL reserved words, 
-								 if any -- otherwise, no harm done.   
+ORIGINAL DOCUMENTATION:
+	Date:  20 May 2012  
+	Author:  Kevin Frank
+	Explanation: generates the entire IN clause to follow a WHERE in a SQL query elements will be wrapped in quotes ONLY if the field is a TEXT field
+
+	Usage:  ThisFieldInListSQL ( theField ; theList )
+
+	Example #1:  where id is a NUMBER field, given a value list "Foo" containing 1¶2¶3,  
+				ThisFieldInListSQL ( 
+					 orders::id ; 
+					 ValueListItems ( Get ( FileName ) ; "Foo" ) 
+				) 
+	Returns:  id IN ( 1,2,3 )
+
+	Example #2:  where id is a TEXT field, given a value list "Foo" containing 1¶2¶3,  
+				ThisFieldInListSQL ( 
+					 orders::id ; 
+					 ValueListItems ( Get ( FileName ) ; "Foo" ) 
+				) 
+	Returns:  id IN ( '1','2','3' )
+
+	Note: The Quote() function "escapes" problematical characters and SQL reserved words, if any -- otherwise, no harm done.   
 */
 
+
 Let ( [ 
-a = GetFieldName ( theField ) ; 
-b = Substitute ( a ; "::" ; ¶ ) ; 
-c = PatternCount ( FieldType ( Get ( FileName ) ; GetFieldName ( theField ) ) ; "text" ) ; 
-d = If ( c > 0 ; "'" ; "" )    //    a single quote if theField is TEXT, otherwise nothing
-] ; 
+		a = GetFieldName ( theField ) ; 
+		b = Substitute ( a ; "::" ; ¶ ) ; 
+		c = PatternCount ( FieldType ( Get ( FileName ) ; GetFieldName ( theField ) ) ; "text" ) ; 
+		d = If ( c > 0 ; "'" ; "" )    // a single quote if theField is TEXT, otherwise nothing
+	] ; 
 
 	 Quote ( GetValue ( b ; 2 ) ) & " IN ( " & d & Substitute ( theList ; ¶ ; d & "," & d ) & d & " )"
 
-)   //   end let]]>
+)]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>

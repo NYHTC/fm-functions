@@ -1,16 +1,24 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="55" functionArity="1" visible="True" parameters="fieldRef" name="TableNameOfField">
 		<Calculation><![CDATA[// TableNameOfField ( fieldRef )
-// version 1.0, Daniel A. Shockley
+// version 1.0, Daniel A. Shockley, NYHTC
 
 /*
 	Get the Table Name from a fully-qualified field reference
+
+
+HISTORY:
+	201x-xx-xx ( dshockley ): first created.
 */
 
 
 Let( 
 	fieldNameFull = GetFieldName( fieldRef );
-	Left( fieldNameFull; Position( fieldNameFull; "::"; 1; 1 ) - 1 )
+
+	Left ( 
+		fieldNameFull; 
+		Position ( fieldNameFull; "::"; 1; 1 ) - 1 
+	)
 )]]>
 		</Calculation>
 	</CustomFunction>

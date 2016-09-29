@@ -1,88 +1,90 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="64" functionArity="3" visible="True" parameters="versionString1;versionString2;optionalVersionComponentSeparator" name="VersionCompare">
 		<Calculation><![CDATA[// VersionCompare ( versionString1, versionString2, optionalVersionComponentSeparator ) 
-// version 1.1, Daniel A. Shockley
+// version 1.1, Daniel A. Shockley, NYHTC
 
 /* 
 	Compares two multi-part version strings properly, returning 0 if the same, +1 if first is greater, -1 is second is greater, and "?" if some error. Can also optionally specify the version component separator - the default is a dot (".")
 
 
-VERSION HISTORY: 
-	1.1 (2015-11-16-dshockley) - updated to return error if either is NOT a valid number at all.
-	1.0 (2015-02-10-dshockley) - first created; currently only handles up to 4 version-components.
+WARNING:
+	currently only handles up to 4 version-components.
+
+
+HISTORY: 
+	1.1 - 2015-11-16 ( dshockley ): updated to return error if either is NOT a valid number at all.
+	1.0 - 2015-02-10 ( dshockley ): first created.
 */
 
 
 Let ( [ 
 
-// TEST PARAMS: versionString1 = "10.10.1.7"; versionString2 = "10.10.2"; optionalVersionComponentSeparator = ""; 
+	// TEST PARAMS: versionString1 = "10.10.1.7"; versionString2 = "10.10.2"; optionalVersionComponentSeparator = ""; 
 
 
-vcSep = If ( IsEmpty ( optionalVersionComponentSeparator ); "."; optionalVersionComponentSeparator )
+	vcSep = 
+		If ( IsEmpty ( optionalVersionComponentSeparator ); 
+			"."; 
+			optionalVersionComponentSeparator 
+		)
+
+	; parsed1 = Substitute ( versionString1; vcSep; "¶" )
+	; partCount1 = ValueCount ( parsed1 )
+	; parsed2 = Substitute ( versionString2; vcSep; "¶" )
+	; partCount2 = ValueCount ( parsed2 )
+	; maxPartCount = If ( partCount1 > partCount2; partCount1; partCount2 )
 
 
+	; part1diff = ( 0+GetValue ( parsed1; 1 ) ) - ( 0+GetValue ( parsed2; 1 ) )
+	; part2diff = ( 0+GetValue ( parsed1; 2 ) ) - ( 0+GetValue ( parsed2; 2 ) )
+	; part3diff = ( 0+GetValue ( parsed1; 3 ) ) - ( 0+GetValue ( parsed2; 3 ) )
+	; part4diff = ( 0+GetValue ( parsed1; 4 ) ) - ( 0+GetValue ( parsed2; 4 ) )
 
-; parsed1 = Substitute ( versionString1; vcSep; "¶" )
-; partCount1 = ValueCount ( parsed1 )
-; parsed2 = Substitute ( versionString2; vcSep; "¶" )
-; partCount2 = ValueCount ( parsed2 )
-; maxPartCount = If ( partCount1 > partCount2; partCount1; partCount2 )
+	]; 
 
-
-; part1diff = ( 0+GetValue ( parsed1; 1 ) ) - ( 0+GetValue ( parsed2; 1 ) )
-; part2diff = ( 0+GetValue ( parsed1; 2 ) ) - ( 0+GetValue ( parsed2; 2 ) )
-; part3diff = ( 0+GetValue ( parsed1; 3 ) ) - ( 0+GetValue ( parsed2; 3 ) )
-; part4diff = ( 0+GetValue ( parsed1; 4 ) ) - ( 0+GetValue ( parsed2; 4 ) )
-
-]; 
-
-Case ( 
-	GetAsNumber ( versionString1 ) = "?" or GetAsNumber ( versionString2 ) = "?"
-	; "?"
-	;
-	part1diff > 0
-	; +1
-	;
-	part1diff < 0
-	; -1
-	;
-	maxPartCount = 1
-	; 0
-	;
-	part2diff > 0
-	; +1
-	;
-	part2diff < 0
-	; -1
-	;
-	maxPartCount = 2
-	; 0
-	;
-	part3diff > 0
-	; +1
-	;
-	part3diff < 0
-	; -1
-	;
-	maxPartCount = 3
-	; 0
-	;
-	part4diff > 0
-	; +1
-	;
-	part4diff < 0
-	; -1
-	;
-	maxPartCount = 4
-	; 0
-	;
-	"?"
-	)
-)
-
-
-// TEMP END. 
-]]>
+	Case ( 
+		GetAsNumber ( versionString1 ) = "?" or GetAsNumber ( versionString2 ) = "?"
+		; "?"
+		;
+		part1diff > 0
+		; +1
+		;
+		part1diff < 0
+		; -1
+		;
+		maxPartCount = 1
+		; 0
+		;
+		part2diff > 0
+		; +1
+		;
+		part2diff < 0
+		; -1
+		;
+		maxPartCount = 2
+		; 0
+		;
+		part3diff > 0
+		; +1
+		;
+		part3diff < 0
+		; -1
+		;
+		maxPartCount = 3
+		; 0
+		;
+		part4diff > 0
+		; +1
+		;
+		part4diff < 0
+		; -1
+		;
+		maxPartCount = 4
+		; 0
+		;
+		"?"
+		)
+	)]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
