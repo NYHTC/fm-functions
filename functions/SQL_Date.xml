@@ -15,7 +15,7 @@ HISTORY:
 */
 
 
-Let ( [ SQ = "'" // single-quote ]; 
+Let ( [ SQ = "'" /* single-quote */ ]; 
 
 	"DATE " & SQ & Year ( someDate ) & "-" & Right ( "0" & Month( someDate ); 2 )  & "-" & Right ( "0" & Day ( someDate ); 2 ) & SQ
 

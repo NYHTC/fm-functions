@@ -13,7 +13,7 @@ HISTORY:
 */
 
 
-Let ( [ SQ = "'" // single-quote ]; 
+Let ( [ SQ = "'" /* single-quote */ ]; 
 
 	"TIMESTAMP " 
 	& SQ 
