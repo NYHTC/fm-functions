@@ -1,40 +1,40 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="337" functionArity="1" visible="True" parameters="fieldForTableNameOrTableName" name="SQL_Table">
 		<Calculation><![CDATA[// SQL_Table ( fieldForTableNameOrTableName )
-// version 1.0, Dan Smith, http://www.fmfunctions.com/fid/340
+// version 1.1, Dan Smith, http://www.fmfunctions.com/fid/340
 
 /* 
 	Gets the short table name from a field reference of a field IN that table and then puts quotes around it for use in SQL queries. 
 
 
 HISTORY: 
+	1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.0 - 2016-06-27 ( dshockley ): Pulled from fmfunctions.com site; renamed; Re-formatted for HTC standards. Original name was 'SQLTable', created by Dan Smith. 
 
 
-ORIGINAL DOCUMENTATION:
+ORIGINAL DOCUMENTATION:]
+	SQLTable ( fieldForTableNameOrTableName )
+	PURPOSE:
+	Quote a table name for use in a FileMaker SQL statement. Prevent hard-coding it's value.
+	PARAMETERS:
+	fieldForTableNameOrTableName (field, txt) field, fully-qualified field name, or table occurence name to extract table occurence from.
+	DEPENDENCIES:
+	FileMaker Pro 10+
+	REVISIONS:
+	2011-JUL-01    - Created by Dan Smith dansmith65@gmail.com
+	2012-AUG-10    - allow parameter to be a field or table name, change parameter name accordingly
+	####################################################################################################
+	===================================
 
-SQLTable ( fieldForTableNameOrTableName )
-PURPOSE:
-Quote a table name for use in a FileMaker SQL statement. Prevent hard-coding it's value.
-PARAMETERS:
-fieldForTableNameOrTableName (field, txt) field, fully-qualified field name, or table occurence name to extract table occurence from.
-DEPENDENCIES:
-FileMaker Pro 10+
-REVISIONS:
-2011-JUL-01    - Created by Dan Smith dansmith65@gmail.com
-2012-AUG-10    - allow parameter to be a field or table name, change parameter name accordingly
-####################################################################################################
-===================================
+		This function is published on FileMaker Custom Functions
+		to check for updates and provide feedback and bug reports
+		please visit http://www.fmfunctions.com/fid/340
+		Prototype: SQLTable( fieldForTableNameOrTableName )
+		Function Author: Daniel Smith (http://www.fmfunctions.com/mid/375)
+		Last updated: 14 November 2012
+		Version: 1
 
-	This function is published on FileMaker Custom Functions
-	to check for updates and provide feedback and bug reports
-	please visit http://www.fmfunctions.com/fid/340
-	Prototype: SQLTable( fieldForTableNameOrTableName )
-	Function Author: Daniel Smith (http://www.fmfunctions.com/mid/375)
-	Last updated: 14 November 2012
-	Version: 1
-
-===================================
+	===================================
 */
 
 

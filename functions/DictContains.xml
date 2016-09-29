@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="15" functionArity="2" visible="True" parameters="dict;name" name="DictContains">
 		<Calculation><![CDATA[// DictContains( dict; name )
-// version 1.2, Daniel A. Shockley, NYHTC
+// version 1.2.1, Daniel A. Shockley, NYHTC
 
 /* 
 	Simple test for whether a dictionary includes a specified key.
@@ -12,6 +12,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.2 - 201x-xx-xx ( eshagdar ): Reformatted to match newer standards.
 	1.1 - 201x-xx-xx ( dshockley ): Use DictEscape instead of hard-coded Substitute within function.
 	1.0 - 201x-xx-xx ( dshockley ): first created.

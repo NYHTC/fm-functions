@@ -1,14 +1,15 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="55" functionArity="1" visible="True" parameters="fieldRef" name="TableNameOfField">
 		<Calculation><![CDATA[// TableNameOfField ( fieldRef )
-// version 1.0, Daniel A. Shockley, NYHTC
+// version 1.1, Daniel A. Shockley, NYHTC
 
 /*
 	Get the Table Name from a fully-qualified field reference
 
 
 HISTORY:
-	201x-xx-xx ( dshockley ): first created.
+	1.1 - 2016-09-29 ( eshagdar ): updated documentation.
+	1.0 - 201x-xx-xx ( dshockley ): first created.
 */
 
 

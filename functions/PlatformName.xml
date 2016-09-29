@@ -1,11 +1,12 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="46" functionArity="0" visible="True" parameters="" name="PlatformName">
 		<Calculation><![CDATA[// PlatformName (  )
-// version 1.1, Daniel A. Shockley
+// version 1.2, Daniel A. Shockley
 
 
 /* 
-HISTORY: 
+HISTORY:
+	1.2 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 201x-xx-xx ( xxxxx ): removed misleading "Server" result, since Platform is the OS. Server is the Application version, although it is perhaps useful for grouping for the PlatformIsServer custom function to return True based on the Application. You would then sometimes still need to know Mac versus Windows. 
 	1.0 - 201x-xx-xx ( dshockley ): first created.
 */

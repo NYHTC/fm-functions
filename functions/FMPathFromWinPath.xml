@@ -25,13 +25,18 @@ HISTORY:
 If ( IsEmpty ( someWinPath )
 	; ""
 	; Let ( [
-		backslash = Char ( 92 ) 
-		; leadingSlashIfNeeded = 
-			If ( not IsEmpty ( Filter ( Left ( Upper ( someWinPath ); 1 ) ; "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ) ) 
-					and Middle ( someWinPath; 2; 2 ) = ":" & backslash
-				; "/"  /* If it starts with an alphabetical letter followed by colon-and-backslash, then it DOES need a leading slash added */
-				; ""  /* if not, it already has 2 leading backslashes, which will be changed to slashes. */
-			)
+			backslash = Char ( 92 ) 
+			; leadingSlashIfNeeded = 
+				If ( not IsEmpty ( Filter ( Left ( Upper ( someWinPath ); 1 ) ; "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ) ) 
+						and Middle ( someWinPath; 2; 2 ) = ":" & backslash
+
+					/* If it starts with an alphabetical letter followed by colon-and-backslash, then it DOES need a leading slash added */
+					; "/"
+
+
+					/* if not, it already has 2 leading backslashes, which will be changed to slashes. */
+					; ""
+				)
 		]; 
 
 		leadingSlashIfNeeded & Substitute ( someWinPath; backslash; "/" )

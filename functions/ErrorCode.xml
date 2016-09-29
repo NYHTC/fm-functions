@@ -1,12 +1,13 @@
 <fmxmlsnippet type="FMObjectList">
 <CustomFunction id="90" functionArity="1" visible="True" parameters="ErrorNum" name="ErrorCode"><Calculation><![CDATA[// ErrorCode( ErrorNum )
-// version 1.2, Erik Shagdar
+// version 1.2.1, Erik Shagdar
 
 /*
 	Returns the explanation for the error number. Also contains HTC custom codes
 
 
 HISTORY:
+	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.2 - 2016-08-22 ( eshagdar ): added AppleScript codes
 	1.1 - 2015-05-28 ( eshagdar ): added custom HTC codes
 	1.0 - 201x-xx-xx ( eshagdar ): first created.

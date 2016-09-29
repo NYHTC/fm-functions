@@ -60,19 +60,19 @@ ORIGINAL DOCUMENTATION:
 Case (
 	/* First call to function, check for pre-processed node data */
 	not $~uuid.step ;
-		Let ( [
-				$~uuid.node = GetValue ( $$~UUID.DATA ; 4 ) ;
-				$~uuid.step =
-					If ( IsEmpty ( $~uuid.node ) ; 1 ; /* Else */ 3 ) ;
-				$~uuid.id_Device =
-					If ( $~uuid.step = 1 ; Left ( Get ( PersistentID ) ; 12 ) )
+	Let ( [
+			$~uuid.node = GetValue ( $$~UUID.DATA ; 4 ) ;
+			$~uuid.step =
+				If ( IsEmpty ( $~uuid.node ) ; 1 ; /* Else */ 3 ) ;
+			$~uuid.id_Device =
+				If ( $~uuid.step = 1 ; Left ( Get ( PersistentID ) ; 12 ) )
 		] ;
-			UUIDTimeDevice
-		) ;
+		UUIDTimeDevice
+	) ;
 
 	/* Parse device ID from hexadecimal to a (base 10) number */
 	$~uuid.step = 1 ;
-		Let ( [
+	Let ( [
 			~deviceDigit = Middle ( $~uuid.id_Device ; 12 - $~uuid.i ; 1 ) ;
 			~deviceDigit =	// convert digit to number
 				Position ( "0123456789abcdef" ; ~deviceDigit ; 1 ; 1 ) - 1 ;
@@ -85,23 +85,23 @@ Case (
 				) ;
 			$~uuid.i = $~uuid.i + 1
 		] ;
-			UUIDTimeDevice
-		) ;
+		UUIDTimeDevice
+	) ;
 
 	/* Set multicast bit to avoid colliding with NIC addresses */
 	$~uuid.step = 2 ;
-		Let ( [
+	Let ( [
 			~left = Div ( $~uuid.node ; 2199023255552 ) ;	// 2^41
 			~right = Mod ( $~uuid.node ; 1099511627776 ) ;	// 2^40
 			$~uuid.node = ( ~left * 2 + 1 ) * 1099511627776 + ~right ;
 			$~uuid.step = $~uuid.step + 1
 		] ;
-			UUIDTimeDevice
-		) ;
+		UUIDTimeDevice
+	) ;
 
 	/* Concatenate information */
 	$~uuid.step = 3 ;
-		Let ( [
+	Let ( [
 			// Set-up timestamp, serial number, and session key
 			~session = GetValue ( $$~UUID.DATA ; 1 ) ;
 			~lastTimestamp = GetValue ( $$~UUID.DATA ; 2 ) ;
@@ -144,17 +144,17 @@ Case (
 			$~uuid.node = "" ;
 			$~uuid.step = ""
 		] ;
-			// v-r-tttt tttt tttt ttt-ssss-ccccc-nnnnn nnnnn nnnnn
-			"12" // version and reserved variant code
-			// "1-2-"
-			& Right ( "000000000000000" & ~now ; 15 )
-			// & "-"
-			& Left ( Substitute ( ~serial ; "." ; "" ) & "0000" ; 4 )
-			// & "-"
-			& Right ( "00000" & ~session ; 5 )
-			// & "-"
-			& Right ( "000000000000000" & ~node ; 15 )
-		)
+		// v-r-tttt tttt tttt ttt-ssss-ccccc-nnnnn nnnnn nnnnn
+		"12" // version and reserved variant code
+		// "1-2-"
+		& Right ( "000000000000000" & ~now ; 15 )
+		// & "-"
+		& Left ( Substitute ( ~serial ; "." ; "" ) & "0000" ; 4 )
+		// & "-"
+		& Right ( "00000" & ~session ; 5 )
+		// & "-"
+		& Right ( "000000000000000" & ~node ; 15 )
+	)
 )]]>
 		</Calculation>
 	</CustomFunction>

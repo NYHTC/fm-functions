@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="29" functionArity="1" visible="True" parameters="fieldRef" name="FieldNameShort">
 		<Calculation><![CDATA[// FieldNameShort ( fieldRef )
-// version 1.2, Erik Shagdar
+// version 1.2.1, Erik Shagdar
 
 /*
 	Get the simple field name (without the Table name and double-colon included ). Can pass in either a reference to the field OR a fully-qualified name as a string. 
 
 
 HISTORY:
+	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.2 - 201x-xx-xx ( eshagdar ): Reformatted to match newer standards.
 	1.1 - 201x-xx-xx ( xxxxx ): 
 	1.0 - 201x-xx-xx ( xxxxx ): first created.

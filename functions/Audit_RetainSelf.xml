@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="413" functionArity="0" visible="True" parameters="" name="Audit_RetainSelf">
 		<Calculation><![CDATA[// Audit_RetainSelf (  )
-// version 1.1, Erik Shagdar, NYHTC
+// version 1.1.1, Erik Shagdar, NYHTC
 
 /*
 	Returns a boolean of if the editing account should retain the current value
 
 
 HISTORY:
+	1.1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 2016-07-07 ( eshagdar ): changed '$$syncAccount' to '$$auditAccount' to match the meta fields.
 	1.0 - 2016-07-06 ( eshagdar ): first created.
 */

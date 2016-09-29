@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="5" functionArity="0" visible="True" parameters="" name="_AL">
 		<Calculation><![CDATA[// _AL (  )
-// version 1.1, NYHTC
+// version 1.2, NYHTC
 
 /*
 	Returns params for ActionLog
@@ -13,6 +13,7 @@ REQUIRED:
 
 
 HISTORY:
+	1.2 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 201x-xx-xx ( xxxxx ): Pass in the dictionary as well. 
 	1.0 - 201x-xx-xx ( xxxxx ): first created.
 */

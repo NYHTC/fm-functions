@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="58" functionArity="3" visible="True" parameters="sourceText;beforeText;afterText" name="TextBetween">
 		<Calculation><![CDATA[// TextBetween ( sourceText; beforeText; afterText )
-// version 1.1, Daniel A. Shockley, NYHTC
+// version 1.2, Daniel A. Shockley, NYHTC
 
 /* 
 	Extracts text found between (not including) the before and after text. If before and after are not present, return nothing. 
 
 
 HISTORY: 
+	1.2 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 201x-xx-xx ( xxxxx ): reformatted calc for legibility. 
 	1.0 - 201x-xx-xx ( xxxxx ): first created.
 */

@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="27" functionArity="2" visible="True" parameters="someText;suffixText" name="EndsWith">
 		<Calculation><![CDATA[// EndsWith ( someText; suffixText )
-// version 1.0, Daniel A. Shockley, NYHTC
+// version 1.1, Daniel A. Shockley, NYHTC
 
 /*
 	Determine if the someText end with suffixText
 
 
 HISTORY:
+	1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.0 - 201x-xx-xx ( dshockley ): first created.
 */
 

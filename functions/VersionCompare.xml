@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="64" functionArity="3" visible="True" parameters="versionString1;versionString2;optionalVersionComponentSeparator" name="VersionCompare">
 		<Calculation><![CDATA[// VersionCompare ( versionString1, versionString2, optionalVersionComponentSeparator ) 
-// version 1.1, Daniel A. Shockley, NYHTC
+// version 1.1.1, Daniel A. Shockley, NYHTC
 
 /* 
 	Compares two multi-part version strings properly, returning 0 if the same, +1 if first is greater, -1 is second is greater, and "?" if some error. Can also optionally specify the version component separator - the default is a dot (".")
@@ -11,7 +11,8 @@ WARNING:
 	currently only handles up to 4 version-components.
 
 
-HISTORY: 
+HISTORY:
+	1.1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 2015-11-16 ( dshockley ): updated to return error if either is NOT a valid number at all.
 	1.0 - 2015-02-10 ( dshockley ): first created.
 */

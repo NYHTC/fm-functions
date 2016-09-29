@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="56" functionArity="2" visible="True" parameters="someText;afterThis" name="TextAfter">
 		<Calculation><![CDATA[// TextAfter ( someText, afterThis )
-// version 1.2, Daniel A. Shockley, NYHTC
+// version 1.2.1, Daniel A. Shockley, NYHTC
 
 /*
 	Returns the text from someText that is after the string 'afterThis'. Returns "" if the afterThis is not present.
 
 
 HISTORY:
+	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.2 - 201x-xx-xx (dshockley): reformatted calc for legibility
 	1.1 - 201x-xx-xx (dshockley): fixed a bug where the 1.0 would chop off the first character from the result.
 	1.0 - 201x-xx-xx ( xxxxx ): first created.

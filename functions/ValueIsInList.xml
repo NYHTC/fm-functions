@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="62" functionArity="2" visible="True" parameters="someValueList;someValue" name="ValueIsInList">
 		<Calculation><![CDATA[// ValueIsInList (someValueList, someValue )
-// version 1.1, Erik Shagdar, Dan Shockley, NYHTC
+// version 1.2, Erik Shagdar, Dan Shockley, NYHTC
 
 /*
 	Simple test to be sure a VALUE is in a list using an exact match. 
 
 
 HISTORY:
+	1.2 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 201x-xx-xx ( eshagdar ): uses Position instead of patternCount for slightly faster performance
 	1.0 - 201x-xx-xx ( dshockley ): first created.
 */

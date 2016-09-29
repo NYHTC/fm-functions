@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="388" functionArity="1" visible="True" parameters="listOfValues" name="SQL_EscapeList">
 		<Calculation><![CDATA[// SQL_EscapeList ( listOfValues )
-// version 1.2, Erik Shagdar, NYHTC
+// version 1.1, Erik Shagdar, NYHTC
 
 /* 
 	Escapes a list of string to work within SQL
@@ -13,6 +13,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.0 - 2016-04-21 ( eshagdar ): first created.
 */
 

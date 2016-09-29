@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="33" functionArity="1" visible="True" parameters="systemPath" name="FMPathFromSystemPath">
 		<Calculation><![CDATA[// FMPathFromSystemPath ( systemPath )
-// version 1.1, Daniel Shockley, NYHTC
+// version 1.1.1, Daniel Shockley, NYHTC
 
 /* 
 	Convert a system path (Posix on Mac, NTFS on Windows) to a FileMaker-style path:
@@ -13,6 +13,7 @@ REQUIRES:
 
 
 HISTORY: 
+	1.1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 2015-06-19 ( dshockley ):  NULL path results a NULL path.
 	1.0 - 2015-05-29 (dshockley/eshagdar ): first created. 
 */
@@ -23,7 +24,8 @@ Case (
 	; ""
 	; 
 
-	Abs ( Get ( SystemPlatform ) ) = 1  /* OS Ⅹ */
+	/* OS Ⅹ */
+	Abs ( Get ( SystemPlatform ) ) = 1
 	; FMPathFromPosix ( systemPath )
 	; 
 

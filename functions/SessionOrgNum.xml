@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="8" functionArity="1" visible="True" parameters="options" name="SessionOrgNum">
 		<Calculation><![CDATA[// SessionOrgNum ( options )
-// version 1.2, NYHTC
+// version 1.2.1, NYHTC
 
 /*
 	Returns this session's OrgNum. Looks at the session table in TimesSQ
 
 
 HISTORY:
+	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.2 - 2016-07-06 ( eshagdar ): renamed '_SessionOrgNum' to 'SessionOrgNum'.
 	1.1 - 2016-xx-xx ( xxxxx ): updated to reference a00_TimesSquare's OrgNum instead of the local file's global OrgNum
 	1.0 - 2015-xx-xx ( xxxxx ): first created.

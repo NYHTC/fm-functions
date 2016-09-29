@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="18" functionArity="2" visible="True" parameters="dict;name" name="DictCount">
 		<Calculation><![CDATA[// DictCount ( dict; name )
-// version 1.2, Daniel A. Shockley, NYHTC
+// version 1.2.1, Daniel A. Shockley, NYHTC
 
 /*
 	This assumes that you have a non-standard dictionary, where a given key might exist more than once. It counts them. 
@@ -12,6 +12,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.2 - 201x-xx-xx ( eshagdar ): Reformatted to match newer standards.
 	1.1 - 201x-xx-xx ( dshockley ): Use DictEscape instead of hard-coded Substitute within function.
 	1.0 - 201x-xx-xx ( dshockley ): first created.

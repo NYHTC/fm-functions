@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="54" functionArity="1" visible="True" parameters="PrefName" name="Audit_PrefRead">
 		<Calculation><![CDATA[// Audit_PrefRead ( PrefName )
-// version 1.5, Erik Shagdar, NYHTC
+// version 1.5.1, Erik Shagdar, NYHTC
 
 /*
 	Send in a preference name.
@@ -16,6 +16,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.5.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.5 - 2016-09-14 ( eshagdar ): added cr/mod fields, auto1, audit trigger/acct/ts fields. changed hard-coded names to be references instead. Deprecated RecID, use UUID instead.
 	1.4 - 2016-07-06 ( eshagdar ): renamed _Audit_PrefRead to Audit_PrefRead.
 	1.3 - 2016-06-16 ( eshagdar ): renamed SyncDeK_PrefRead to _Audit_PrefRead. Updated RecID/UUID prefName

@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="36" functionArity="1" visible="True" parameters="fmPath" name="FMPathToOS">
 		<Calculation><![CDATA[// FMPathToOS ( fmPath )
-// version 1.6, Tom Robinson, http://www.tomrobinson.co.nz/
+// version 1.6.1, Tom Robinson, http://www.tomrobinson.co.nz/
 
 /*
 	Convert from FileMaker filepath to OS filepath (HFS or NTFS)
@@ -36,6 +36,7 @@ EXAMPLE:
 
 
 HISTORY:
+	1.6.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.6 - 2015-05-29 ( dshockley ): if there are TWO leading slashes, do NOT remove one - only remove leading slash when converting to Windows if it is alone. 
 	1.5 - 2015-02-23 ( eshagdar ): reformatted
 	1.4 - 2010-07-14: (by Daniel A. Shockley): changed prefix test to use Left instead of PatternCount (no more need to prefix ¶); 

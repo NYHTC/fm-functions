@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="40" functionArity="4" visible="True" parameters="SQL;dbFileName;colSepChar;rowSepChar" name="HTC_ExecuteFileSQL">
 		<Calculation><![CDATA[// HTC_ExecuteFileSQL ( SQL ; dbFileName ; colSepChar ; rowSepChar )
-// version 1.1, Daniel A. Shockley, NYHTC
+// version 1.2, Daniel A. Shockley, NYHTC
 
 /*
 	Pass on an SQL command to built-in FileMaker whenever possible, alternatively to whatever plugin is being used by HTC. 
@@ -12,6 +12,7 @@ PLUGIN:
 
 
 HISTORY:
+	1.2 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 201x-xx-xx ( eshagdar ): Dataguard function is not compatible with FM13 ( as of 2013-12-16 ). Uses FM's ExecuteSQL function is selecting, and BaseElements for all special queries that are not supported. 
 	1.0 - 201x-xx-xx ( dshockley ): first created.
 */

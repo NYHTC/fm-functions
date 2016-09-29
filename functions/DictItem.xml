@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="22" functionArity="2" visible="True" parameters="name;value" name="DictItem">
 		<Calculation><![CDATA[// DictItem ( name; value )
-// version 1.0, SixFriedRice.com
+// version 1.1, SixFriedRice.com
 
 /*
 	Creates a name/value (aka key/value) pair for a SixFriedRice.com-style dictionary.
@@ -12,6 +12,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.0 - 201x-xx-xx ( xxxxx ): first created.
 */
 

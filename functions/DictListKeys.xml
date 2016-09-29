@@ -13,8 +13,9 @@ REQUIRES:
 
 
 HISTORY:
-	1.2 - Reformatted to match newer standards.
-	1.1 - Reformatted calc to fit standards. 
+	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
+	1.2 - 201x-xx-xx ( xxxxx ): Reformatted to match newer standards.
+	1.1 - 201x-xx-xx ( xxxxx ): Reformatted calc to fit standards. 
 	1.0 - 201x-xx-xx ( xxxxx ): first created.
 */
 

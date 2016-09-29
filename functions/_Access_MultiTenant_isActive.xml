@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="3" functionArity="0" visible="True" parameters="" name="_Access_MultiTenant_isActive">
 		<Calculation><![CDATA[// _Access_MultiTenant_isActive
-// version 1.2, NYHTC
+// version 1.2.1, NYHTC
 
 /*
 	Returns if multi-tenant is turned on. Looks at the prefs table in a00_TimesSquare
 
 
 HISTORY:
+	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.2 - 201x-xx-xx ( xxxxx ): 
 	1.1 - 201x-xx-xx ( xxxxx ): 
 	1.0 - 201x-xx-xx ( xxxxx ): first created.

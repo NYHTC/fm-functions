@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="183" functionArity="1" visible="True" parameters="someList" name="FirstNotEmpty">
 		<Calculation><![CDATA[// FirstNotEmpty ( someList )
-// version 1.0, Daniel A. Shockley
+// version 1.1, Daniel A. Shockley
 
 /* 
 	Returns the first not-empty value. Basically, this allows use of this function as follows, rather than having to say "If Not IsEmpty ( X ), then X, else Y"
@@ -12,7 +12,8 @@ WARNING:
 
 
 HISTORY: 
-	1.0 (2011-??-??-dshockley): first created.
+	1.1 - 2016-09-29 ( eshagdar ): updated documentation.
+	1.0 - 2011-xx-xx ( dshockley ): first created.
 */
 
 

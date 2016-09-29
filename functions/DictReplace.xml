@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="25" functionArity="3" visible="True" parameters="dict;name;newValue" name="DictReplace">
 		<Calculation><![CDATA[// DictReplace( dict; name; newValue )
-// version 1.1, SixFriedRice.com
+// version 1.2, SixFriedRice.com
 
 /*
 	Replaces (the first occurrence of) a key-value pair in a SixFriedRice.com-style Dictionary with a new specified value.
@@ -13,6 +13,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.2 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 201x-xx-xx ( xxxxx ): Changed the order - new key/value pair is before the remaining original dictionary. Reason: If the dictionary contains multiple pairs named with same key, then the one that is "replaced" will be the first one, but the old method would then put the new one at the end. Putting it FIRST in the result means it will appear at the same location as the one it is replacing if the values were extracted for all of the specified (multiple) pairs. Nothing should have relied on the previous behavior, but this new behavior is more consistent with what the function's name implies. 
 	1.0 - 201x-xx-xx ( xxxxx ): first created.
 */

@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="60" functionArity="0" visible="True" parameters="" name="UniqueID">
 		<Calculation><![CDATA[// UniqueID (  )
-// version 1.1, NYHTC
+// version 1.2, NYHTC
 
 /*
 	This custom function is a reserved keyword function and can be used as a wrapper (like an alias) or reference to any other custom function used to generate a UUID (Universally unique identifier)
@@ -12,6 +12,7 @@ NOTE:
 
 
 HISTORY:
+	1.2 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 2015-11-16 ( eshagdar ): updated from UUIDTimeNIC to UUIDTimeDevice.
 	1.0 - 201x-xx-xx ( xxxx ): first created.
  */

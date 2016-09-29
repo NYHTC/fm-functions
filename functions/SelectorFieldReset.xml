@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="48" functionArity="1" visible="True" parameters="fieldRefSelf" name="SelectorFieldReset">
 		<Calculation><![CDATA[// SelectorFieldReset ( fieldRefSelf )
-// version 1.1, Daniel A. Shockley, Erik Shagdar, NYHTC
+// version 1.1.1, Daniel A. Shockley, Erik Shagdar, NYHTC
 
 /* 
 	This is used via triggered auto-enter calcs to set the value of a global link field in the Selector table. It will set the link field to the value of the appropriately named local (single dollar sign) variable, once the refresh-trigger field is refreshed. Note that, in addition to setting the variable to the primary key of the record you wish to edit, you can set the variable to a reserved value "SelectorCreate" to clear the field (empty variable will not work, since it will be ignored), which, combined with the Allow Create option on the relationship tied to an auto-enter key field, will create the related record and back-fill that new record's value. 
 
 
 HISTORY:
+	1.1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 201x-xx-xx ( xxxxx ): also clear "SelectorCreate" when used, since only needed on the 1st refresh. Leaving it could be dangerous, since a refresh would clear the field again. 
 	1.0 - 201x-xx-xx ( xxxxx ): first created.
 */
