@@ -1,0 +1,44 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="384" functionArity="2" visible="True" parameters="dict;listOfKeys" name="DictRemoveMultiple">
+		<Calculation><![CDATA[// DictRemoveMultiple( dict; listOfKeys )
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	Removes key/value pairs from a SixFriedRice.com-style dictionary.
+
+
+HISTORY:
+	1.0 - 2016-04-08 ( eshagdar ): first created.
+
+
+REQUIRES:
+	DictRemove
+	ValueRemove
+
+
+SAMPLE:
+	Input:	DictRemoveMultiple (
+				" <:bob:=foo:>
+				  <:sue:=fizz:>
+				  <:fred:=buzz:>"; 
+				"fred¶bob"
+			)
+	Output:	<:sue:=fizz:>*/
+
+
+If ( IsEmpty ( dict ) or IsEmpty ( listOfKeys );
+	dict;
+	Let ( [
+			firstKey = GetValue ( listOfKeys; 1 );
+			remainingList = ValueRemove ( listOfKeys ; firstKey );
+			newDict = DictRemove ( dict ; firstKey )
+		];	
+		If ( IsEmpty ( remainingList  );
+			newDict;
+			DictRemoveMultiple ( newDict; remainingList )
+		)
+	)
+)]]>
+			</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
