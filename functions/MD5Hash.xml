@@ -1,5 +1,5 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="425" functionArity="1" visible="True" parameters="String" name="HashMD5">
+	<CustomFunction id="425" functionArity="1" visible="True" parameters="String" name="MD5Hash">
 		<Calculation><![CDATA[// MD5Hash ( string )
 // version 1.0, Erik Shagdar, NYHTC
 
