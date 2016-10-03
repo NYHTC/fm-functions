@@ -1,0 +1,21 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="425" functionArity="1" visible="True" parameters="String" name="HashMD5">
+		<Calculation><![CDATA[// MD5Hash ( string )
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	Return the MD5 hash of some string
+
+
+HISTORY ( recent at top ):
+	1.0 - 2016-10-03 ( eshagdar ): first created.
+*/
+
+
+If ( not IsEmpty ( string );
+	BE_MessageDigest ( string; BE_MessageDigestAlgorithm_MD5 );
+	""
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
