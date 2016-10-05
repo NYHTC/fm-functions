@@ -1,0 +1,36 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="134" functionArity="2" visible="True" parameters="valueList;valueListToRemove" name="ValueRemoveMultiple">
+		<Calculation><![CDATA[// ValueRemoveMultiple ( valueList ; valueListToRemove )
+// version 1.1, Andrew Morgan
+
+/* 
+Takes two value lists as parameters and removes each value in the second list from the first list
+
+
+REQUIRES:
+	ValueRemove ( valueList ; itemValue )
+
+
+VERSION HISTORY:
+	1.1 - 2015-12-02 ( eshagdar ): fixed recursive bug where an empty valueListToRemove causes a memory error
+	1.0 - 12-16-11-morgan: Initial version
+
+*/
+
+
+
+If ( IsEmpty ( GetValue ( valueListToRemove; 1 ) );
+	valueList;
+	Let ( [
+			keepValues = ValueRemove ( valueList ; GetValue ( valueListToRemove ; 1 ) );    /* what is left after removing first "remove" value */
+			removeValues = ValueRemove ( valueListToRemove ; GetValue ( valueListToRemove ; 1 ) )    /* remaining values to remove */
+		];
+
+		If ( IsEmpty ( removeValues );
+			keepValues;    /* nothing left to remove */
+			ValueRemoveMultiple ( keepValues ; removeValues )    /* remove the rest */
+		)
+	)
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
