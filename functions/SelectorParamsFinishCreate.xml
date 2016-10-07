@@ -1,25 +1,33 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="404" functionArity="1" visible="True" parameters="options" name="SelectorParamsFinishCreate">
 		<Calculation><![CDATA[// SelectorParamsFinishCreate ( options )
-// version 1.1, Daniel A. Shockley, NYHTC
+// version 1.2, Daniel A. Shockley
 
 /* 
 	Sends needed params to the SelectorCreateFinish script. 
 
+	HISTORY:
 
-REQUIRES:
-	#
-	CallStack
+		1.2 (2016-10-07-dshockley) - added NoCommit HERE (either as key-value pair, or just NoCommit as string), instead of having to do as a separate parameter in the call to script.
+		1.0 (2016-04-29-dshockley) - initial version.
 
-
-HISTORY:
-	1.1 - 2016-09-29 ( eshagdar ): updated documentation.
-	1.0 - 2016-04-29 ( dshockley ): - first created.
 */
 
-
 	# ( "OriginalLayoutNumber"; $selectorOriginalLayoutNumber )
-&	CallStack ( "" )]]>
+
+&	case ( 
+		dictcontains ( options ; "NoCommit" )
+		; # ( "NoCommit"; DictGet ( options ; "NoCommit" ) )
+		; 
+		patterncount ( options ; "NoCommit" )
+		; # ( "NoCommit"; True )
+		; 
+		"" 
+		)
+
+&	CallStack ( "" )
+
+]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
