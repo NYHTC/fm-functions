@@ -1,0 +1,39 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="68" functionArity="1" visible="True" parameters="_list" name="UniqueValues">
+		<Calculation><![CDATA[// UniqueValues( _list )
+// version 1.0, Erik Wegweiser, Boston, MA
+
+/*
+	Return the unique values from a list
+
+HISTORY:
+	1.1 - 2016-10-05 ( eshagdar ): updated documentation
+	1.0 - 20xx-xx-xx ( xxxxx ): taken from http://www.briandunning.com/cf/596
+	0.0 - 2011-01-09 ( ewegweiser ): last updated
+
+
+ORIGINAL DOCUMENTATION:
+	// version 1.0, Erik Wegweiser, Boston, MA
+	// January 09, 2011 11:25am
+
+	// comments at: http://www.briandunning.com/cf/596
+*/
+
+Let([
+		startlist = _list;
+		line1 = GetValue( startlist; 1 );
+		newlist = RightValues( startlist; ValueCount( startlist ) - 1)
+	];
+
+	Case(
+		IsEmpty( startlist );
+		""; 
+
+		ValueCount( FilterValues( startlist; line1 )) > 1;
+		UniqueValues( newlist );
+
+		List( line1; UniqueValues( newlist ) )
+	)
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
