@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="403" functionArity="1" visible="True" parameters="fieldRef_Link" name="SelectorCreate">
 		<Calculation><![CDATA[// SelectorCreate ( fieldRef_Link )
-// version 1.1.1, Daniel A. Shockley, John Vasiliadis, NYHTC
+// version 1.2, Daniel A. Shockley, John Vasiliadis, NYHTC
 
 /* 
 	This is used to set the local variable for creation via Selector-Connector. It also checks for whether the script that ensures safe context (non-zero-record found set) had to switch to a utility table/layout or not. 
@@ -12,6 +12,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.2 - 2016-10-14 ( dshockley ): set the original layout number variable first. 
 	1.1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 2016-03-09 ( dshockley ): changed "switched" layout to the original layout number. 
 	1.0 - 2016-03-01 ( dshockley ): first creted.
@@ -20,7 +21,8 @@ HISTORY:
 
 
 Let ( [ 
-	  fieldName_Link = GetFieldName ( fieldRef_Link )
+	  setVarForOriginalLayout = Evaluate ( "Let ( $selectorOriginalLayoutNumber = #R ( \"SelectorOriginalLayoutNumber\" ); True ) " )
+	; fieldName_Link = GetFieldName ( fieldRef_Link )
 	; fieldName_Link = GetValue ( Substitute ( fieldName_Link; "::"; "¶" ); 2 )    /* Convert to short field name, from which the variable name is built. */
 
 	; fieldNameSuffix = "_Link"
@@ -29,7 +31,6 @@ Let ( [
 	; varPrefix = "$Selector_"
 	; varName = varPrefix & fieldNameWithoutLinkSuffix
 	; setVarForCreate = Evaluate ( "Let ( " & varName & " = \"SelectorCreate\"; True ) " )
-	; setVarForOriginalLayout = Evaluate ( "Let ( $selectorOriginalLayoutNumber = #R ( \"SelectorOriginalLayoutNumber\" ); True ) " )
 	]; 
 
 	True
