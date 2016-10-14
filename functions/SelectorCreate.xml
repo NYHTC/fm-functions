@@ -12,7 +12,7 @@ REQUIRES:
 
 
 HISTORY:
-	1.2 - 2016-10-14 ( dshockley ): set the original layout number variable first. 
+	1.2 - 2016-10-14 ( dshockley ): set the original layout number variable first and without redundant Evaluate. 
 	1.1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 2016-03-09 ( dshockley ): changed "switched" layout to the original layout number. 
 	1.0 - 2016-03-01 ( dshockley ): first creted.
@@ -21,7 +21,9 @@ HISTORY:
 
 
 Let ( [ 
-	  setVarForOriginalLayout = Evaluate ( "Let ( $selectorOriginalLayoutNumber = #R ( \"SelectorOriginalLayoutNumber\" ); True ) " )
+
+	  $selectorOriginalLayoutNumber = #R ( "SelectorOriginalLayoutNumber" )
+
 	; fieldName_Link = GetFieldName ( fieldRef_Link )
 	; fieldName_Link = GetValue ( Substitute ( fieldName_Link; "::"; "¶" ); 2 )    /* Convert to short field name, from which the variable name is built. */
 
