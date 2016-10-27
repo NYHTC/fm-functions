@@ -1,0 +1,43 @@
+<fmxmlsnippet type="FMObjectList">
+<CustomFunction id="281" functionArity="3" visible="True" parameters="dict;keys;outSep" name="DictGetMultiple"><Calculation><![CDATA[// DictGetMultiple ( dict; keys; outSep )
+// version 1.1, Daniel A. Shockley, Erik Shagdar, NYHTC
+
+/* 
+	Grabs the values from a dictionary object (as used by SixFriedRice.com) that belong to the key(s) (return-delimited) listed, separating each by the delimiter specified. If there are multiple ocurrences of a key, ONLY the FIRST value will be returned. 
+
+
+NOTE: 
+	DOES return a null value with the outdelimiter if a key does not appear. In other words, your output value count will be exactly the same as the number of specified KEYS. 
+
+
+REQUIRES: 
+	DictGet
+	ValueRemove
+
+
+HISTORY:
+	1.1 - 2016-10-27 ( dshockley ): renamed, reformatted, renamed param 'outdelimiter' to 'outSep'. 
+	1.0 - 2014-xx-xx ( dshockley/eshagdar ): first created, as a complement to DictToDelimitedList. Date unknown.
+
+*/
+
+
+Let ( [
+		firstKeyName = GetValue ( keys; 1 )
+	]; 
+
+	If ( Length ( firstKeyName ) = 0
+		; ""
+		; Let ( [
+				restOfKeys = ValueRemove ( keys; firstKeyName )
+			];
+
+			DictGet ( dict; firstKeyName ) 
+			& If ( IsEmpty ( restOfKeys )
+				; ""
+				; outSep & DictGetMultiple ( dict; restOfKeys; outSep )
+				)
+			)
+		)
+	)]]></Calculation></CustomFunction>
+</fmxmlsnippet>

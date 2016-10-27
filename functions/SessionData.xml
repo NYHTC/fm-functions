@@ -1,0 +1,49 @@
+<fmxmlsnippet type="FMObjectList">
+<CustomFunction id="429" functionArity="1" visible="True" parameters="options" name="SessionData"><Calculation><![CDATA[// SessionData ( options )
+// version 1.0, Daniel A. Shockley, NYHTC
+
+/* 
+	Returns the user's session dictionary from Times Square. If no options specified, returns entire dictionary as dictionary. Can specify one or more keys as a return-delimited list, and optionally a delimiter between returned values.
+
+
+REQUIRES:
+	DictContains
+	DictGet
+	DictGetMultiple
+	external table occurrence: _ext_00ZZ_SESSION
+
+
+HISTORY:
+	1.0 - 2016-10-27 ( dshockley ): first created.
+*/
+
+
+Case ( 
+
+	options = "Help"
+	; List ( 
+		  "Returns the session data from the user's session dictionary in Times Square."
+		; "By default, it returns the entire dictionary as a dictionary."
+		; "Or, you can specify one or more of the following keys as a return-delimited list as param 'keys', and optionally an output-value delimiter specified in 'outSep': "
+		; DictListKeys ( _ext_00ZZ_SESSION::gSessionDictionary )
+		)
+
+
+	/* options specified, so get values for specific list of keys: */
+	; not IsEmpty ( options )
+	; DictGetMultiple ( 
+		  _ext_00ZZ_SESSION::gSessionDictionary 
+		; DictGet ( options ; "keys" ) 
+		; If ( DictContains ( options ; "outSep" )
+			; DictGet ( options ; "outSep" ) 
+			; "¶"
+			)
+		)
+	; 
+	
+	
+	/* Default is return whole dictionary as dictionary: */
+	_ext_00ZZ_SESSION::gSessionDictionary
+	
+	)]]></Calculation></CustomFunction>
+</fmxmlsnippet>
