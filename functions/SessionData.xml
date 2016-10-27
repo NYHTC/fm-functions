@@ -1,6 +1,6 @@
 <fmxmlsnippet type="FMObjectList">
 <CustomFunction id="429" functionArity="1" visible="True" parameters="options" name="SessionData"><Calculation><![CDATA[// SessionData ( options )
-// version 1.0, Daniel A. Shockley, NYHTC
+// version 1.1, Daniel A. Shockley, NYHTC
 
 /* 
 	Returns the user's session dictionary from Times Square. If no options specified, returns entire dictionary as dictionary. Can specify one or more keys as a return-delimited list, and optionally a delimiter between returned values.
@@ -14,6 +14,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.1 - 2016-10-27 ( dshockley ): options can be a simple return-delimited list of keys, instead of requiring it to be a dictionary.
 	1.0 - 2016-10-27 ( dshockley ): first created.
 */
 
@@ -29,11 +30,14 @@ Case (
 		)
 
 
-	/* options specified, so get values for specific list of keys: */
+	/* options specified, so get values for specific list of keys (which is either a dictionary item IN options, or is just options itself): */
 	; not IsEmpty ( options )
 	; DictGetMultiple ( 
 		  _ext_00ZZ_SESSION::gSessionDictionary 
-		; DictGet ( options ; "keys" ) 
+		; If ( DictContains ( options ; "keys" ) 
+			; DictGet ( options ; "keys" ) 
+			; options
+			)
 		; If ( DictContains ( options ; "outSep" )
 			; DictGet ( options ; "outSep" ) 
 			; "¶"
