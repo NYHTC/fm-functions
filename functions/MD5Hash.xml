@@ -1,19 +1,25 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="425" functionArity="1" visible="True" parameters="String" name="MD5Hash">
 		<Calculation><![CDATA[// MD5Hash ( string )
-// version 1.0, Erik Shagdar, NYHTC
+// version 1.1, Erik Shagdar, NYHTC
 
 /*
 	Return the MD5 hash of some string
 
 
 HISTORY ( recent at top ):
+	1.1 - 2016-10-24 ( eshagdar ): Added backwards compatibility for pre-3.0 plug-in.
 	1.0 - 2016-10-03 ( eshagdar ): first created.
 */
 
-
 If ( not IsEmpty ( string );
-	BE_MessageDigest ( string; BE_MessageDigestAlgorithm_MD5 );
+	BE_MessageDigest ( 
+		string; 
+		if ( getasnumber ( VersionCompare ( BE_Version ; "3" ; "." ) ) ≥ 0;
+			Evaluate ( "BE_MessageDigestAlgorithm_MD5" );    /* 3.0 or later */
+			Evaluate ( "BE_MessageDigestType_MD5" )    /* before 3.0 */
+		)
+	);
 	""
 )]]>
 		</Calculation>
