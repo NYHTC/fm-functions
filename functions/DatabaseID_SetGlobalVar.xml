@@ -1,0 +1,64 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="428" functionArity="0" visible="True" parameters="" name="DatabaseID_SetGlobalVar">
+		<Calculation><![CDATA[// DatabaseID_SetGlobalVar
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	Set a global variable for the databaseID of this file
+
+
+REQUIRES:
+	FM_Name_ID
+	HTC_ExecuteFileSQL
+	SQL_EscapeString
+
+
+HISTORY:
+	1.0 - 2016-10-24 ( eshagdar ): first created
+*/
+
+
+If ( not IsEmpty ( $$DbID );
+	True;
+	Let ( [
+
+		/* Declare table/field IDs of fields so we can rename the fields*/
+			id_table = 1065177;    /* D_DATABASE */
+			id_dbID = id_table & "::15";    /* a00D__DbID */
+			id_fileName = id_table & "::1";    /* b00D_FileName */
+
+
+		/* Get the dbName. Once we have it ge the names of the table/fields so we can query the table */
+			dbString = 
+				HTC_ExecuteFileSQL ( 
+					"SELECT BaseFileName" &
+						" FROM FileMaker_Tables" & 
+						" WHERE TableName = " & 
+						SQL_EscapeString ( TableNameOfField ( _ext_00ZZ_SESSION::zFoundCount ) ) ; 
+					"" ; 
+					";" ; 
+					¶ 
+				);
+			_dbName_source = Trim ( TextBefore ( dbString; "(" & Get ( HostName ) ) );
+			_tableName_source = FM_Name_ID ( id_table ; "T" ; _dbName_source ; "" );
+			_fieldName_dbID = FM_Name_ID ( id_dbID ; "F" ; _dbName_source ; "" );
+			_fieldName_fileName = FM_Name_ID ( id_fileName ; "F" ; _dbName_source ; "" );
+
+
+		/* Get the DbID */
+			$$DbID = 
+				HTC_ExecuteFileSQL ( 
+					"SELECT " & _fieldName_dbID & 
+						" FROM " & _tableName_source & 
+						" WHERE " & _fieldName_fileName & " = " & SQL_EscapeString ( Get ( FileName ) );
+					_dbName_source; 
+					";" ; 
+					¶ 
+				)
+		];
+		True
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

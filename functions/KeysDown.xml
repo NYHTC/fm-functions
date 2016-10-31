@@ -1,0 +1,58 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="385" functionArity="2" visible="True" parameters="theModifierKeyNames;ignoreCapsLock" name="KeysDown">
+		<Calculation><![CDATA[// KeysDown ( theModifierKeys ; ignoreCapsLock )
+// version 1.0, Peter Wagemans, SHpartners, http://www.shpartners.com
+
+/* 
+	User friendly version of Get ( ActiveModifierKeys ) - you send in a string of the names which command-key(s) you would like to know about, it returns a boolean.
+
+
+NOTE:
+	The custom function tests for each bit, each time comparing it with the presence of the modifier key in "theModifierKeys" (using XOR). All tests are put together using AND, so if one fails, all fail.
+	The Caps Lock test is only performed when ignoreCapsLock is False.
+
+
+EXAMPLE: 
+	Input:	KeysDown ( "shift-ctrl" ; True )
+	Output:	returns True (1) if ctrl and shift key are down, ignoring caps-lock.
+
+	Input:	KeysDown ( "ctrl-shift-alt" ; False )
+	Output:	returns True if ctrl option/alt and shift are down, caps-lock should be off.
+
+	Input:	KeysDown ( "ctrl-capslock" ; False )
+	Output:	returns True if ctrl key is down, AND caps-lock is on. 
+
+
+HISTORY: 
+	1.0 - 2016-04-19 ( dshockley ): reformatted for clarity, rename 1st param for clarity. taken from https://www.briandunning.com/cf/473
+	0.0 - 20xx-xx-xx ( pwagemans ): created
+*/
+
+
+Let ( [ 
+		activeModifierKeys = Get ( ActiveModifierKeys ) 
+	];
+
+	( ( activeModifierKeys = 0 ) xor ( theModifierKeyNames ≠ "" ) ) 
+	 and
+	( Mod ( activeModifierKeys ; 2 ) xor not PatternCount ( theModifierKeyNames ; "shift" ) ) 
+	 and
+	If ( not ignoreCapsLock 
+		; ( 
+			Mod ( Int ( activeModifierKeys / 2 ) ; 2 ) 
+			xor 
+			not PatternCount ( theModifierKeyNames ; "capslock" ) 
+			) 
+		; True 
+		) 
+	 and
+	( Mod ( Int ( activeModifierKeys / 4 ) ; 2 ) xor not PatternCount ( theModifierKeyNames ; "ctrl" ) ) 
+	 and
+	( Mod ( Int ( activeModifierKeys / 8 ) ; 2 ) xor not PatternCount ( theModifierKeyNames ; "alt" ) ) 
+	 and
+	( Mod ( Int ( activeModifierKeys / 16 ) ; 2 ) xor not PatternCount ( theModifierKeyNames ; "command" ) )
+
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

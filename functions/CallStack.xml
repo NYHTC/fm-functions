@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="16" functionArity="1" visible="True" parameters="options" name="CallStack">
 		<Calculation><![CDATA[// CallStack ( options )
-// version 1.3, Shockley/Shagdar, NYHTC
+// version 1.4, Shockley/Shagdar, NYHTC
 
 /* 
 	Append this to params when calling ANY script. It sends in the callstack of scripts so a script knows the entire stack of parent scripts that called it. Note that in typical use the 'options' parameter will be empty. 
@@ -9,11 +9,14 @@
 
 REQUIRES:
 	#
+	DatabaseID_SetGlobalVar
 	DictGet
+	FM_Name_ID
 	ListConcat
 
 
 HISTORY:
+	1.4 - 2016-10-31 ( eshagdar ): added 'CallingIDStack' key to stack. added 'SetScriptVars' option. sets $$DbID if not already set.
 	1.3 - 2016-10-03 ( dshockley ): added "NotMe" option to get the stack so far but NOT including the current script/file.
 	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.2 - 2016-09-19 ( eshagdar ): support for 'DisplayCurrent' option. updated documentation.
@@ -24,12 +27,18 @@ HISTORY:
 
 Case (
 
+	/* help: display available options. */
+	option = "help"
+	; List ( 
+		"Below is a list of available commands";
+		" ";
+		"'DisplayCurrent' - display the callstack in a human-friendly list";
+		"'NotMe' - display incoming callstack";
+		"'SetScriptVars' - set local variable";
+		"default: empty string - put a new call to the stack"
+	)
 
-	/* NotMe: returns the INCOMING callstack WITHOUT the current script. */
-	options = "NotMe"
-	; # ( "CallingFileName"; $CallingFileName )  
-		& # ( "CallingScriptName"; $CallingScriptName )
-	;
+
 
 	/* DisplayCurrent: display the current callstack (including THIS script/file) in a human-friendly way */
 	options = "DisplayCurrent"
@@ -39,27 +48,66 @@ Case (
 		)
 	;
 
+
+	/* NotMe: returns the INCOMING callstack WITHOUT the current script. */
+	options = "NotMe"
+	; # ( "CallingFileName"; $CallingFileName )  
+		& # ( "CallingScriptName"; $CallingScriptName )
+		& # ( "CallingIDStack"; $CallingIDStack )
+	;
+
+
+	/* SetScriptVars: instantiate script variables calling callstack */
+	options = "SetScriptVars"
+	; Let ( [
+			$CallingScriptName = DictGet ( $params; "CallingScriptName" );
+			$CallingFileName = DictGet ( $params; "CallingFileName" );
+			$CallingIDStack = DictGet ( $params; "CallingIDStack" )
+
+		];
+		True
+	)
+	;
+
+
 	/* Default: append current script/file to incoming callstack. */
 	# ( "CallingFileName"; 
-			List ( 
-				Get ( FileName ); 
-				$CallingFileName 
-			)  
-		) 
+		List ( 
+			Get ( FileName ); 
+			$CallingFileName 
+		)
+	) 
 	& 
 	# ( "CallingScriptName"; 
-			List ( 
-				GetValue ( 
-					List ( 
-						Get ( ScriptName ); 
-						"[L] " & Get ( LayoutName ) 
-					); 
-					1 
+		List ( 
+			GetValue ( 
+				List ( 
+					Get ( ScriptName ); 
+					"[L] " & Get ( LayoutName ) 
 				); 
-				$CallingScriptName 
-			) 
+				1 
+			); 
+			$CallingScriptName 
+		) 
+	)
+	& 
+	# ( "CallingIDStack"; 
+		Let ( [
+				ensureDbID = DatabaseID_SetGlobalVar;
+				ScriptID = 
+					if ( not isemptY ( Get ( ScriptName ) );
+						FM_Name_ID ( Get ( ScriptName ) ; "S" ; "" ; "" );
+						"L" & FM_Name_ID ( Get ( LayoutName ) ; "L" ; "" ; "" )
+					);
+				ScriptStack = 
+					List (
+						$$DbID & "-" & ScriptID;
+						$CallingIDStack
+					)
+			];
+			ScriptStack
 		)
-		
+	)
 )]]>
 		</Calculation>
 	</CustomFunction>
