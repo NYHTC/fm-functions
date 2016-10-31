@@ -28,7 +28,7 @@ HISTORY:
 Case (
 
 	/* help: display available options. */
-	option = "help"
+	options = "help"
 	; List ( 
 		"Below is a list of available commands";
 		" ";
