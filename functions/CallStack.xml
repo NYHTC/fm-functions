@@ -37,7 +37,7 @@ Case (
 		"'SetScriptVars' - set local variable";
 		"default: empty string - put a new call to the stack"
 	)
-
+	;
 
 
 	/* DisplayCurrent: display the current callstack (including THIS script/file) in a human-friendly way */
