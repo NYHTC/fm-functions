@@ -1,0 +1,26 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="430" functionArity="1" visible="True" parameters="fullyQualified_ID" name="GetFieldByID">
+		<Calculation><![CDATA[// GetFieldByID ( fullyQualified_ID )
+// version 1.0, Daniel A. Shockley, NYHTC
+
+/* 
+	Get the field value by a fully-qualified ID (e.g. 1065090::352 )
+
+
+REQUIRES:
+	FM_Name_ID 
+
+
+HISTORY: 
+	1.0 - 2016-10-28 ( dshockley ): first created.
+*/
+
+
+GetField ( 
+	FM_Name_ID ( fullyQualified_ID ; "T"; ""; "" )
+	& "::"
+	& FM_Name_ID ( fullyQualified_ID ; "F"; ""; "" )
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
