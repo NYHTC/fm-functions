@@ -1,0 +1,45 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="433" functionArity="1" visible="True" parameters="options" name="WindowOffscreenPos">
+		<Calculation><![CDATA[// WindowOffscreenPos ( options )
+// version 1.0, Jared Gibson, NYHTC
+
+/*
+	Return the standard off-screen (single) position. 
+
+
+HISTORY ( recent at top ):
+	1.0 - 2016-11-07 ( jgibson ): first created.
+*/
+
+
+Let ( [ 
+	  helpText = "Return the standard off-screen (single) position. Can specify a number to put in an override position (or clear that override by sending \"Clear\"). "
+	; defaultPos = -9999
+];
+
+	Case ( 
+		options = "Help"
+		; helpText
+		; 
+	
+		options = "Clear"
+		; Let ( $$_DEBUG_WindowOffscreenPos_Override = "" ; defaultPos )
+		; 
+
+		not IsEmpty ( options ) 
+		 and 
+		options = GetAsNumber ( options )
+		; Let ( $$_DEBUG_WindowOffscreenPos_Override = options ; options )
+		; 
+
+		not IsEmpty ( $$_DEBUG_WindowOffscreenPos_Override )
+		; $$_DEBUG_WindowOffscreenPos_Override
+		; 
+	
+		defaultPos 
+	
+		)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
