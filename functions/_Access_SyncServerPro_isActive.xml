@@ -1,21 +1,51 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="4" functionArity="0" visible="True" parameters="" name="_Access_SyncServerPro_isActive">
 		<Calculation><![CDATA[// _Access_SyncServerPro_isActive
-// version 1.3, NYHTC
+// version 1.4, NYHTC
 
-/*
-	Returns if SyncServerPro is turned on for this file. Looks at the prefs table in TimesSQ
+/*   
+	Returns if SyncServerPro is turned on for the current table by querying the MT_MetaTable table in a00_TimesSq.
 
 
 HISTORY:
-	1.3 - 2016-09-28 ( eshagdar ): Renamed '_Access_SyncDek_isActive' to '_Access_SyncServerPro_isActive'. added proper docstring
-	1.2 - 201x-xx-xx ( xxxxx ):
-	1.1 - 201x-xx-xx ( xxxxx ):
-	1.0 - 201x-xx-xx ( xxxxx ): first created.
+	1.4 - 2016-11-17 ( eshagdar ): Returns ( and caches into a SRF-dict ) whether or not the current table is audited by SyncServer.
+	1.3 - 2016-09-28 ( eshagdar ): Renamed '_Access_SyncDek_isActive' to '_Access_SyncServerPro_isActive'. added proper docstring.
+	1.2 - 201x-xx-xx ( eshagdar ):
+	1.1 - 201x-xx-xx ( eshagdar ):
+	1.0 - 201x-xx-xx ( xxxxx ): created
 */ 
 
 
-_ext_00ZZ_PREFS::gSyncDeK_isActive]]>
+If ( DictContains ( $$__FilePrefs__; Get ( LayoutTableName ) );
+	DictGet ( $$__FilePrefs__; Get ( LayoutTableName ) );
+	Let ( [
+			_sourceDbName = "a00_TIMESSQUARE";
+			_sourceTableID = 1065290;
+			_sourceTableName = FM_Name_ID ( _sourceTableID ; "T" ; _sourceDbName ; "" );    /* MT_META_TABLE */
+			_sourceFieldDb = FM_Name_ID ( _sourceTableID & "::15" ; "F" ; _sourceDbName ; "" );    /* MT_META_TABLE::c00MT_DbName */
+			_sourceFieldTable = FM_Name_ID ( _sourceTableID & "::3" ; "F" ; _sourceDbName ; "" );    /* MT_META_TABLE::b00MT_TableName */
+			_sourceFieldAudit = FM_Name_ID ( _sourceTableID & "::42" ; "F" ; _sourceDbName ; "" );    /* MT_META_TABLE::c00MT_isSyncServer_Sync__b */
+
+			isTableAudited = HTC_ExecuteFileSQL ( 
+				"SELECT " & _sourceFieldAudit & 
+					" FROM " & _sourceTableName &
+					" WHERE " & _sourceFieldTable & 
+						" = " & 
+						SQL_EscapeString ( Get ( LayoutTableName ) ) &
+					" AND " & _sourceFieldDb & 
+						" = " & 
+						SQL_EscapeString ( Get ( FileName ) );
+ 				_sourceDbName ; 
+				";" ; 
+				¶ 
+			);
+			isTableAudited = GetAsBoolean ( isTableAudited );
+
+			$$__FilePrefs__ = DictReplace ( $$__FilePrefs__; Get ( LayoutTableName ); isTableAudited )
+		];
+		isTableAudited
+	)
+)]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
