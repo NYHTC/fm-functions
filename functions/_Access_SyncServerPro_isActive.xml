@@ -16,8 +16,8 @@ HISTORY:
 */ 
 
 
-If ( DictContains ( $$__FilePrefs__; Get ( LayoutTableName ) );
-	DictGet ( $$__FilePrefs__; Get ( LayoutTableName ) );
+If ( DictContains ( $$__FilePrefs__; "isAudit_" & Get ( LayoutTableName ) );
+	DictGet ( $$__FilePrefs__; "isAudit_" & Get ( LayoutTableName ) );
 	Let ( [
 			_sourceDbName = "a00_TIMESSQUARE";
 			_sourceTableID = 1065290;
@@ -41,7 +41,7 @@ If ( DictContains ( $$__FilePrefs__; Get ( LayoutTableName ) );
 			);
 			isTableAudited = GetAsBoolean ( isTableAudited );
 
-			$$__FilePrefs__ = DictReplace ( $$__FilePrefs__; Get ( LayoutTableName ); isTableAudited )
+			$$__FilePrefs__ = DictReplace ( $$__FilePrefs__; "isAudit_" & Get ( LayoutTableName ); isTableAudited )
 		];
 		isTableAudited
 	)
