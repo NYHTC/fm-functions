@@ -1,0 +1,31 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="275" functionArity="1" visible="True" parameters="someTimestamp" name="DateTimeAsISO8601">
+		<Calculation><![CDATA[// DateTimeAsISO8601 ( someTimestamp )
+// version 1.1, Erik Shagdar, NYHCT
+
+/*
+	Takes a timestamp and returns as an ISO8601 formatted string
+
+
+REQUIRES
+	DateAsISO8601
+
+
+HISTORY
+	1.1 - 2016-11-21 ( eshagdar ): added documentation. return empty string if one isn't passed in. reformatted to remove let-statement.
+	1.0 - 201x-xx-xx ( eshagdar ): created.
+*/
+
+if ( IsEmpty ( someTimestamp );
+	"";
+	DateAsISO8601 ( GetAsDate ( someTimestamp ) ) &
+		" " &
+		Right ( "00" & Hour ( someTimestamp ); 2 ) & 
+		":" &
+		Right ( "00" & Minute ( someTimestamp ); 2 ) &
+		":" &
+		Right ( "00" & Seconds ( someTimestamp ); 2 )
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
