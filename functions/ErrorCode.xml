@@ -1,15 +1,16 @@
 <fmxmlsnippet type="FMObjectList">
 <CustomFunction id="90" functionArity="1" visible="True" parameters="ErrorNum" name="ErrorCode"><Calculation><![CDATA[// ErrorCode( ErrorNum )
-// version 1.2.1, Erik Shagdar
+// version 1.3, Erik Shagdar
 
 /*
 	Returns the explanation for the error number. Also contains HTC custom codes
 
 
 HISTORY:
+	1.3 - 2016-11-21 ( eshagdar ): added -1008. added when there is a missing error number(s). added comments for groups of errors.
 	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
-	1.2 - 2016-08-22 ( eshagdar ): added AppleScript codes
-	1.1 - 2015-05-28 ( eshagdar ): added custom HTC codes
+	1.2 - 2016-08-22 ( eshagdar ): added AppleScript codes.
+	1.1 - 2015-05-28 ( eshagdar ): added custom HTC codes.
 	1.0 - 201x-xx-xx ( eshagdar ): first created.
 */
 
@@ -20,7 +21,11 @@ If ( ErrorNum = 0;
 )  & 
 
 Case(
+
+/* HTC errors */
+
 	ErrorNum = -1 ; "Unknown error"; 
+
 	ErrorNum = -1001 ; "Not all of the necessary parameters were passed"; 
 	ErrorNum = -1002 ; "Unable to delete - need to specify a TOC for pubFlag"; 
 	ErrorNum = -1003 ; "Unable to delete - no active portal row"; 
@@ -28,34 +33,52 @@ Case(
 	ErrorNum = -1005 ; "Your access privileges do not allow you to perform this action"; 
 	ErrorNum = -1006 ; "Multi-tenant is active, but the user does not appear to have an organization number, so cannot create a new record"; 
 	ErrorNum = -1007 ; "Unable to set record(s)"; 
+	ErrorNum = -1008 ; "Unable to delete - unable to determine if the related table is audited"; 
 
-	ErrorNum = -2700 ; "AppleScript Error: Unknown error.";
-	ErrorNum = -2701 ; "AppleScript Error: Can’t divide <number> by zero.";
-	ErrorNum = -2702 ; "AppleScript Error: The result of a numeric operation was too large.";
-	ErrorNum = -2703 ; "AppleScript Error: <reference> can't be launched because it is not an application.";
-	ErrorNum = -2704 ; "AppleScript Error: <reference> isn't scriptable.";
-	ErrorNum = -2705 ; "AppleScript Error: The application has a corrupted dictionary.";
-	ErrorNum = -2706 ; "AppleScript Error: Stack overflow.";
-	ErrorNum = -2707 ; "AppleScript Error: Internal table overflow.";
-	ErrorNum = -2708 ; "AppleScript Error: Attempt to create a value larger than the allowable size.";
-	ErrorNum = -2709 ; "AppleScript Error: Can't get the event dictionary.";
-	ErrorNum = -2720 ; "AppleScript Error: Can't both consider and ignore <attribute>.";
-	ErrorNum = -2721 ; "AppleScript Error: Can't perform operation on text longer than 32K bytes.";
-	ErrorNum = -2729 ; "AppleScript Error: Message size too large for the 7.0 Finder.";
-	ErrorNum = -2740 ; "AppleScript Error: A <language element> can't go after this <language element>.";
-	ErrorNum = -2741 ; "AppleScript Error: Expected <language element> but found <language element>.";
-	ErrorNum = -2750 ; "AppleScript Error: The <name> parameter is specified more than once.";
-	ErrorNum = -2751 ; "AppleScript Error: The <name> property is specified more than once.";
-	ErrorNum = -2752 ; "AppleScript Error: The <name> handler is specified more than once.";
-	ErrorNum = -2753 ; "AppleScript Error: The variable <name> is not defined.";
-	ErrorNum = -2754 ; "AppleScript Error: Can't declare <name> as both a local and global variable.";
-	ErrorNum = -2755 ; "AppleScript Error: Exit statement was not in a repeat loop.";
-	ErrorNum = -2760 ; "AppleScript Error: Tell statements are nested too deeply.";
-	ErrorNum = -2761 ; "AppleScript Error: <name> is illegal as a formal parameter.";
-	ErrorNum = -2762 ; "AppleScript Error: <name> is not a parameter name for the event <event>.";
-	ErrorNum = -2763 ; "AppleScript Error: No result was returned for some argument of this expression.";
 
-	ErrorNum = 0 ; "" /* No Error */;
+
+/* AppleScript errors */
+
+	ErrorNum = -2700 ; "AppleScript Error: Unknown error";
+	ErrorNum = -2701 ; "AppleScript Error: Can’t divide <number> by zero";
+	ErrorNum = -2702 ; "AppleScript Error: The result of a numeric operation was too large";
+	ErrorNum = -2703 ; "AppleScript Error: <reference> can't be launched because it is not an application";
+	ErrorNum = -2704 ; "AppleScript Error: <reference> isn't scriptable";
+	ErrorNum = -2705 ; "AppleScript Error: The application has a corrupted dictionary";
+	ErrorNum = -2706 ; "AppleScript Error: Stack overflow";
+	ErrorNum = -2707 ; "AppleScript Error: Internal table overflow";
+	ErrorNum = -2708 ; "AppleScript Error: Attempt to create a value larger than the allowable size";
+	ErrorNum = -2709 ; "AppleScript Error: Can't get the event dictionary";
+
+	ErrorNum = -2720 ; "AppleScript Error: Can't both consider and ignore <attribute>";
+	ErrorNum = -2721 ; "AppleScript Error: Can't perform operation on text longer than 32K bytes";
+
+	ErrorNum = -2729 ; "AppleScript Error: Message size too large for the 7.0 Finder";
+
+	ErrorNum = -2740 ; "AppleScript Error: A <language element> can't go after this <language element>";
+	ErrorNum = -2741 ; "AppleScript Error: Expected <language element> but found <language element>";
+
+	ErrorNum = -2750 ; "AppleScript Error: The <name> parameter is specified more than once";
+	ErrorNum = -2751 ; "AppleScript Error: The <name> property is specified more than once";
+	ErrorNum = -2752 ; "AppleScript Error: The <name> handler is specified more than once";
+	ErrorNum = -2753 ; "AppleScript Error: The variable <name> is not defined";
+	ErrorNum = -2754 ; "AppleScript Error: Can't declare <name> as both a local and global variable";
+	ErrorNum = -2755 ; "AppleScript Error: Exit statement was not in a repeat loop";
+
+	ErrorNum = -2760 ; "AppleScript Error: Tell statements are nested too deeply";
+	ErrorNum = -2761 ; "AppleScript Error: <name> is illegal as a formal parameter";
+	ErrorNum = -2762 ; "AppleScript Error: <name> is not a parameter name for the event <event>";
+	ErrorNum = -2763 ; "AppleScript Error: No result was returned for some argument of this expression";
+
+
+
+/* No Error */
+
+	ErrorNum = 0 ; ""
+
+
+
+/* FileMaker errors */
 
 	ErrorNum = 1 ; "User canceled action";
 	ErrorNum = 2 ; "Memory error"; 
@@ -76,6 +99,7 @@ Case(
 	ErrorNum = 17 ; "Attempt to convert foreign character set to UTF-16 failed"; 
 	ErrorNum = 18 ; "Client must provide account information to proceed"; 
 	ErrorNum = 19 ; "String contains characters other than A-Z, a-z, 0-9 (ASCII)"; 
+
 	ErrorNum = 100 ; "File is missing"; 
 	ErrorNum = 101 ; "Record is missing"; 
 	ErrorNum = 102 ; "Field is missing"; 
@@ -94,8 +118,10 @@ Case(
 	ErrorNum = 115 ; "Specified menu set is not present"; 
 	ErrorNum = 116 ; "Specified layout object is not present"; 
 	ErrorNum = 117 ; "Specified data source is not present"; 
+
 	ErrorNum = 130 ; "Files are damaged or missing and must be reinstalled"; 
 	ErrorNum = 131 ; "Language pack files are missing (such as template files)"; 
+
 	ErrorNum = 200 ; "Record access is denied"; 
 	ErrorNum = 201 ; "Field cannot be modified"; 
 	ErrorNum = 202 ; "Field access is denied"; 
@@ -114,12 +140,14 @@ Case(
 	ErrorNum = 215 ; "Administrator privileges cannot be duplicated"; 
 	ErrorNum = 216 ; "Guest account cannot be duplicated"; 
 	ErrorNum = 217 ; "User does not have sufficient privileges to modify administrator account"; 
+
 	ErrorNum = 300 ; "File is locked or in use"; 
 	ErrorNum = 301 ; "Record is in use by another user"; 
 	ErrorNum = 302 ; "Table is in use by another user"; 
 	ErrorNum = 303 ; "Database schema is in use by another user"; 
 	ErrorNum = 304 ; "Layout is in use by another user"; 
 	ErrorNum = 306 ; "Record modification ID does not match"; 
+
 	ErrorNum = 400 ; "Find criteria are empty"; 
 	ErrorNum = 401 ; "No records match the request"; 
 	ErrorNum = 402 ; "Selected field is not a match field for a lookup"; 
@@ -137,6 +165,7 @@ Case(
 	ErrorNum = 415 ; "One or more required related records are not available"; 
 	ErrorNum = 416 ; "Primary key required from data source table"; 
 	ErrorNum = 417 ; "Database is not supported for ODBC operations"; 
+
 	ErrorNum = 500 ; "Date value does not meet validation entry options"; 
 	ErrorNum = 501 ; "Time value does not meet validation entry options"; 
 	ErrorNum = 502 ; "Number value does not meet validation entry options"; 
@@ -151,17 +180,21 @@ Case(
 	ErrorNum = 511 ; "Value in field exceeds maximum number of allowed characters"; 
 	ErrorNum = 512 ; "Record was already modified by another user"; 
 	ErrorNum = 513 ; "Record must have a value in some field to be created"; 
+
 	ErrorNum = 600 ; "Print error has occurred"; 
 	ErrorNum = 601 ; "Combined header and footer exceed one page"; 
 	ErrorNum = 602 ; "Body doesn't fit on a page for current column setup"; 
 	ErrorNum = 603 ; "Print connection lost"; 
+
 	ErrorNum = 700 ; "File is of the wrong file type for import"; 
+
 	ErrorNum = 706 ; "EPSF file has no preview image"; 
 	ErrorNum = 707 ; "Graphic translator cannot be found"; 
 	ErrorNum = 708 ; "Can't import the file or need color monitor support to import file"; 
 	ErrorNum = 709 ; "QuickTime movie import failed"; 
 	ErrorNum = 710 ; "Unable to update QuickTime reference because the database file is read-only"; 
 	ErrorNum = 711 ; "Import translator cannot be found"; 
+
 	ErrorNum = 714 ; "Password privileges do not allow the operation"; 
 	ErrorNum = 715 ; "Specified Excel worksheet or named range is missing"; 
 	ErrorNum = 716 ; "A SQL query using DELETE, INSERT, or UPDATE is not allowed for ODBC import"; 
@@ -176,6 +209,7 @@ Case(
 	ErrorNum = 725 ; "You do not have permission to modify records in the target table"; 
 	ErrorNum = 726 ; "There are more records in the import file than in the target table. Not all records were imported"; 
 	ErrorNum = 727 ; "There are more records in the target table than in the import file. Not all records were updated"; 
+
 	ErrorNum = 729 ; "Errors occurred during import. Records could not be imported"; 
 	ErrorNum = 730 ; "Unsupported Excel version. (Convert file to Excel 7.0 (Excel 95), Excel 97, 2000, or XP format and try again)"; 
 	ErrorNum = 731 ; "The file you are importing from contains no data"; 
@@ -184,6 +218,7 @@ Case(
 	ErrorNum = 734 ; "This file type cannot be displayed as a picture"; 
 	ErrorNum = 735 ; "This file type cannot be displayed as a picture. It will be inserted and displayed as a file"; 
 	ErrorNum = 736 ; "Too much data to export to this format. It will be truncated"; 
+
 	ErrorNum = 800 ; "Unable to create file on disk"; 
 	ErrorNum = 801 ; "Unable to create temporary file on System disk"; 
 	ErrorNum = 802 ; "Unable to open file"; 
@@ -196,33 +231,41 @@ Case(
 	ErrorNum = 809 ; "Disk/volume is full"; 
 	ErrorNum = 810 ; "Disk/volume is locked"; 
 	ErrorNum = 811 ; "Temporary file cannot be opened as FileMaker Pro file";
+
 	ErrorNum = 813 ; "Record Synchronization error on network"; 
 	ErrorNum = 814 ; "File(s) cannot be opened because maximum number is open"; 
 	ErrorNum = 815 ; "Couldn't open lookup file"; 
 	ErrorNum = 816 ; "Unable to convert file"; 
 	ErrorNum = 817 ; "Unable to open file because it does not belong to this solution"; 
+
 	ErrorNum = 819 ; "Cannot save a local copy of a remote file"; 
 	ErrorNum = 820 ; "File is in the process of being closed"; 
 	ErrorNum = 821 ; "Host forced a disconnect"; 
 	ErrorNum = 822 ; "FMI files not found; reinstall missing files"; 
 	ErrorNum = 823 ; "Cannot set file to single-user, guests are connected"; 
 	ErrorNum = 824 ; "File is damaged or not a FileMaker file"; 
+
 	ErrorNum = 900 ; "General spelling engine error"; 
 	ErrorNum = 901 ; "Main spelling dictionary not installed"; 
 	ErrorNum = 902 ; "Could not launch the Help system"; 
 	ErrorNum = 903 ; "Command cannot be used in a shared file"; 
+
 	ErrorNum = 905 ; "No active field selected; command can only be used if there is an active field"; 
 	ErrorNum = 906 ; "Current file must be shared in order to use this command"; 
+
 	ErrorNum = 920 ; "Can't initialize the spelling engine"; 
 	ErrorNum = 921 ; "User dictionary cannot be loaded for editing"; 
 	ErrorNum = 922 ; "User dictionary cannot be found"; 
 	ErrorNum = 923 ; "User dictionary is read-only"; 
+
 	ErrorNum = 951 ; "An unexpected error occurred (*)"; 
+
 	ErrorNum = 954 ; "Unsupported XML grammar (*)"; 
 	ErrorNum = 955 ; "No database name (*)"; 
 	ErrorNum = 956 ; "Maximum number of database sessions exceeded (*)"; 
 	ErrorNum = 957 ; "Conflicting commands (*)"; 
 	ErrorNum = 958 ; "Parameter missing (*)"; 
+
 	ErrorNum = 1200 ; "Generic calculation error"; 
 	ErrorNum = 1201 ; "Too few parameters in the function"; 
 	ErrorNum = 1202 ; "Too many parameters in the function"; 
@@ -249,7 +292,9 @@ Case(
 	ErrorNum = 1223 ; "The function is not implemented"; 
 	ErrorNum = 1224 ; "The function is not defined"; 
 	ErrorNum = 1225 ; "The function is not supported in this context"; 
+
 	ErrorNum = 1300 ; "The specified name can't be used"; 
+
 	ErrorNum = 1400 ; "ODBC driver initialization failed; make sure the ODBC drivers are properly installed"; 
 	ErrorNum = 1401 ; "Failed to allocate environment (ODBC)"; 
 	ErrorNum = 1402 ; "Failed to free environment (ODBC)"; 
@@ -260,10 +305,12 @@ Case(
 	ErrorNum = 1407 ; "Failed to allocate statement (ODBC)"; 
 	ErrorNum = 1408 ; "Extended error (ODBC)"; 
 	ErrorNum = 1409 ; "Error (ODBC)"; 
+
 	ErrorNum = 1413 ; "Failed communication link ODBC ";
 
 	ErrorNum = 1450 ; "Action requires PHP privilege extension (*)" ;
 	ErrorNum = 1451 ; "Action requires that current file be remote" ;
+
 	ErrorNum = 1501 ; "SMTP authentication failed" ;
 	ErrorNum = 1502 ; "Connection refused by SMTP server" ;
 	ErrorNum = 1503 ; "Error with SSL" ;
@@ -271,6 +318,10 @@ Case(
 	ErrorNum = 1505 ; "Specified authentication is not supported by SMTP server" ;
 	ErrorNum = 1506 ; "Email(s) could not be sent successfully" ;
 	ErrorNum = 1507 ; "Unable to log in to the SMTP server";
+
+
+
+/* Default */
 
 	"Undefined code number"
 )]]></Calculation></CustomFunction>

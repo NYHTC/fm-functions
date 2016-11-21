@@ -1,14 +1,15 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="4" functionArity="0" visible="True" parameters="" name="_Access_SyncServerPro_isActive">
 		<Calculation><![CDATA[// _Access_SyncServerPro_isActive
-// version 1.4, NYHTC
+// version 1.4.1, NYHTC
 
 /*   
 	Returns if SyncServerPro is turned on for the current table by querying the MT_MetaTable table in a00_TimesSq.
 
 
 HISTORY:
-	1.4 - 2016-11-17 ( eshagdar ): Returns ( and caches into a SRF-dict ) whether or not the current table is audited by SyncServer.
+	1.4.1 - 2016-11-18 ( eshagdar ): renamed global variable from '__FilePrefs__' to '__FilePrefs_byTable__'. added comment
+	1.4 - 2016-11-17 ( eshagdar ): Returns ( and caches into a SFR-dict ) whether or not the current table is audited by SyncServer.
 	1.3 - 2016-09-28 ( eshagdar ): Renamed '_Access_SyncDek_isActive' to '_Access_SyncServerPro_isActive'. added proper docstring.
 	1.2 - 201x-xx-xx ( eshagdar ):
 	1.1 - 201x-xx-xx ( eshagdar ):
@@ -16,8 +17,8 @@ HISTORY:
 */ 
 
 
-If ( DictContains ( $$__FilePrefs__; "isAudit_" & Get ( LayoutTableName ) );
-	DictGet ( $$__FilePrefs__; "isAudit_" & Get ( LayoutTableName ) );
+If ( DictContains ( $$__FilePrefs_byTable__; "isAudit_" & Get ( LayoutTableName ) );
+	DictGet ( $$__FilePrefs_byTable__; "isAudit_" & Get ( LayoutTableName ) );
 	Let ( [
 			_sourceDbName = "a00_TIMESSQUARE";
 			_sourceTableID = 1065290;
@@ -26,22 +27,30 @@ If ( DictContains ( $$__FilePrefs__; "isAudit_" & Get ( LayoutTableName ) );
 			_sourceFieldTable = FM_Name_ID ( _sourceTableID & "::3" ; "F" ; _sourceDbName ; "" );    /* MT_META_TABLE::b00MT_TableName */
 			_sourceFieldAudit = FM_Name_ID ( _sourceTableID & "::42" ; "F" ; _sourceDbName ; "" );    /* MT_META_TABLE::c00MT_isSyncServer_Sync__b */
 
-			isTableAudited = HTC_ExecuteFileSQL ( 
-				"SELECT " & _sourceFieldAudit & 
-					" FROM " & _sourceTableName &
-					" WHERE " & _sourceFieldTable & 
-						" = " & 
-						SQL_EscapeString ( Get ( LayoutTableName ) ) &
-					" AND " & _sourceFieldDb & 
-						" = " & 
-						SQL_EscapeString ( Get ( FileName ) );
- 				_sourceDbName ; 
-				";" ; 
-				¶ 
-			);
+			isTableAudited = 
+				HTC_ExecuteFileSQL ( 
+					"SELECT " & _sourceFieldAudit & 
+						" FROM " & _sourceTableName &
+						" WHERE " & _sourceFieldTable & 
+							" = " & 
+							SQL_EscapeString ( Get ( LayoutTableName ) ) &
+						" AND " & _sourceFieldDb & 
+							" = " & 
+							SQL_EscapeString ( Get ( FileName ) );
+	 				_sourceDbName ; 
+					";" ; 
+					¶ 
+				);
+
+			/* if false, the table is not audited, or does not exist in the meta-system. */
 			isTableAudited = GetAsBoolean ( isTableAudited );
 
-			$$__FilePrefs__ = DictReplace ( $$__FilePrefs__; "isAudit_" & Get ( LayoutTableName ); isTableAudited )
+			$$__FilePrefs_byTable__ = 
+				DictReplace ( 
+					$$__FilePrefs_byTable__; 
+					"isAudit_" & Get ( LayoutTableName ); 
+					isTableAudited 
+				)
 		];
 		isTableAudited
 	)
