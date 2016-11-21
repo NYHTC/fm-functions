@@ -40,7 +40,7 @@ Case(
 /* AppleScript errors */
 
 	ErrorNum = -2700 ; "AppleScript Error: Unknown error";
-	ErrorNum = -2701 ; "AppleScript Error: Can’t divide <number> by zero";
+	ErrorNum = -2701 ; "AppleScript Error: Can't divide <number> by zero";
 	ErrorNum = -2702 ; "AppleScript Error: The result of a numeric operation was too large";
 	ErrorNum = -2703 ; "AppleScript Error: <reference> can't be launched because it is not an application";
 	ErrorNum = -2704 ; "AppleScript Error: <reference> isn't scriptable";
@@ -74,7 +74,7 @@ Case(
 
 /* No Error */
 
-	ErrorNum = 0 ; ""
+	ErrorNum = 0 ; "";
 
 
 
@@ -271,7 +271,7 @@ Case(
 	ErrorNum = 1202 ; "Too many parameters in the function"; 
 	ErrorNum = 1203 ; "Unexpected end of calculation"; 
 	ErrorNum = 1204 ; "Number, text constant, field name or ( expected"; 
-	ErrorNum = 1205 ; "Comment is not terminated with *\/" ; 
+	ErrorNum = 1205 ; "Comment is not terminated with *\/"; 
 	ErrorNum = 1206 ; "Text constant must end with a quotation mark"; 
 	ErrorNum = 1207 ; "Unbalanced parenthesis"; 
 	ErrorNum = 1208 ; "Operator missing, function not found or ( not expected"; 
@@ -308,15 +308,15 @@ Case(
 
 	ErrorNum = 1413 ; "Failed communication link ODBC ";
 
-	ErrorNum = 1450 ; "Action requires PHP privilege extension (*)" ;
-	ErrorNum = 1451 ; "Action requires that current file be remote" ;
+	ErrorNum = 1450 ; "Action requires PHP privilege extension (*)";
+	ErrorNum = 1451 ; "Action requires that current file be remote";
 
-	ErrorNum = 1501 ; "SMTP authentication failed" ;
-	ErrorNum = 1502 ; "Connection refused by SMTP server" ;
-	ErrorNum = 1503 ; "Error with SSL" ;
-	ErrorNum = 1504 ; "SMTP server requires the connection to be encrypted" ;
-	ErrorNum = 1505 ; "Specified authentication is not supported by SMTP server" ;
-	ErrorNum = 1506 ; "Email(s) could not be sent successfully" ;
+	ErrorNum = 1501 ; "SMTP authentication failed";
+	ErrorNum = 1502 ; "Connection refused by SMTP server";
+	ErrorNum = 1503 ; "Error with SSL";
+	ErrorNum = 1504 ; "SMTP server requires the connection to be encrypted";
+	ErrorNum = 1505 ; "Specified authentication is not supported by SMTP server";
+	ErrorNum = 1506 ; "Email(s) could not be sent successfully";
 	ErrorNum = 1507 ; "Unable to log in to the SMTP server";
 
 
