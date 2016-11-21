@@ -1,44 +1,51 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="433" functionArity="1" visible="True" parameters="options" name="WindowOffscreenPos">
 		<Calculation><![CDATA[// WindowOffscreenPos ( options )
-// version 1.0, Jared Gibson, NYHTC
+// version 1.1, Jared Gibson, NYHTC
+
 
 /*
 	Return the standard off-screen (single) position. 
 
 
-HISTORY ( recent at top ):
+HISTORY:
+	1.2 - 2016-11-21 ( eshagdar ): formatted help text.
+	1.1 - 2016-11-15 ( jgibson ): clarified help text.
 	1.0 - 2016-11-07 ( jgibson ): first created.
 */
 
 
 Let ( [ 
-	  helpText = "Return the standard off-screen (single) position. Can specify a number to put in an override position (or clear that override by sending \"Clear\"). "
-	; defaultPos = -9999
-];
+		 defaultPos = -9999
 
+		;  helpText = 
+			list ( 
+				"Returns the standard off-screen position ( single value ). Currently " & defaultPos & ".";
+				"OPTIONAL PARAMETERS:";
+				" - specify a number to override position.";
+				" - specify \"Reset\" to clear/reset that override.";
+				"To override while walking through a script, run this custom function in Data Viewer passing a number."
+			)
+	];
 	Case ( 
 		options = "Help"
 		; helpText
 		; 
-	
-		options = "Clear"
+
+		options = "Reset" 
 		; Let ( $$_DEBUG_WindowOffscreenPos_Override = "" ; defaultPos )
 		; 
 
-		not IsEmpty ( options ) 
-		 and 
-		options = GetAsNumber ( options )
+		not IsEmpty ( options ) and options = GetAsNumber ( options )
 		; Let ( $$_DEBUG_WindowOffscreenPos_Override = options ; options )
 		; 
 
 		not IsEmpty ( $$_DEBUG_WindowOffscreenPos_Override )
 		; $$_DEBUG_WindowOffscreenPos_Override
 		; 
-	
-		defaultPos 
-	
-		)
+
+		defaultPos
+	)
 )]]>
 		</Calculation>
 	</CustomFunction>
