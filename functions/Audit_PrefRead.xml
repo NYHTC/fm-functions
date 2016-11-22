@@ -1,7 +1,6 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="54" functionArity="1" visible="True" parameters="PrefName" name="Audit_PrefRead">
-		<Calculation><![CDATA[// Audit_PrefRead ( PrefName )
-// version 1.5.1, Erik Shagdar, NYHTC
+<CustomFunction id="92" functionArity="1" visible="True" parameters="prefName" name="Audit_PrefRead"><Calculation><![CDATA[// Audit_PrefRead ( PrefName )
+// version 1.6, Erik Shagdar, NYHTC
 
 /*
 	Send in a preference name.
@@ -16,6 +15,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.6 - 2016-11-22 ( eshagdar/dshockley ): simplified dictPrefs setup, added Short option.
 	1.5.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.5 - 2016-09-14 ( eshagdar ): added cr/mod fields, auto1, audit trigger/acct/ts fields. changed hard-coded names to be references instead. Deprecated RecID, use UUID instead.
 	1.4 - 2016-07-06 ( eshagdar ): renamed _Audit_PrefRead to Audit_PrefRead.
@@ -29,47 +29,58 @@ HISTORY:
 Let ( [
 		prefName = If ( IsEmpty ( prefName ) ; "help" ; prefName );
 		dictPrefs = 
-				# ( "OrgNum"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zAutoOrgNum ) )
-			&	# ( "OrgMatch"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zAutoOrgMATCH ) )
+				# ( "OrgNum" ; FieldNameShort ( ZZ_INTERFACE::zAutoOrgNum ) )
+			&	# ( "OrgMatch" ; FieldNameShort ( ZZ_INTERFACE::zAutoOrgMATCH ) )
 
-			&	# ( "PubFlag"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::SyncDeK_pubFlag ) )
-			&	# ( "UUID"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zzAudit_UUID ) )
-			&	# ( "Trigger"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zzAudit_ModTrigger ) )
-			&	# ( "AuditAccount"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zzAudit_ModAccount ) )
-			&	# ( "AuditTS"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zzAudit_ModTS ) )
+			&	# ( "PubFlag" ; FieldNameShort ( ZZ_INTERFACE::SyncDeK_pubFlag ) )
+			&	# ( "UUID" ; FieldNameShort ( ZZ_INTERFACE::zzAudit_UUID ) )
+			&	# ( "Trigger" ; FieldNameShort ( ZZ_INTERFACE::zzAudit_ModTrigger ) )
+			&	# ( "AuditAccount" ; FieldNameShort ( ZZ_INTERFACE::zzAudit_ModAccount ) )
+			&	# ( "AuditTS" ; FieldNameShort ( ZZ_INTERFACE::zzAudit_ModTS ) )
 
-			&	# ( "Auto1"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zAuto1 ) )
-			&	# ( "AutoSpace"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zAutoSpace ) )
-			&	# ( "RecordID"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zRecordID ) )
-			&	# ( "CalcRecID"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zCalcRecID ) )
-			&	# ( "TableName"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zTableNm ) )
+			&	# ( "Auto1" ; FieldNameShort ( ZZ_INTERFACE::zAuto1 ) )
+			&	# ( "AutoSpace" ; FieldNameShort ( ZZ_INTERFACE::zAutoSpace ) )
+			&	# ( "RecordID" ; FieldNameShort ( ZZ_INTERFACE::zRecordID ) )
+			&	# ( "CalcRecID" ; FieldNameShort ( ZZ_INTERFACE::zCalcRecID ) )
+			&	# ( "TableName" ; FieldNameShort ( ZZ_INTERFACE::zTableNm ) )
 
-			&	# ( "CrAccount"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zCrAcct ) )
-			&	# ( "CrUser"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zCrNm ) )
-			&	# ( "CrScript"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zCrScript ) )
-			&	# ( "CrTS"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zCrTStmp ) )
+			&	# ( "CrAccount" ; FieldNameShort ( ZZ_INTERFACE::zCrAcct ) )
+			&	# ( "CrUser" ; FieldNameShort ( ZZ_INTERFACE::zCrNm ) )
+			&	# ( "CrScript" ; FieldNameShort ( ZZ_INTERFACE::zCrScript ) )
+			&	# ( "CrTS" ; FieldNameShort ( ZZ_INTERFACE::zCrTStmp ) )
 
-			&	# ( "ModAccount"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zModAcct ) )
-			&	# ( "ModUser"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zModNm ) )
-			&	# ( "ModScript"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zModScript ) )
-			&	# ( "ModTS"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zModTStmp ) )
+			&	# ( "ModAccount" ; FieldNameShort ( ZZ_INTERFACE::zModAcct ) )
+			&	# ( "ModUser" ; FieldNameShort ( ZZ_INTERFACE::zModNm ) )
+			&	# ( "ModScript" ; FieldNameShort ( ZZ_INTERFACE::zModScript ) )
+			&	# ( "ModTS" ; FieldNameShort ( ZZ_INTERFACE::zModTStmp ) )
 
 
 
 /*
 	2016-09-15 ( eshagdar ): This is for backwards compatibility. Check against base elements next time it is refreshed ( currently at 2016-08-03 )
 */
-			&	# ( "RecID"; Get ( LayoutTableName ) & "::" & FieldNameShort ( ZZ_INTERFACE::zzAudit_UUID ) )
+			&	# ( "RecID" ; FieldNameShort ( ZZ_INTERFACE::zzAudit_UUID ) )
 
 
 
 	];
 
-	If ( prefName = "help" ;
-		"Below is a list of available commands¶¶" & DictListKeys ( dictPrefs ) ; 
-		DictGet ( dictPrefs ; prefName )
+	Case ( 
+		prefName = "help" 
+		; "Below is a list of available commands¶¶" & DictListKeys ( dictPrefs ) 
+		;
+
+		/* only the field SHORT name is desired: */
+		"_Short" = Right ( prefName ; Length ( "_Short" ) )
+		; DictGet ( dictPrefs ; Left ( prefName ; Length ( prefName ) - Length ( "_Short" ) ) )
+		;
+
+		"Short_" = Left ( prefName ; Length ( "Short_" ) )
+		; DictGet ( dictPrefs ; Right ( prefName ; Length ( prefName ) - Length ( "Short_" ) ) )
+		;
+		 
+		/* default is fully-qualified field name: */
+		Get ( LayoutTableName ) & "::" & DictGet ( dictPrefs ; prefName )
 	)
-)]]>
-		</Calculation>
-	</CustomFunction>
+)]]></Calculation></CustomFunction>
 </fmxmlsnippet>
