@@ -1,0 +1,42 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="242" functionArity="1" visible="True" parameters="consoleMsg" name="LogConsole">
+		<Calculation><![CDATA[// LogConsole ( consoleMsg )
+// 1.0.1, Daniel A. Shockley, NYHTC
+
+/*
+	Log a message to the console
+
+
+NOTE:
+	Mac ONLY
+
+
+PLUGIN:
+	BaseElements
+
+
+REQUIRES:
+	ShellQuotedForm
+
+
+HISTORY:
+	1.0.1 - 2016-12-08 ( eshagdar ): added documentation.
+	1.0 - 201x-xx-xx ( dshockley ): created.
+*/
+
+
+Let ( [ 
+		 processName = "FMScript"
+		; consoleMsg = 
+			If ( IsEmpty ( consoleMsg ); 
+				"NOTHING SPECIFIED"; 
+				consoleMsg 
+			) 
+		; shellCommand = "logger -t " & ShellQuotedForm ( processName ) & " "  & ShellQuotedForm ( consoleMsg ) 
+	];
+
+	BE_ExecuteSystemCommand ( shellCommand )
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
