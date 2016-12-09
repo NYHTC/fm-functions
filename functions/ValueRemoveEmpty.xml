@@ -1,0 +1,42 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="193" functionArity="1" visible="True" parameters="_list" name="ValueRemoveEmpty">
+		<Calculation><![CDATA[// ValueRemoveEmpty ( _list )
+// version 1.1, Shagdar/Shockley
+
+/* Description: Remove all empty values in a list.  */
+
+
+/* HISTORY: 
+
+1.1 (2015-07-07-dshockley): also removes leading blank lines.
+1.0 (2013-01-28-eshagdar): first created. 
+
+*/
+
+Let ( [
+	_cleanList = Case ( 
+				Position ( _list; "¶¶"; 1; 1 ) > 0
+				; ValueRemoveEmpty ( Substitute ( _list; "¶¶"; "¶" ) )
+				;
+				_list
+				)
+	; _cleanList = 
+		Case (
+			Right ( _cleanList; 1 ) = "¶"
+			; Left ( _cleanList; Length ( _cleanList ) - 1 )
+			; _cleanList
+			)
+	; _cleanList = 
+		Case (
+			Left ( _cleanList; 1 ) = "¶"
+			; Right ( _cleanList; Length ( _cleanList ) - 1 )
+			; _cleanList
+			)
+	];
+	
+	_cleanList
+
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
