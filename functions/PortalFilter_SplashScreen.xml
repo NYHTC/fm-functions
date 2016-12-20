@@ -1,0 +1,22 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="158" functionArity="1" visible="True" parameters="tabName" name="PortalFilter_SplashScreen">
+		<Calculation><![CDATA[// PortalFilter_SplashScreen ( tabName )
+// version 1.1, Erik Shagdar, NYHTC
+
+/*
+	Use this to avoid having to separately edit the filter on each portal sub-section. 
+
+
+HISTORY:
+	1.1 - 2016-12-20 ( eshagdar ): Renamed '_PortalFilter_SplashScreen' to 'PortalFilter_SplashScreen'. Use $$DbID global varaible instead of hard-coding the database ID.
+	1.0 - 2016-02-16 ( eshagdar ): First Created.
+*/
+
+
+
+Utility_LAYOUT::a00ML_DbID = $$DbID
+  and 
+Utility_LAYOUT::b00ML_TabName = tabName]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
