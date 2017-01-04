@@ -1,0 +1,51 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="189" functionArity="3" visible="True" parameters="_list;_reference;_type" name="ValuesGreaterThan">
+		<Calculation><![CDATA[// ValuesGreaterThan ( _list ; _reference ; _type)
+// version 1.1, Theo Gantos, TEKA, Inc.
+
+/* 
+	Returns all values in list that are greater than the reference parameter
+
+
+REQUIRES:
+	ValueAsType
+
+
+ORIGINAL DOCUMENTATION:
+	Originally written by Jeremy Bante, OshVay Systems, Inc., but was lost, so I rewrote it
+	Original function used the parameter List, which is now a reserved word, changed to listvalues.
+
+
+VERSION HISTORY:
+	1.1 - 2017-01-04 ( eshagdar ): added _type parameter to do a type conversion if specified. If none is spcified, default to text. updated documentation, formatting.
+	1.0 - xxxx-xx-xx ( tgantos ): initial version.
+*/
+
+
+Let ( [
+		_listLength = ValueCount ( _list );
+		_firstValue = GetValue ( _list; 1);
+		_type = If ( IsEmpty ( _type ) ; "Text" ; _type )
+	];
+
+	List ( 
+		/* if the first element is greater than the reference, return it */
+		If ( ValueAsType ( _firstValue; _type ) > ValueAsType ( _reference; _type );
+			_firstValue;
+			""
+		);
+
+		/* recursively find all other elements greater than the reference */
+		If ( _listLength > 1;
+			ValuesGreaterThan (
+				RightValues ( _list; _listLength - 1 );
+				_reference;
+				_type
+			);
+			""
+		)
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

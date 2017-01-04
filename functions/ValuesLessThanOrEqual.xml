@@ -1,0 +1,45 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="190" functionArity="3" visible="True" parameters="_list;_reference;_type" name="ValuesLessThanOrEqual">
+		<Calculation><![CDATA[// ValuesLessThanOrEqual ( _list ; _reference; _type )
+// version 1.1, Jeremy Bante, OshVay Systems, Inc.
+
+/* 
+	returns all values in list that are less than or equal to reference.
+
+
+REQUIRES:
+	ValueAsType
+
+
+VERSION HISTORY:
+	1.1 - 2017-01-04 ( eshagdar ): added _type parameter to do a type conversion if specified. If none is spcified, default to text. updated documentation, formatting.
+	1.0 - xxxx-xx-xx ( jbante ): initial version.
+*/
+
+
+Let ( [
+		_listLength = ValueCount ( _list ) ;
+		_firstValue = GetValue ( _list; 1 ) ;
+		_type = If ( IsEmpty ( _type ) ; "Text" ; _type )
+	];
+
+	List ( 
+		/* if the first element is less than or equal to reference, return it */
+		If ( ValueAsType ( _firstValue; _type ) ≤ ValueAsType ( _reference; _type ) ;
+			_firstValue ;
+			""
+		);
+
+		/* recursively find all other elements less than the reference */
+		If ( _listLength > 1;
+			ValuesLessThanOrEqual (
+				RightValues ( _list; _listLength - 1) ;
+				_reference ;
+				_type
+			)
+		)
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

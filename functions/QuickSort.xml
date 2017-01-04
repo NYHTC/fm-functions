@@ -1,0 +1,42 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="188" functionArity="2" visible="True" parameters="_list;_type" name="QuickSort">
+		<Calculation><![CDATA[// QuickSort ( _list; _type )
+// version 1.1, Jeremy Bante, OshVay Systems, Inc.
+
+/*
+	Sorts list with the popular and reasonably efficient quicksort algorithm
+
+
+REQUIRES:
+	ValuesGreaterThan 
+	ValuesLessThanOrEqual
+
+
+HISTORY:
+	1.1 - 2017-01-04 ( eshagdar ): reformatted. added _type parameter.
+	1.0 - xxxx-xx-xx ( jbante ): initial version.
+*/
+
+
+Let ( [
+		listLength = ValueCount ( _list ) ;
+		pivotIndex = Ceiling ( Random * listLength ) ;
+		pivot = MiddleValues ( _list; pivotIndex; 1) ;
+		listLessPivot = LeftValues ( _list; pivotIndex -1 ) & RightValues ( _list; listLength - pivotIndex )
+	];
+
+	/* sort the list */
+	If ( listLength < 2;
+
+		/* base case, just return the value */
+		_list;
+
+		/* recursively sort everything and after the pivot */
+		QuickSort ( ValuesLessThanOrEqual ( listLessPivot; pivot; _type ); _type ) &
+		pivot &
+		QuickSort ( ValuesGreaterThan ( listLessPivot; pivot; _type ); _type )
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
