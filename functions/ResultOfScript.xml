@@ -1,0 +1,51 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="151" functionArity="2" visible="True" parameters="resultType;resultDescription" name="ResultOfScript">
+		<Calculation><![CDATA[// ResultOfScript ( resultType; resultDescription )
+// version 1.1, Daniel A. Shockley & Erik Shagdar, NYHTC
+
+/*
+	Quickly provide script result (for use in Exit Script) to return this script's result in dictionary form, using NYHTC standards.
+
+
+REQUIRES:
+	#
+
+
+HISTORY:
+	1.1 - 2017-01-17 ( eshagdar ): updated with default values. added as standard function. added to script template.
+	1.0 - 2012-xx-xx ( dshockley ): created.
+*/
+
+
+Let ( [
+		resultType = 
+			If ( not IsEmpty ( resultType ); 
+				resultType;
+				"Success"
+			);
+		resultDescription = 
+			Case ( 
+				not IsEmpty ( resultDescription ); 
+				resultDescription;
+
+				resultType = "Success";
+				"Completed " & Get ( ScriptName ) & " in " & Get ( FileName ) & ".";
+
+				resultType = "Error";
+				"Encountered error in  " & Get ( ScriptName ) & " in " & Get ( FileName ) & ".";
+
+				resultType = "Cancel";
+				"User canceled " & Get ( ScriptName ) & " in " & Get ( FileName ) & ".";
+
+				"Unable to set result description because a non-standard ResultType was specified without a ResultDescription."
+			)
+	];
+
+		# ( "Result"; resultType ) 
+	&	# ( "ResultDescription"; resultDescription )
+	&	# ( "FileName" ; Get ( FileName ) ) 
+	&	# ( "ScriptName" ; Get ( ScriptName ) ) 
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

@@ -1,0 +1,50 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="161" functionArity="2" visible="True" parameters="_valueList;_itemIndex" name="ValueRemoveIndex">
+		<Calculation><![CDATA[// ValueRemoveIndex ( _valueList; _itemIndex )
+// version 1.2.1, Daniel A. Shockley & Erik Shagdar, New York Hotel Trades Council (HTC)
+
+
+/* 
+	Remove a value at the specified index  
+VERSION HISTORY: 
+	1.2.1 - 2017-01-10 ( eshagdar ): added more documentation. added spacing between function and its params.
+	1.2 - 2015-08-17 ( dshockley ): bug fix. When asked to remove index 1, version 1.1 wiped out the whole list. 
+	1.1 - 201x-xx-xx ( xxxxx ): updated to honor LF (ASCII 10) as equivalent to CR (ASCII 13 - FileMaker's default) to be consistent with built-in functions, which honor both. Note also that it may seem to strip internal double-LFs, since FileMaker sometimes treats LF-CR or CR-LF as a SINGLE character. 
+	1.0 - 201x-xx-xx ( dshockley/eshagdar ): initial version 
+*/
+
+
+Let ( [
+
+		originalValueCount = ValueCount ( _valueList )
+
+	];
+
+	Case ( 
+		/* Index in middle of list */
+		_itemIndex > 1 and _itemIndex < originalValueCount
+		; LeftValues ( _valueList; _itemIndex - 1 ) & RightValues ( _valueList; originalValueCount - _itemIndex ) 
+		;
+
+		/* Index is last item */
+		_itemIndex > 1 and _itemIndex = originalValueCount
+		; LeftValues ( _valueList; originalValueCount - 1 )
+		;
+
+		/* Index is first item */
+		_itemIndex = 1 and _itemIndex < originalValueCount
+		; RightValues ( _valueList; originalValueCount - 1 )
+		;
+
+		/* delimiters not found, but they wanted to remove the first (and only) item */
+		_itemIndex = 1 and originalValueCount = 1
+		; ""
+		; 
+
+		/* DEFAULT - The item asked to be removed not there, so return original list */
+		_valueList
+ 	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
