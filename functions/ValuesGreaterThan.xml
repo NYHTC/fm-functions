@@ -17,8 +17,8 @@ ORIGINAL DOCUMENTATION:
 
 
 VERSION HISTORY:
-	1.1 - 2017-01-04 ( eshagdar ): added _type parameter to do a type conversion if specified. If none is spcified, default to text. updated documentation, formatting.
-	1.0 - xxxx-xx-xx ( tgantos ): initial version.
+	1.1 - 2017-01-04 ( eshagdar ): added _type parameter to do a type conversion if specified. If none is spcified, default to text. updated documentation, formatting. Renamed '_listValues' to '_list', '_referenceValue' to '_reference'.
+	1.0 - initial version.
 */
 
 

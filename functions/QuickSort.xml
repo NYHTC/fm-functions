@@ -1,20 +1,19 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="188" functionArity="2" visible="True" parameters="_list;_type" name="QuickSort">
 		<Calculation><![CDATA[// QuickSort ( _list; _type )
-// version 1.1, Jeremy Bante, OshVay Systems, Inc.
+// version 1.1.1, Jeremy Bante, OshVay Systems, Inc.
 
 /*
 	Sorts list with the popular and reasonably efficient quicksort algorithm
 
 
 REQUIRES:
-	ValuesGreaterThan 
-	ValuesLessThanOrEqual
+	ValuesGreaterThan 	ValuesLessThanOrEqual
 
 
 HISTORY:
-	1.1 - 2017-01-04 ( eshagdar ): reformatted. added _type parameter.
-	1.0 - xxxx-xx-xx ( jbante ): initial version.
+	1.1 - 2017-01-04 ( eshagdar ): added '_type' param. Renamed 'listValues' to '_list'.
+	1.0 - initial version.
 */
 
 
