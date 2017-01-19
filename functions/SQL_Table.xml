@@ -12,7 +12,7 @@ HISTORY:
 	1.0 - 2016-06-27 ( dshockley ): Pulled from fmfunctions.com site; renamed; Re-formatted for HTC standards. Original name was 'SQLTable', created by Dan Smith. 
 
 
-ORIGINAL DOCUMENTATION:]
+ORIGINAL DOCUMENTATION:
 	SQLTable ( fieldForTableNameOrTableName )
 	PURPOSE:
 	Quote a table name for use in a FileMaker SQL statement. Prevent hard-coding it's value.
