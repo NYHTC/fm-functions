@@ -1,7 +1,9 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="151" functionArity="2" visible="True" parameters="resultType;resultDescription" name="ResultOfScript">
-		<Calculation><![CDATA[// ResultOfScript ( resultType; resultDescription )
-// version 1.1, Daniel A. Shockley & Erik Shagdar, NYHTC
+
+<CustomFunction id="151" functionArity="2" visible="True" parameters="resultType;resultDescription" name="ResultOfScript">
+<Calculation>
+<![CDATA[// ResultOfScript ( resultType; resultDescription )
+// version 1.1.1, Daniel A. Shockley & Erik Shagdar, NYHTC
 
 /*
 	Quickly provide script result (for use in Exit Script) to return this script's result in dictionary form, using NYHTC standards.
@@ -9,43 +11,67 @@
 
 REQUIRES:
 	#
+	CallStack
 
 
 HISTORY:
+	1.1.1 - 2017-01-26 ( eshagdar ): updated MissingParams description.
 	1.1 - 2017-01-17 ( eshagdar ): updated with default values. added as standard function. added to script template.
 	1.0 - 2012-xx-xx ( dshockley ): created.
 */
 
 
-Let ( [
-		resultType = 
-			If ( not IsEmpty ( resultType ); 
+If ( resultType = "help" or resultDescription = "help";
+	/* display the help text */
+	"Return a dictionary of the standard key-value pairs. ResultType can take on one of the standard results - 'Success', 'Error', on 'Cancel' ( defaults to 'Success' if none is specified ). ResultDescription uses a pre-canned description for specified resultType, or passes through the specified string.¶NOTE: resultType can use a special value of 'MissingParams' which will be converted to 'Error' type and with pre-canned description. You can optionally specify a comma-delimitted list of of missing params in the resultDescription to get them added to the description.";
+
+
+	/* return a dictionary */
+	Let ( [
+			SQ = "'";
+			str_ScriptAndFile = SQ & Get ( ScriptName ) & SQ & " script in " & SQ & Get ( FileName ) & SQ & " file";
+
+			_result = Case ( 
+				resultType = "MissingParams";
+				"Error";
+
+				not IsEmpty ( resultType ); 
 				resultType;
+
 				"Success"
 			);
-		resultDescription = 
-			Case ( 
+			_description = Case ( 
+				resultType = "MissingParams";
+				str_ScriptAndFile & " was called without required parameters" & 
+						If ( not IsEmpty ( resultDescription );
+								": " & Substitute ( resultDescription; [ ¶; ", " ] );
+								""
+						) &
+						". Please contact your database administrator.¶CallStack:¶" & CallStack ( "DisplayCurrent" );
+
 				not IsEmpty ( resultDescription ); 
 				resultDescription;
 
-				resultType = "Success";
-				"Completed " & Get ( ScriptName ) & " in " & Get ( FileName ) & ".";
+				_result = "Success";
+				"Completed " & str_ScriptAndFile & ".";
 
-				resultType = "Error";
-				"Encountered error in  " & Get ( ScriptName ) & " in " & Get ( FileName ) & ".";
+				_result = "Cancel";
+				"User canceled " & str_ScriptAndFile & ".";
 
-				resultType = "Cancel";
-				"User canceled " & Get ( ScriptName ) & " in " & Get ( FileName ) & ".";
+				_result = "Error";
+				"Encountered error in " & str_ScriptAndFile & ".";
 
 				"Unable to set result description because a non-standard ResultType was specified without a ResultDescription."
 			)
-	];
+		];
 
-		# ( "Result"; resultType ) 
-	&	# ( "ResultDescription"; resultDescription )
-	&	# ( "FileName" ; Get ( FileName ) ) 
-	&	# ( "ScriptName" ; Get ( ScriptName ) ) 
+			# ( "Result"; _result ) 
+		&	# ( "ResultDescription"; _description )
+		&	# ( "FileName" ; Get ( FileName ) ) 
+		&	# ( "ScriptName" ; Get ( ScriptName ) ) 
+	)
 )]]>
-		</Calculation>
-	</CustomFunction>
+</Calculation>
+</CustomFunction>
+
 </fmxmlsnippet>
