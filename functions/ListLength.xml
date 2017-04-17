@@ -1,0 +1,24 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="234" functionArity="2" visible="True" parameters="_list;delim" name="ListLength">
+		<Calculation><![CDATA[// ListLength ( _list; delim )
+// version 1.0, Erik Shagdar
+
+/*
+	Given a delimited stirng, return the number of values in it
+
+
+HISTORY ( recent at top ):
+	1.0 - 2017-04-17 ( eshagdar ): Created
+*/
+
+
+If ( IsEmpty ( _list );
+	0;
+	Let ( 
+		delim = If ( IsEmpty ( delim ); ¶; delim );
+		PatternCount ( _list ; delim ) + 1
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

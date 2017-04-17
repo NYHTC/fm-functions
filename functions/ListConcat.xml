@@ -1,27 +1,33 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="422" functionArity="3" visible="True" parameters="firstList;secondList;options" name="ListConcat">
 		<Calculation><![CDATA[// ListConcat ( firstList; secondList; options )
-// version 1.0, Erik Shagdar, NYHTC
+// version 1.1, Erik Shagdar
 
 /*
-	Given 2 lists, concatinate their values
+	Given 2 lists, concat their values
+
+
+WARNING:
+	Recursive
 
 
 REQUIRES:
 	DictContains
 	DictGet
 	DictRemove
-	ValueRemove
+	ValueRemoveIndex
 
 
-HISTORY:
-	1.0 - 2016-09-19 ( eshagdar ): first created.
+HISTORY ( recent at top ):
+	1.1 - 2017-04-17 ( eshagdar ): use ValueRemoveIndex instead of ValueRemove since lists should be allowed to have duplicate items
+	1.0 - 2016-09-19 ( eshagdar ): Created
 */
+
 
 
 If ( options = "help" or DictGet ( options; "help" );
 	List ( 
-		"This functions takes 2 lists and concatenates them. Below are optional keys that can be specified in teh 'options' param:";
+		"This functions takes 2 lists and concatenates them. Below are optional keys that can be specified in the 'options' param:";
 		"  rowSep - output string between each row";
 		"  colSep - string between the two value";
 		"  prefix - string before each value of the first list";
@@ -56,8 +62,8 @@ If ( options = "help" or DictGet ( options; "help" );
 			firstVal_firstList = GetValue ( firstList; 1 );
 			firstVal_secondList = GetValue ( secondList; 1 );
 
-			remain_firstList = ValueRemove ( firstList ; firstVal_firstList );
-			remain_secondList = ValueRemove ( secondList ; firstVal_secondList );
+			remain_firstList = ValueRemoveIndex ( firstList ; 1 );
+			remain_secondList = ValueRemoveIndex ( secondList ; 1 );
 			remain_options = 
 				If ( IsEmpty ( listNames );
 					options;
@@ -73,11 +79,10 @@ If ( options = "help" or DictGet ( options; "help" );
 
 			firstResult = prefix & firstVal_firstList & colSep & firstVal_secondList & suffix;
 			remainResult = 
-				If ( not IsEmpty ( remain_firstList ) 
-						or not IsEmpty ( remain_secondList );
-					rowSep & ListConcat ( remain_firstList; remain_secondList; remain_options );
-					""
-				)
+				If ( not IsEmpty ( remain_firstList ) or not IsEmpty ( remain_secondList );
+				rowSep & ListConcat ( remain_firstList; remain_secondList; remain_options );
+				""
+			)
 		];
 
 		firstResult & remainResult
