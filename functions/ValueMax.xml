@@ -1,0 +1,46 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="254" functionArity="1" visible="True" parameters="_list" name="ValueMax">
+		<Calculation><![CDATA[// ValueMax ( _list )
+// version 1.1, Erik Shagdar
+
+/*
+	Takes a list of values and returns the 'max' of them. Works across ints and strings. 
+
+
+NOTE:
+	Recursive.
+	This should be much faster if the list mostly have duplicate values. Fr a list that's mostly unique, get the last value of the sorted list.
+
+HISTORY:
+	1.1 - 2017-04-19 ( eshagdar ): updated documentation.
+	1.0 - 201x-xx-xx ( eshagdar ): first created.
+*/
+
+
+Let ( [
+		firstValue = GetValue ( _list; 1 )
+	];
+
+	If ( ValueCount ( _list ) > 1;
+
+		/* recursive case */
+		If ( firstValue > $$_CF_ValueMax;
+			Let ( 
+				$$_CF_ValueMax = firstValue;
+				ValueMax ( ValueRemove ( _list ; firstValue ) )
+			);
+			ValueMax ( ValueRemove ( _list ; firstValue ) )
+		);
+
+		/* base case */
+		Let ( [
+				_maxVal = Max ( firstValue; $$_CF_ValueMax );
+				$$_CF_ValueMax = ""
+			];
+			_maxVal
+		)
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
