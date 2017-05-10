@@ -1,22 +1,28 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="69" functionArity="2" visible="True" parameters="ListA;ListB" name="IntersectionSet">
 		<Calculation><![CDATA[// IntersectionSet ( ListA ; ListB )
-// version 1.1.1, Peter Gort, Denbigh International http://www.denbigh.com.au
+// version 1.1.2, Peter Gort, Denbigh International http://www.denbigh.com.au
 
 /*
 	Outputs a list of the unique values present in both of the value lists supplied in the parameters
 
 
+NOTE:
+	Recursive function
+
+
 EXAMPLE:
-	Input:  Intersection Set ( "1¶2¶3¶4" ; "3¶4¶5¶6" )
-	Output: "3¶4"
+	Input:	Intersection Set ( "1¶2¶3¶4" ; "3¶4¶5¶6" )
+	Output:	"3¶4"
 
 
 REQUIRES:
+	UniqueValues
 	NULL
 
 
 HISTORY:
+	1.1.2 - 2017-05-01 ( eshagdar ): updated required doc section with missing function
 	1.1.1 - 2017-01-19 ( eshagdar ): updated documenation.
 	1.1 - 201x-xx-xx ( dshockley ): Modified to match entire values, rather than PART of a value; faster through use of position where full PatternCount not really needed; used List to avoid adding extraneous line returns; reformatted calc whitespace. 
 	1.0 - 201x-xx-xx ( xxxxx ): pulled from http://www.briandunning.com/cf/946
@@ -38,33 +44,33 @@ ORIGINAL DOCUMENTATION:
 
 	Also uses a custom function called NULL that returns nothing.
 
-	Example : 
+	Example
 		Intersection Set ( "1¶2¶3¶4" ; "3¶4¶5¶6" ) -> "3¶4"
 */
 
 
 If ( IsEmpty ( ListA ) or IsEmpty ( ListB ) 
-	 ; NULL 
-	 ; Let ( [
-			  nA = ValueCount( ListA ) 
-			; nB = ValueCount( ListB ) 
-			; t1 = GetValue ( ListA ; nA ) 
-			; t2 = GetValue ( ListB ; nB ) 
-			; remainderA = LeftValues ( ListA ; nA - 1 ) 
-			; remainderB = LeftValues ( ListB ; nB - 1 ) 
-			; result = List ( 
-				If ( Position ( ¶ & ListA & ¶ ; ¶ & t2 & ¶; 1; 1 ) 
-					; t2 
-					; NULL 
-				)
-				; If ( Position ( ¶ & ListB & ¶ ; ¶ & t1 & ¶; 1; 1 ) 
-					; t1 
-					; NULL 
-				) 
-				; IntersectionSet ( remainderA ; remainderB )
+	; NULL 
+	; Let ( [
+		  nA = ValueCount( ListA ) 
+		; nB = ValueCount( ListB ) 
+		; t1 = GetValue ( ListA ; nA ) 
+		; t2 = GetValue ( ListB ; nB ) 
+		; remainderA = LeftValues ( ListA ; nA - 1 ) 
+		; remainderB = LeftValues ( ListB ; nB - 1 ) 
+		; result = List ( 
+			If ( Position ( ¶ & ListA & ¶ ; ¶ & t2 & ¶; 1; 1 ) 
+				; t2 
+				; NULL 
 			)
-		];
-		UniqueValues ( result )
+			; If ( Position ( ¶ & ListB & ¶ ; ¶ & t1 & ¶; 1; 1 ) 
+				; t1 
+				; NULL 
+			) 
+			; IntersectionSet ( remainderA ; remainderB )
+		)
+	];
+	UniqueValues ( result )
 	)
 )]]>
 		</Calculation>
