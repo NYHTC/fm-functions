@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="410" functionArity="3" visible="True" parameters="fieldRef;operator;someValue" name="SQL_Where">
 		<Calculation><![CDATA[// SQL_Where ( fieldRef ; operator ; someValue )
-// version 1.0, Daniel A. Shockley, Erik Shagdar, NYHTC
+// version 1.1, Daniel A. Shockley, Erik Shagdar, NYHTC
 
 /* 
 	Gets a 'where' clause (for use following WHERE, AND, OR) with the quoted short field name of the field reference, the operator, and then properly escape (or not) the value based on the field's Type. 
@@ -9,12 +9,14 @@
 
 REQUIRE: 
 	SQL_Date
+	SQL_EscapeList
 	SQL_EscapeString
 	SQL_Field
 	SQL_Timestamp
 
 
 HISTORY: 
+	1.1 - 2017-05-16 ( eshagdar ): added support for 'IN' operator.
 	1.0 - 2016-06-27 ( dshockley ): first created.
 */
 
@@ -42,6 +44,9 @@ Let ( [
 			; 
 			Trim ( operator ) = "LIKE"
 			; SQL_EscapeString ( Trim ( someValue ) )
+			; 
+			Trim ( operator ) = "IN"
+			; "( " & SQL_EscapeList ( Trim ( someValue ) ) & " )"
 			; 
 			Position ( fieldType ; "Text" ; 1 ; 1 ) 
 			; SQL_EscapeString ( someValue )
