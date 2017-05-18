@@ -35,6 +35,7 @@ If ( resultType = "help" or resultDescription = "help";
 	/* return a dictionary */
 	Let ( [
 			SQ = "'";
+			devMsg = "Please contact your database administrator and give them the following information.¶CallStack:¶" & CallStack ( "DisplayCurrent" );
 			str_ScriptAndFile = SQ & Get ( ScriptName ) & SQ & " script in " & SQ & Get ( FileName ) & SQ & " file";
 
 			_result = Case ( 
@@ -53,7 +54,7 @@ If ( resultType = "help" or resultDescription = "help";
 								": " & Substitute ( resultDescription; [ ¶; ", " ] );
 								""
 						) &
-						". Please contact your database administrator and give them the following information.¶CallStack:¶" & CallStack ( "DisplayCurrent" );
+						". " & devMsg;
 
 				not IsEmpty ( resultDescription ); 
 				resultDescription;
@@ -72,7 +73,7 @@ If ( resultType = "help" or resultDescription = "help";
 			_description = 
 				Substitute ( 
 					_description; 
-					[ "#DEVMSG"; "Please contact your database administrator and give them the following information.¶CallStack:¶" & CallStack ( "DisplayCurrent" ) ]
+					[ "#DEVMSG"; devMsg ]
 				)
 		];
 
