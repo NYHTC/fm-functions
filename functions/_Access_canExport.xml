@@ -1,0 +1,36 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="196" functionArity="0" visible="True" parameters="" name="_Access_canExport">
+		<Calculation><![CDATA[// _Access_canExport
+// version 1.0, NYHTC
+
+/*
+	Determine if the user can export records.
+
+
+REQUIRES:
+	ValueIsInList
+
+
+HISTORY:
+	1.0 - 2017-05-25 ( eshagdar ): first created.
+*/
+
+
+ValueIsInList ( 
+	List ( 
+		"[Full Access]";
+		"Developer"
+	);
+	Get ( AccountPrivilegeSetName ) 
+)
+  or
+ValueIsInList ( 
+		List ( 
+				"";
+				""
+		);
+		Get ( AccountName ) 
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
