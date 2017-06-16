@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="8" functionArity="1" visible="True" parameters="options" name="SessionOrgNum">
 		<Calculation><![CDATA[// SessionOrgNum ( options )
-// version 1.2.1, NYHTC
+// version 1.3.1, NYHTC
 
 /*
-	Returns this session's OrgNum. Looks at the session table in TimesSQ
+	Returns this session's OrgNum. Looks at the OrgPrefs table in the OrgPrefs database. 
 
 
 HISTORY:
+	1.3.1 - 2017-06-02 ( dshockley/eshagdar ): Uses new method of querying an Organization Prefs table, instead of a client-side global. 
 	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.2 - 2016-07-06 ( eshagdar ): renamed '_SessionOrgNum' to 'SessionOrgNum'.
 	1.1 - 2016-xx-xx ( xxxxx ): updated to reference a00_TimesSquare's OrgNum instead of the local file's global OrgNum
@@ -15,7 +16,17 @@ HISTORY:
 */
 
 
-_ext_00ZZ_SESSION::zgAutoOrgNum]]>
+Let ( [ sqlResult = ExecuteSQL ( "SELECT a99OP__OrgNum FROM Utility_SessionOrgPrefs" ; Char ( 9 ) ; "¶" ) ];
+	Case ( 
+		sqlResult = "?" 
+		; "" 
+		; 
+		Length ( sqlResult ) = 1
+		; GetAsNumber ( sqlResult  )
+		; 
+		""
+	)
+)]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
