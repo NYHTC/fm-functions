@@ -1,0 +1,36 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="168" functionArity="2" visible="True" parameters="baseString;decimalNumber" name="BaseX_FromDecimal">
+		<Calculation>
+<![CDATA[// BaseX_FromDecimal ( baseString; decimalNumber )
+// version 1.2, Tim Griffith Sr.
+
+/*
+	Convert a decimal number to some base.
+
+
+NOTE:
+	Recursive
+
+
+HISTORY:
+	1.2 - 2017-06-20 ( eshagdar ): Renamed from BaseConvert to BaseX_FromDecimal. added comments. cleaned up code.
+	1.1 - 2011-01-13 ( dshockley ): Renamed from NumToDuoTrigesimal to BaseConvert. added baseString param to allow to be used with any base.
+	1.0 - 2010-12-26 ( tgriffith ): first created. https://www.briandunning.com/cf/1254
+*/
+
+
+Let ( [
+		 _BASE = Mod ( decimalNumber ; Length ( baseString ) ) ;
+		 _CHAR = Middle ( baseString ; _BASE + 1 ; 1 ) ;
+		 _NEXT = Div ( decimalNumber ; Length ( baseString ) )
+	] ;
+
+	If ( _NEXT ;
+		 BaseX_FromDecimal ( baseString; _NEXT );
+		 ""
+	)
+	& _CHAR
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

@@ -1,0 +1,31 @@
+<fmxmlsnippet type="FMObjectList">
+
+<CustomFunction id="455" functionArity="2" visible="True" parameters="baseString;baseNum" name="BaseX_ToDecimal">
+<Calculation>
+<![CDATA[// BaseX_ToDecimal ( baseString; decimalNumber )
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	Convert a somebase to decimal number.
+
+
+NOTE:
+	Recursive
+
+
+HISTORY:
+	1.2 - 2017-06-20 ( eshagdar ): first created.
+*/
+
+
+Let ( [
+		lastChar = Right ( baseNum; 1 );
+		posChar = Position ( baseString; lastChar; 1; 1 ) - 1;
+		remainingStr = Left ( baseNum; Length ( baseNum ) - 1 )
+	];
+
+	posChar + Length ( baseString ) * If ( not IsEmpty ( remainingStr ); BaseX_ToDecimal ( baseString; remainingStr ); 0 )
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
