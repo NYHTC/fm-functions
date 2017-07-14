@@ -1,0 +1,29 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="458" functionArity="0" visible="True" parameters="" name="_PrivSet_Developer">
+		<Calculation><![CDATA[// _PrivSet_Developer
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	Determine if the user has a developer privilege set
+
+
+REQUIRES:
+	ValueIsInList
+
+
+HISTORY:
+	1.0 - 2017-07-14 ( eshagdar ): first created.
+*/
+
+
+ValueIsInList ( 
+	List (
+		"Developer";
+		"Developer_1";
+		"Developer_2"
+	);
+	Get ( AccountPrivilegeSetName )
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

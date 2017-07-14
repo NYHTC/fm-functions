@@ -1,35 +1,34 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="196" functionArity="0" visible="True" parameters="" name="_Access_canExport">
+	<CustomFunction id="454" functionArity="0" visible="True" parameters="" name="_Access_canExport">
 		<Calculation><![CDATA[// _Access_canExport
-// version 1.0, NYHTC
+// version 1.1, NYHTC
 
 /*
 	Determine if the user can export records.
 
 
 REQUIRES:
+	_PrivSet_Developer
+	_PrivSet_FullAccess
 	ValueIsInList
 
 
 HISTORY:
+	1.1 - 2017-07-14 ( eshagdar ): developer/fullAccess privSets moved into _PrivSet_Developer function
 	1.0 - 2017-05-25 ( eshagdar ): first created.
 */
 
 
+_PrivSet_Developer
+  or
+_PrivSet_FullAccess
+  or 
 ValueIsInList ( 
 	List ( 
-		"[Full Access]";
-		"Developer"
+		"";
+		""
 	);
-	Get ( AccountPrivilegeSetName ) 
-)
-  or
-ValueIsInList ( 
-		List ( 
-				"";
-				""
-		);
-		Get ( AccountName ) 
+	Get ( AccountName ) 
 )]]>
 		</Calculation>
 	</CustomFunction>

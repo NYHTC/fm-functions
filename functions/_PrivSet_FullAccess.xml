@@ -1,0 +1,22 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="458" functionArity="0" visible="True" parameters="" name="_PrivSet_FullAccess">
+		<Calculation><![CDATA[// _PrivSet_FullAccess
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	Determine if the user has a full access privilege set
+
+
+REQUIRES:
+	ValueIsInList
+
+
+HISTORY:
+	1.0 - 2017-07-14 ( eshagdar ): first created.
+*/
+
+
+Get ( AccountPrivilegeSetName ) = "[Full Access]"]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

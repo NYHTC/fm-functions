@@ -1,0 +1,29 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="458" functionArity="0" visible="True" parameters="" name="_PrivSet_AlmostFull">
+		<Calculation><![CDATA[// _PrivSet_AlmostFull
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	Determine if the user has an AlmostFull privilege set
+
+
+REQUIRES:
+	ValueIsInList
+
+
+HISTORY:
+	1.0 - 2017-07-14 ( eshagdar ): first created.
+*/
+
+
+ValueIsInList ( 
+	List (
+		"AlmostFull";
+		"AlmostFull_1";
+		"AlmostFull_2"
+	);
+	Get ( AccountPrivilegeSetName )
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
