@@ -1,12 +1,13 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="68" functionArity="1" visible="True" parameters="_list" name="UniqueValues">
-		<Calculation><![CDATA[// UniqueValues( _list )
-// version 1.0, Erik Wegweiser, Boston, MA
+	<CustomFunction id="68" functionArity="1" visible="True" parameters="_list" name="ValueUnique">
+		<Calculation><![CDATA[// ValueUnique( _list )
+// version 1.2, Erik Wegweiser, Boston, MA
 
 /*
 	Return the unique values from a list
 
 HISTORY:
+	1.2 - 2017-07-28 ( eshagdar ): renamed UniqueValues to ValueUnique since FM16 has a standard UniqueValues function.
 	1.1 - 2016-10-05 ( eshagdar ): updated documentation
 	1.0 - 20xx-xx-xx ( xxxxx ): taken from http://www.briandunning.com/cf/596
 	0.0 - 2011-01-09 ( ewegweiser ): last updated
@@ -30,9 +31,9 @@ Let([
 		""; 
 
 		ValueCount( FilterValues( startlist; line1 )) > 1;
-		UniqueValues( newlist );
+		ValueUnique( newlist );
 
-		List( line1; UniqueValues( newlist ) )
+		List( line1; ValueUnique( newlist ) )
 	)
 )]]></Calculation>
 	</CustomFunction>
