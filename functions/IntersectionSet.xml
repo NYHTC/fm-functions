@@ -17,11 +17,12 @@ EXAMPLE:
 
 
 REQUIRES:
-	UniqueValues
+	ValueUnique
 	NULL
 
 
 HISTORY:
+	1.1.3 - 2017-08-01 ( eshagdar ): updated function call from 'UniqueValues' to 'ValueUnique' becasue of FM16's standard UniqueValues function.
 	1.1.2 - 2017-05-01 ( eshagdar ): updated required doc section with missing function
 	1.1.1 - 2017-01-19 ( eshagdar ): updated documenation.
 	1.1 - 201x-xx-xx ( dshockley ): Modified to match entire values, rather than PART of a value; faster through use of position where full PatternCount not really needed; used List to avoid adding extraneous line returns; reformatted calc whitespace. 
@@ -70,7 +71,7 @@ If ( IsEmpty ( ListA ) or IsEmpty ( ListB )
 			; IntersectionSet ( remainderA ; remainderB )
 		)
 	];
-	UniqueValues ( result )
+	ValueUnique ( result )
 	)
 )]]>
 		</Calculation>
