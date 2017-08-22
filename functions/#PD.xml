@@ -1,0 +1,26 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="472" functionArity="2" visible="True" parameters="name;defaultValue" name="#PD">
+		<Calculation><![CDATA[// #PD ( name; defaultValue )
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	Declare a param by name, or use a default value ( if specified ).
+
+
+REQUIRES:
+	#P
+	DictContains
+
+
+HISTORY:
+	1.0 - 2017-08-22 ( eshagdar ): created.
+*/
+
+
+If ( DictContains ( Get ( ScriptParameter ) ; name );
+	#P ( name );
+	defaultValue
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

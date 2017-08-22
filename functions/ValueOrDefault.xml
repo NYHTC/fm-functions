@@ -1,0 +1,27 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="349" functionArity="2" visible="True" parameters="SomeValue;DefaultValue" name="ValueOrDefault">
+		<Calculation><![CDATA[// ValueOrDefault ( SomeValue; DefaultValue )
+// version 1.0, Erik Shagdar, NYHTC
+
+
+/*
+	Takes 2 values, uses the first one if the first is NOT empty, uses the second ( default ) if first is empty
+
+
+NOTE:
+	the test is only for a NULL value, if 'SomeValue' evaluates to 'False' ( 0, false, etc... ) it would still be used.
+
+
+HISTORY:
+	1.0 - 2015-11-11 ( eshagdar ): created
+*/
+
+
+
+If ( not IsEmpty ( SomeValue );
+	SomeValue;
+	DefaultValue
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
