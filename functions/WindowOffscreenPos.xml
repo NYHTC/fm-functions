@@ -1,38 +1,53 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="433" functionArity="1" visible="True" parameters="options" name="WindowOffscreenPos">
 		<Calculation><![CDATA[// WindowOffscreenPos ( options )
-// version 1.1, Jared Gibson, NYHTC
-
+// version 1.3.1, Jared Gibson, NYHTC
 
 /*
 	Return the standard off-screen (single) position. 
 
-
-HISTORY:
-	1.2 - 2016-11-21 ( eshagdar ): formatted help text.
+HISTORY ( recent at top ):
+	1.3.1 - 2017-08-23 ( eshagdar ): updated formatting on help text
+	1.3 - 2017-05-03 ( jgibson ): dev = added developer_onscreen
+	1.2 - 2017-04-06 ( jgibson ): clarified help text.
 	1.1 - 2016-11-15 ( jgibson ): clarified help text.
 	1.0 - 2016-11-07 ( jgibson ): first created.
 */
 
 
 Let ( [ 
-		 defaultPos = -9999
+		defaultPos = -9999;
+		devOnscreen = 50;
 
-		;  helpText = 
-			list ( 
-				"Returns the standard off-screen position ( single value ). Currently " & defaultPos & ".";
-				"OPTIONAL PARAMETERS:";
-				" - specify a number to override position.";
-				" - specify \"Reset\" to clear/reset that override.";
-				"To override while walking through a script, run this custom function in Data Viewer passing a number."
-			)
+		helpText = 
+			"Returns the standard off-screen position (single value). Currently = -9999" // & defaultPos & ". 
+		&¶&	"OPTIONAL PARAMETERS: "
+		&¶&	"	• Specify a number to override position. "
+		&¶&	"	• Specify \"Reset\" to clear that override. ( Resets offscreen to default )"
+		&¶&	"	• Specify \"Dev\" to set a developer onscreen override. Currently = 50"
+		&¶&	"	** The order"
+		&¶&	"		1) options = Dev (" & devOnscreen & " )"
+		&¶&	"		2) options = Reset (" & defaultPos & " )"
+		&¶&	"		3) options = A Number ( does not clear he $$_DEBUG … )"
+		&¶&	"		4) $$_DEBUG_WindowOffscreenPos_Override AND IsEmpty (options)"
+		&¶&	"		5) else default (" & defaultPos & " )"
+		&¶&	"	To override while walking through a script : "
+		&¶&	"		Run this custom function in Data Viewer passing a number  OR"
+		&¶&	"		Manually setting $$_DEBUG_WindowOffscreenPos_Override. As options executes first, it must be empty."
+		&¶&	"		Running with options empty does not clear the $$ var by design. Therefore The empty options script step will respond to the override until it is manually reset."
+		&¶&	"		If and override set $$_DEBUG_WindowOffscreenPos_Override, clear options will revert to the override. You must pass Reset to clear it."
 	];
+
 	Case ( 
 		options = "Help"
 		; helpText
 		; 
 
-		options = "Reset" 
+		options = "Dev"
+		; Let ( $$_DEBUG_WindowOffscreenPos_Override = devOnscreen ; devOnscreen )
+		; 
+
+		options = "Reset"
 		; Let ( $$_DEBUG_WindowOffscreenPos_Override = "" ; defaultPos )
 		; 
 
