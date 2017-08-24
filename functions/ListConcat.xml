@@ -1,14 +1,15 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="422" functionArity="3" visible="True" parameters="firstList;secondList;options" name="ListConcat">
 		<Calculation><![CDATA[// ListConcat ( firstList; secondList; options )
-// version 1.1, Erik Shagdar
+// version 1.1.1, Erik Shagdar
 
 /*
 	Given 2 lists, concat their values
 
 
-WARNING:
-	Recursive
+EXAMPLE:
+	Input:	ListConcat ( List ( 1 ; 2 ; 3 ) ; List ( "A" ; "B" ; "C" ) ; # ( "RowSep" ; "-rowsep-" ) & # ( "colSep" ; "-colsep-" ) )
+	Output:	1-colsep-A-rowsep-2-colsep-B-rowsep-3-colsep-C
 
 
 REQUIRES:
@@ -19,6 +20,7 @@ REQUIRES:
 
 
 HISTORY ( recent at top ):
+	1.1.1 - 2017-08-24 ( eshagdar ): added example to documentation.
 	1.1 - 2017-04-17 ( eshagdar ): use ValueRemoveIndex instead of ValueRemove since lists should be allowed to have duplicate items
 	1.0 - 2016-09-19 ( eshagdar ): Created
 */
