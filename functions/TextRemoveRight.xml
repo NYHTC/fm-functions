@@ -1,0 +1,18 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="476" functionArity="2" visible="True" parameters="someString;numCharsToRemove" name="TextRemoveRight">
+		<Calculation><![CDATA[// TextRemoveRight ( someString; numCharsToRemove )
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	For the provided string, remove the specified number of characters from the end
+
+
+VERSION HISTORY:
+	10 - 2017-09-13 ( eshagdar ): initial version
+*/
+
+
+Replace ( someString ; Length ( someString ) - numCharsToRemove + 1 ; numCharsToRemove ; "" )]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

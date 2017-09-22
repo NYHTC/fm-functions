@@ -1,0 +1,51 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="270" functionArity="3" visible="True" parameters="dict;keyName;optionalDelimBetweenValues" name="DictGetValuesSameKey">
+		<Calculation><![CDATA[// DictGetValuesSameKey ( dict; keyName; optionalDelimBetweenValues )
+// version 1.2, Daniel A. Shockley
+
+/*
+	For a given SixFriedRice.com-style dictionary that has multiple name-value pairs with the same name, return the values of each as a delimited list (default is RETURN-delimited). 
+
+
+NOTE:
+	Recursive function
+
+
+REQUIRES:
+	DictContains
+	DictGet
+	DictRemove
+
+
+VERSION HISTORY:
+	1.2 - 2017-09-13 ( eshagdar ): added missing required fucntion ( DictRemove ) to documentation. Honor the optional delimiter. renamed parameter 'Delimiter_OPT' to 'optionalDelimBetweenValues'.
+	1.1 - 2017-03-20 ( eshagdar ): updated documentation.
+	1.0 - 20xx-xx-xx ( dshockley ): initial version
+*/
+
+
+
+Let ( [ 
+		optionalDelimBetweenValues = If ( IsEmpty ( optionalDelimBetweenValues ); 
+			"¶"; 
+			optionalDelimBetweenValues 
+		);
+		keyExists = DictContains ( dict; keyName );
+		firstValueForKey = DictGet ( dict; keyName );
+		remainingDict = DictRemove ( dict; keyName );
+		keyStillExists = DictContains ( remainingDict; keyName )
+	];
+
+	If ( keyExists
+		; firstValueForKey &
+			If ( keyStillExists ; 
+				optionalDelimBetweenValues & 
+					DictGetValuesSameKey ( remainingDict; keyName; optionalDelimBetweenValues ) ; 
+				"" 
+			)
+		; ""
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
