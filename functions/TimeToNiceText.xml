@@ -1,0 +1,101 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="220" functionArity="1" visible="True" parameters="someTimeOrTimestamp" name="TimeToNiceText">
+		<Calculation><![CDATA[// TimeToNiceText ( someTimeOrTimestamp )
+// version 1.3, Daniel A. Shockley
+
+
+/* 
+	Converts a time to something that reads nicely in text. 
+
+
+VERSION HISTORY:
+	1.3 - 2017-09-28 ( eshagdar ): works only with positive timestamps
+	1.2 - 2017-09-26 ( eshagdar ): cleaned up documentation. Do not return anything if nothing is passed in. added years
+	1.1 - 20xx-xx-xx ( xxxxx ): added DAY(S) if the hours are more than 24. 
+	1.0 - 20xx-xx-xx ( dshockley ): initial version.
+*/
+
+
+Case ( 
+	IsEmpty ( someTimeOrTimestamp );
+	"";
+
+	someTimeOrTimestamp < 0;
+	"";
+
+	Let ( [ 
+			totalHours = Hour ( GetAsTime ( someTimeOrTimestamp ) ) ;
+			totalDays = Div ( totalHours; 24 ) ;
+			rawYears = Div ( totalDays; 365 );
+			rawDays = Mod ( totalDays; 365 ) ;
+			rawHours = Mod ( totalHours; 24 ) ;
+			rawMinutes = Minute ( GetAsTime ( someTimeOrTimestamp ) ) ;
+			rawSeconds = Seconds ( GetAsTime ( someTimeOrTimestamp ) ) ;
+
+
+			niceY = Case ( 
+				rawYears > 1
+				; rawYears & " years" 
+				; 
+				rawYears = 1
+				; rawYears & " year"
+				; 
+				""
+			);
+			niceD = Case ( 
+				rawDays > 1
+				; rawDays & " days" 
+				; 
+				rawDays = 1
+				; rawDays & " day"
+				; 
+				""
+			);
+			niceH = Case ( 
+				rawHours > 1
+				; rawHours & " hours" 
+				;
+				rawHours = 1
+				; rawHours & " hour"
+				; 
+				""
+			);
+			niceM = Case ( 
+				rawMinutes > 1
+				; rawMinutes & " minutes" 
+				; 
+				rawMinutes = 1
+				; rawMinutes & " minute"
+				; 
+				""
+			);
+			niceS = Case ( 
+				rawSeconds > 1
+				; rawSeconds & " seconds"
+				;
+				rawSeconds = 1
+				; rawSeconds & " second"
+				; 
+				IsEmpty ( niceD ) and IsEmpty ( niceH ) and IsEmpty ( niceM )
+				; rawSeconds & " seconds"
+				;
+				""
+			);
+
+			msgText = Substitute ( 
+				List ( 
+					niceY;
+					niceD;
+					niceH;
+					niceM;
+					niceS
+				); 
+				[ ¶; ", " ]
+			)
+		]; 
+
+		msgText
+	)
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
