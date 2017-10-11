@@ -1,0 +1,30 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="64" functionArity="2" visible="True" parameters="_list;_value" name="ValueIndex">
+		<Calculation><![CDATA[// ValueIndex ( _list, _value )
+// version 1.0, Daniel A. Shockley, NYHTC
+
+/*
+	Returns the (first occurrence) index of a specified value within a specified list of return-delimited values. 
+	Properly wraps the list and value with returns to avoid false partial-value matches. 
+	Returns 0 if the value is not in the list at all. 
+
+
+HISTORY:
+	1.0.1 - 2017-10-11 ( eshagdar ): cleaned up formatting. updated documentation.
+	1.0 - 201x-xx-xx ( dshockley ): created.
+*/
+
+
+Let ( [ 
+		wrappedList = "¶" & _list & "¶" ;
+			wrappedValue = "¶" & _value & "¶" ;
+			valuePos = Position ( wrappedList; wrappedValue; 1; 1 )
+	];
+
+	If ( valuePos = 0
+		; 0 
+		; PatternCount ( Left ( wrappedList; valuePos ); "¶" )
+	)
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
