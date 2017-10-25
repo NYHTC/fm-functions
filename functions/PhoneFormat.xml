@@ -1,14 +1,21 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="156" functionArity="3" visible="True" parameters="_PhoneNumber;_Format;_UseIfBlank" name="PhoneFormat">
 		<Calculation><![CDATA[// PhoneFormat ( _PhoneNumber; _Format; _UseIfBlank )
-// version 1.2, John Mark Osborne, http://www.fmfunctions.com/mid/107
+// version 1.3, John Mark Osborne, http://www.fmfunctions.com/mid/107
 
 /*
 	Formats a phone number with the given format.
 
 
-TODO:
-	make sure the number of digits in _PhoneNumber and the number of '#' in _Format is the same
+HISTORY:
+	1.3 - 2017-10-25 ( eshagdar ): test for ensure the format is the same length the number of digits in the phone number.
+	1.2 - 2016-09-07 ( eshagdar ): updated documentation. Added Example and Todo
+	1.1 - 20xx-xx-xx ( dshockley): added _UseIfBlank param. Usually it will be ""
+	1.0 - 2008-12-15 ( Osborne ): created, http://www.fmfunctions.com/fid/144
+
+
+NOTE:
+	recursive
 
 
 EXAMPLE:
@@ -16,15 +23,8 @@ EXAMPLE:
 	Output:	"(123)-456-7890"
 
 
-HISTORY:
-	1.2 - 2016-09-07 ( eshagdar ): updated documentation. Added Example and Todo
-	1.1 - 20xx-xx-xx ( dshockley): added _UseIfBlank param. Usually it will be ""
-	1.0 - 20xx-xx-xx ( xxxxx ): taken from http://www.fmfunctions.com/fid/144
-	0.0 - 2008-12-15 ( Osborne ): created
-
-
-ORIGINAL DOCUMENTATION:
-
+ORIGINAL DOC:
+	
 	This function is published on FileMaker Custom Functions 
 	to check for updates and provide feedback and bug reports 
 	please visit http://www.fmfunctions.com/fid/144
@@ -36,33 +36,45 @@ ORIGINAL DOCUMENTATION:
 */
 
 
-Case (
+Let ( [
+		_NumbersOnly = Filter ( _PhoneNumber; "0123456789" )
+	];
 
-/* Don't return anything when number blank, unless told to (recursing SHOULD) */
-	not _UseIfBlank and IsEmpty ( _PhoneNumber ); 
-	"";
+	Case (
 
-/* Should recursion continue? */
-	not IsEmpty ( _Format );
-	Let ( [ 
-			_NumbersOnly = Filter ( _PhoneNumber; "0123456789" );
-			_New_Format = Left ( _Format; Length ( _Format ) - 1 );    /* Remove last character */
-			_NewNumber = Left ( _NumbersOnly; Length ( _NumbersOnly ) - 1 )    /* Remove last character */
-		];
+		/* format string and digit length mismatch */
+		PatternCount ( _Format; "#" ) ≠ Length ( _NumbersOnly );
+		_PhoneNumber;
 
-		/* Check if pound sign - if so, swap in the digit */
-		If ( Right ( _Format; 1 ) = "#"; 
-			/* Recurse with new number and _Format */
-			PhoneFormat ( _NewNumber; _New_Format; True ) 
-				& Right ( _NumbersOnly; 1 ); 
 
-			/* Recurse with same number and new _Format (the format didn't want a number here) */
-			PhoneFormat ( _NumbersOnly; _New_Format; True ) 
-				& Right ( _Format; 1 )
+		/* Don't return anything when number blank, unless told to (recursing SHOULD) */
+		not _UseIfBlank and IsEmpty ( _PhoneNumber ); 
+		"";
+
+
+		/* RECURSIVE CASE:  */
+		not IsEmpty ( _Format );
+		Let ( [ 
+				_New_Format = Left ( _Format; Length ( _Format ) - 1 );    /* Remove last format character */
+				_NewNumber = Left ( _NumbersOnly; Length ( _NumbersOnly ) - 1 )    /* Remove last phone number character */
+			];
+
+			/* Check if pound sign - if so, swap in the digit */
+			If ( Right ( _Format; 1 ) = "#"; 
+				/* Recurse with new number and _Format */
+				PhoneFormat ( _NewNumber; _New_Format; True ) 
+					& Right ( _NumbersOnly; 1 ); 
+
+				/* Recurse with same number and new _Format (the format didn't want a number here) */
+				PhoneFormat ( _NumbersOnly; _New_Format; True ) 
+					& Right ( _Format; 1 )
+			)
 		)
-	)    /* End let */
 
-	; ""
+
+		/* BASE CASE: return nothing because the format string is empty */
+		; ""
+	)
 )]]>
 		</Calculation>
 	</CustomFunction>
