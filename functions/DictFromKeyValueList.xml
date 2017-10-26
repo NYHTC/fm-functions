@@ -1,0 +1,49 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="398" functionArity="3" visible="True" parameters="delimitedData;colDelim;rowDelim" name="DictFromKeyValueList">
+		<Calculation><![CDATA[// DictFromKeyValueList ( delimitedData; colDelim; rowDelim )
+// version 1.1, Erik Shagdar
+
+/* 
+	Take a delimited 2-column list and converts that into a SixFriedRice.com-style dictionary. NOT recursive. 
+
+
+REQUIRES:
+	#
+	DictEscape
+
+
+ VERSION HISTORY:
+	1.1 - 2017-10-26 ( eshagdar ): return an empty string if no delimitedData is passed in.
+	1.0 - 2015-09-14 ( eshagdar ): first created.
+*/
+
+
+If ( IsEmpty ( delimitedData );
+	"";
+	Let ( [
+			colDelim = If ( IsEmpty ( colDelim ); ";"; colDelim );
+			rowDelim = If ( IsEmpty ( rowDelim ); "¶"; rowDelim );
+
+			DQ = "\"";
+			EQ = "\\"";
+
+			evalString = Substitute ( DictEscape ( delimitedData ); [ DQ; EQ ] );
+			evalString = 
+				"# ( " & 
+				DQ & 
+				Substitute ( 
+					evalString; 
+					[ colDelim; DQ & "; " & DQ ]; 
+					[ rowDelim; DQ & " ) " & rowDelim & "& # ( " & DQ ] 
+				) &
+				DQ &
+				" )";
+			dict = Evaluate ( evalString )
+		];
+
+		dict
+	)
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

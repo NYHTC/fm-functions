@@ -1,19 +1,22 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="131" functionArity="1" visible="True" parameters="text" name="TrimWS">
 		<Calculation><![CDATA[// TrimWS ( text )
-// version 1.5, Debi Fuchs, debi@aptworks.com
+// version 1.6.1, Debi Fuchs, debi@aptworks.com
 
 /* 
 	Trims all  leading and trailing whitespace
 
 
-HISTORY:
-	1.5 - 2016-09-07 ( eshagdar ): Updating with modern documentation. 
-	1.4 - 2014-12-14 ( dshockley ): Fixed the test for NO non-WS characters. 1.3 - 201x-xx-xx ( xxxxx ): This will now reurn NULL. Previous versions would have FAILED to trim the only-whitespace down to NULL. 
-	1.2 - 2014-10-21 ( dshockley ): get each whitespace character by ASCII code; reformatted calc and added comments. 
-	1.1 - 2014-09-19 ( eshagdar ): updated to remove line feeds ( char 10 )
-	1.0 - 20xx-xx-xx ( xxxxx ): taken from http://www.briandunning.com/cf/904
-	0.0 - 2008-08-20 ( Debi Fuchs ): original name "Supertrim" - Debi Fuchs of Aptworks Consulting, http://www.briandunning.com/cf/904
+NOTE:
+	article:
+		https://stackoverflow.com/questions/18169006/all-the-whitespace-characters-is-it-language-independent
+	references:
+		http://unicode.org/charts/collation/
+	We are not capturing 133 because …
+		133 = <next-line> control character - or - Lowercase "a" with acute accent (a-acute)
+	We are not capturing 160 because …
+		160 = non-breaking space - or - Lowercase "a" with acute accent (a-acute)
+	ExtraNote: the accents tilt in different directions. aigu vs grave
 
 
 EXAMPLE:
@@ -28,6 +31,17 @@ ORIGINAL DOCUMENTATION:
 	Speedily (and with no recursion) remove leading and trailing white space (including spacing, tabs and returns) from a text string.
 
 	NOTE: Similar to TrimAll, except that it also removes tabs and returns (in addition to spaces), and it does not touch any spacing WITHIN the string. 
+
+
+HISTORY:
+	1.6.1 - 2017-10-26 ( eshagdar ): updated documentation to make sense - we are explicitly not omitting char 133 or 160 because they are not treated as whitespace in some instances.
+	1.6 - 2017-09-22 ( jgibson ): updated documentation
+	1.5 - 2016-09-07 ( eshagdar ): Updating with modern documentation. 
+	1.4 - 2014-12-14 (dshockley ): Fixed the test for NO non-WS characters. 1.3 - 201x-xx-xx ( xxxxx ): This will now reurn NULL. Previous versions would have FAILED to trim the only-whitespace down to NULL. 
+	1.2 - 2014-10-21 ( dshockley ): get each whitespace character by ASCII code; reformatted calc and added comments. 
+	1.1 - 2014-09-19 ( eshagdar ): updated to remove line feeds ( char 10 )
+	1.0 - 20xx-xx-xx ( xxxxx ): taken from http://www.briandunning.com/cf/904
+	0.0 - 2008-08-20 ( Debi Fuchs ): original name "Supertrim" - Debi Fuchs of Aptworks Consulting, http://www.briandunning.com/cf/904
 */
 
 
@@ -36,7 +50,7 @@ Let ( [
 		noWS = 
 			Substitute ( 
 				text; 
-				[ Char ( 202 ); "" ]; 
+				[ Char ( 202 ); "" ];    /* non breaking space */
 				[ Char ( 32 ); "" ];    /* space */
 				[ Char ( 9 ); "" ];    /* tab */
 				[ Char ( 13 ); "" ];    /* carriage return */
@@ -45,7 +59,7 @@ Let ( [
 
 		/* Determine position of first non-ws character in original string. */
 		posFirstNonWS = Position ( text; Left( noWS; 1 ); 0; 1 );
-		
+
 		/* Determine position of last non-whitespace character in original string. */
 		posLastNonWS = Position ( text; Right( noWS; 1 ); Length( text ); -1 )
 	];
