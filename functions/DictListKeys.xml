@@ -1,44 +1,44 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="23" functionArity="1" visible="True" parameters="dict" name="DictListKeys">
 		<Calculation><![CDATA[// DictListKeys( dict )
-// version 1.2, Daniel A. Shockley, NYHTC
+// version 1.3, Daniel A. Shockley
 
 /*
 	Lists all of the keys present in a dictionary object (as used by SixFriedRice.com).
 
 
+NOTE:
+	Recursive
+
+
 REQUIRES:
+	DictContains
 	DictFirst
 	DictRemove
 
 
 HISTORY:
-	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
-	1.2 - 201x-xx-xx ( xxxxx ): Reformatted to match newer standards.
-	1.1 - 201x-xx-xx ( xxxxx ): Reformatted calc to fit standards. 
-	1.0 - 201x-xx-xx ( xxxxx ): first created.
+	1.3 - 2017-10-26 ( eshagdar ): allow for empty strings as the key name. updated documentation with required fucntions, note.
+	1.2 - 201x-xx-xx ( dshockley ): Reformatted to match newer standards.
+	1.1 - 201x-xx-xx ( dshockley ): Reformatted calc to fit standards. 
 */
 
 
-Let( [
-		firstKeyName = DictFirst( dict )
-		/* Need to get next key so that we know whether to put in the line return (if no next, don't put in the separator) */
-		; nextKeyName = 
-			If ( Length( firstKeyName ) > 0
-				; DictFirst ( DictRemove ( dict; firstKeyName ) )
-				; "" 
-			)
+Let ( [
+		firstKeyName = DictFirst ( dict );
+		remainingDict = DictRemove ( dict; firstKeyName )
 	];
 
-	If( Length( firstKeyName ) > 0
+	If ( DictContains ( dict ; firstKeyName )
 		; firstKeyName 
-		& If ( Length( nextKeyName ) = 0
-			; ""
-			; "¶" & DictListKeys ( DictRemove( dict; firstKeyName ) ) 
-		)
+			& If ( not DictContains ( dict ; DictFirst ( remainingDict ) )
+				; ""
+				; ¶ & DictListKeys ( remainingDict ) 
+			)
 		; ""
 	)
-)]]>
+)
+]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
