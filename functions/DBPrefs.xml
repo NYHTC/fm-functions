@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="17" functionArity="1" visible="True" parameters="prefName" name="DBPrefs">
 		<Calculation><![CDATA[// DBPrefs ( prefName )
-// version 1.1, Andrew Morgan, Dan Shockley, Erik Shagdar, NYHTC
+// version 1.1.1, Andrew Morgan, Dan Shockley, Erik Shagdar, NYHTC
 
 /*
 	Returns value of prefName preference.
@@ -10,9 +10,11 @@
 REQUIRES:
 	_DBPrefs_Data
 	DictGet
+	DictListKeys
 
 
 HISTORY ( recent at top ):
+	1.1.1 - 2017-11-15 ( eshagdar ): updated requires section.
 	1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.0 - 2015-10-13 ( amorgan ): first created
 */

@@ -1,0 +1,49 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="149" functionArity="2" visible="True" parameters="Alias;getInfo" name="ToggleAliasInfo">
+		<Calculation><![CDATA[// ToggleAliasInfo ( Alias ; getInfo )
+// version 1.1, Daniel A. Shockley
+
+/*
+	Gets the specified info for the given Toggle Alias name.
+	Can use this with named layout objects and the ToggleAlias script to make dynamic buttons that toggle and indicate a field's state. 
+	The 'getInfo' parameter can be one of: FieldName, ObjectName, or BooleanType (where results are: "1/0" or "1/empty", with a default of "1/0" ).
+
+
+NOTE:
+	The field should be an actual 1/0 toggle, not 1/empty. 
+
+
+REQUIRES:
+	#
+	DBPrefs
+	DictGet
+
+
+HISTORY:
+	1.1 - 2017-11-15 ( eshagdar ): added default ObjectName. Moved aliasObjectsHash source data to DBPrefs. 
+	1.0 - 2017-11-02 ( dshockley ): first created. 
+*/
+
+
+Let ( [ 
+		  aliasObjectsHash = DBPrefs ( "ToggleAliasObjectsHash" )
+		; chosenHash = DictGet ( aliasObjectsHash ; Alias )
+		; chosenInfo = DictGet ( chosenHash ; getInfo )
+		; chosenInfo = Case ( 
+			IsEmpty ( chosenInfo ) and getInfo = "ObjectName"
+			; "buttonbar:" & Alias
+			; 
+			IsEmpty ( chosenInfo ) and getInfo = "BooleanType"
+			; "1/0"
+			; 
+			/* DEFAULT */
+			chosenInfo
+			)
+
+	 ]; 
+
+	 chosenInfo
+)]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
