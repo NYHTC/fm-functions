@@ -1,41 +1,44 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="193" functionArity="1" visible="True" parameters="_list" name="ValueRemoveEmpty">
 		<Calculation><![CDATA[// ValueRemoveEmpty ( _list )
-// version 1.1, Shagdar/Shockley
+// version 1.1.1, Erik Shagdar, NYHTC
 
-/* Description: Remove all empty values in a list.  */
+/* 
+	Remove all empty values in a list.
 
 
-/* HISTORY: 
+NOTE:
+	Recursive
 
-1.1 (2015-07-07-dshockley): also removes leading blank lines.
-1.0 (2013-01-28-eshagdar): first created. 
+
+HISTORY: 
+	1.1.1 - 2018-01-12 ( eshagdar ): formatted to match current developer standards/styles. added comments.
+	1.1 - 2015-07-07 ( dshockley ): also removes leading blank lines.
+	1.0 - 2013-01-28 ( eshagdar ): first created. 
 
 */
 
 Let ( [
-	_cleanList = Case ( 
-				Position ( _list; "¶¶"; 1; 1 ) > 0
-				; ValueRemoveEmpty ( Substitute ( _list; "¶¶"; "¶" ) )
-				;
-				_list
-				)
-	; _cleanList = 
-		Case (
-			Right ( _cleanList; 1 ) = "¶"
-			; Left ( _cleanList; Length ( _cleanList ) - 1 )
-			; _cleanList
-			)
-	; _cleanList = 
-		Case (
-			Left ( _cleanList; 1 ) = "¶"
-			; Right ( _cleanList; Length ( _cleanList ) - 1 )
-			; _cleanList
-			)
-	];
-	
-	_cleanList
+		/* recursive call until there are no blank values IN the list */
+		_cleanList = If ( Position ( _list; "¶¶"; 1; 1 ) > 0 ;
+			ValueRemoveEmpty ( Substitute ( _list; "¶¶"; "¶" ) ) ;
+			_list
+		) ;
 
+		/* remove TRAILING blank value */
+		_cleanList = If (Right ( _cleanList; 1 ) = "¶" ;
+			Left ( _cleanList; Length ( _cleanList ) - 1 ) ;
+			_cleanList
+		) ;
+
+		/* remove LEADING blank value */
+		_cleanList = If ( Left ( _cleanList; 1 ) = "¶" ;
+			Right ( _cleanList; Length ( _cleanList ) - 1 ) ;
+			_cleanList
+		)
+	];
+
+	_cleanList
 )]]>
 		</Calculation>
 	</CustomFunction>
