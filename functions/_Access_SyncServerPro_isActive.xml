@@ -1,13 +1,23 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="4" functionArity="0" visible="True" parameters="" name="_Access_SyncServerPro_isActive">
 		<Calculation><![CDATA[// _Access_SyncServerPro_isActive
-// version 1.4.1, NYHTC
+// version 1.4.2, NYHTC
 
 /*   
 	Returns if SyncServerPro is turned on for the current table by querying the MT_MetaTable table in a00_TimesSq.
 
 
+REQUIRES:
+	DictContains
+	DictGet
+	DictReplace
+	FM_Name_ID
+	HTC_ExecuteFileSQL
+	SQL_EscapeString
+
+
 HISTORY:
+	1.4.2 - 2017-11-30 ( eshagdar ): added requirements doc.
 	1.4.1 - 2016-11-18 ( eshagdar ): renamed global variable from '__FilePrefs__' to '__FilePrefs_byTable__'. added comment
 	1.4 - 2016-11-17 ( eshagdar ): Returns ( and caches into a SFR-dict ) whether or not the current table is audited by SyncServer.
 	1.3 - 2016-09-28 ( eshagdar ): Renamed '_Access_SyncDek_isActive' to '_Access_SyncServerPro_isActive'. added proper docstring.
