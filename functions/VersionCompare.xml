@@ -12,14 +12,34 @@
 NOTE: 
        options as a simple string allows for a non-default "Delim" literal.
        options can be a dictionary where the key "Delim" overrides the default component delimiter.
-       options can be a dictionary where the key "ResultType" overrides the type of result. 
-               "ResultType" possibilities are:
-               • "MaxVersion", which returns the larger of the two versions.
-               • one of these operators, where it returns True or False when applying that operator to versionString1 OP versionString2: >, ≥, >=, <, ≤, <=, =
+       options can be a dictionary where the key "Op" overrides the type of result. 
+               "Op" can be one of these operators, where it returns True or False when applying that operator to versionString1 OP versionString2:
+               • Max, >, ≥, >=, <, ≤, <=, =
+               (note that "Max" will return the bigger of the two versions, not a Boolean result)
+               
+               
+EXAMPLES: 
+       INPUT: VersionCompare ( "3" ; "5" ; "" ) 
+       OUTPUT: -1
+       
+       INPUT: VersionCompare ( 5 ; 3 ; "" ) 
+       OUTPUT: 1
+       
+       INPUT: VersionCompare ( "5.2" ; "5.2" ; "" ) 
+       OUTPUT: 0
+       
+       INPUT: VersionCompare ( 3 ; 5 ; # ( "Op" ; "Max" ) ) 
+       OUTPUT: 5
+
+       INPUT: VersionCompare ( "3.2" ; "3.4" ; # ( "Op" ; "<" ) ) 
+       OUTPUT: True
+
+       INPUT: VersionCompare ( "3|2" ; "3|4" ; # ( "Op" ; "<" ) & # ( "Delim" ; "|" ) ) 
+       OUTPUT: True
 
 
 HISTORY:
-       1.2 - 2018-01-17 ( dshockley, eshagdar ): Make recursive. 3rd param is now optional dictionary. Add ResultType options. Fix to work when doing comparisons where the versions are simple decimal intention. For example, when 5.0303 is supposed to be LOWER than 5.07. The hint is that if one of the numbers in a segment begins with 0, need to pad the END of the shorter of the two strings before converting to number. 
+       1.2 - 2018-01-17 ( dshockley, eshagdar ): Make recursive. 3rd param is now optionally a dictionary. Add Op as a key in options dictionary. Fix to work when doing comparisons where the versions are simple decimal intention. For example, when 5.0303 is supposed to be LOWER than 5.07. The hint is that if one of the numbers in a segment begins with 0, need to pad the END of the shorter of the two strings before converting to number. 
        1.1.1 - 2016-09-29 ( eshagdar ): updated documentation.
        1.1 - 2015-11-16 ( dshockley ): updated to return error if either is NOT a valid number at all.
        1.0 - 2015-02-10 ( dshockley ): first created.
@@ -47,7 +67,7 @@ Let ( [
                        ; "."
                )
                
-       ; resultType = DictGet ( options ; "ResultType" )
+       ; operator = DictGet ( options ; "Op" )
 
        ; parsedPart1 = Substitute ( versionString1 ; vcSep; "¶" )
        ; firstPart1 = GetValue ( parsedPart1 ; 1 )
@@ -92,7 +112,7 @@ Let ( [
 
                        /* EQUAL so far, so continue to the remaining parts, if any: */
                        firstPartDiff = 0 and ( not IsEmpty ( remainingPart1 ) or not IsEmpty ( remainingPart2 ) )
-                       ; VersionCompare ( remainingPart1 ; remainingPart2 ; vcSep )  /* NOTE: strip out other options, since this diffResult needs the default ResultType */
+                       ; VersionCompare ( remainingPart1 ; remainingPart2 ; vcSep )  /* NOTE: strip out other options, since this diffResult needs the default Operator */
                        ;
                
                        /* EQUAL, and nothing left to check: */
@@ -109,25 +129,25 @@ Let ( [
 
        Case ( 
 
-               /* when ResultType is not specified (or in recursed-level calls): */
-               IsEmpty ( resultType )
+               /* when operator is not specified (or in recursed-level calls): */
+               IsEmpty ( operator )
                ; diffResult
                ; 
 
                /* return the greater of the two version strings: */
-               resultType = "MaxVersion"
+               operator = "Max"
                ; If ( diffResult ≥ 0 ; versionString1 ; versionString2 )
                ; 
 
-               diffResult > 0 and ( resultType = ">" or resultType = "≥" or resultType = ">=" )
+               diffResult > 0 and ( operator = ">" or operator = "≥" or operator = ">=" )
                ; True
                ; 
 
-               diffResult < 0 and ( resultType = "<" or resultType = "≤" or resultType = "<=" )
+               diffResult < 0 and ( operator = "<" or operator = "≤" or operator = "<=" )
                ; True
                ; 
 
-               diffResult = 0 and ( resultType = "=" or resultType = "≥" or resultType = ">=" or resultType = "≤" or resultType = "<=" )
+               diffResult = 0 and ( operator = "=" or operator = "≥" or operator = ">=" or operator = "≤" or operator = "<=" )
                ; True
                ; 
 
