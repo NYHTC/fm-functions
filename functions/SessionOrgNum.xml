@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="8" functionArity="1" visible="True" parameters="options" name="SessionOrgNum">
 		<Calculation><![CDATA[// SessionOrgNum ( options )
-// version 1.4, NYHTC
+// version 1.4.1, NYHTC
 
 /*
 	Returns this session's OrgNum. 
@@ -9,6 +9,7 @@
 
 
 HISTORY:
+	1.4.1 - 2018-01-22 ( eshagdar ): explictly coerce to number, then do the comparison
 	1.4 - 2017-10-31 ( eshagdar ): get the orgNum based on the suffix of the PrivSet/AccountName
 	1.3.1 - 2017-06-02 ( dshockley/eshagdar ): Uses new method of querying an Organization Prefs table, instead of a client-side global. 
 	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
@@ -18,12 +19,12 @@ HISTORY:
 */
 
 
-let ( [
-		privSetSuffix = Right ( Get ( AccountPrivilegeSetName ); 1 )
+Let ( [
+		privSetSuffix = GetAsNumber ( Right ( Get ( AccountPrivilegeSetName ); 1 ) )
 	];
 	
 	/* check privSet suffix, and use it if 1 or 2 */
-	case ( 
+	Case ( 
 		privSetSuffix = 1;
 		1;
 
@@ -32,15 +33,18 @@ let ( [
 
 		/* DEFAULT: if none of the above, try accountName suffix, and fail to orgNum 1 */
 		Let ( [
-				accountNameSuffix = Right ( Get ( AccountName ); 1 )
-				];
-				case ( 
+				accountNameSuffix = GetAsNumber ( Right ( Get ( AccountName ); 1 ) )
+			];
+
+			Case ( 
+				/* check account name suffix */
 				accountNameSuffix = 1;
 				1;
 
 				accountNameSuffix = 2;
 				2;
 
+				/* unable to get it based on privSet and accountName, so default to 1 */
 				1
 			)
 		)

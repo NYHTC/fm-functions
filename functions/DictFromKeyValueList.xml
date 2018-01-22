@@ -13,7 +13,7 @@ REQUIRES:
 
 
 VERSION HISTORY:
-	1.1.1 - 2018-01-18 ( eshagdar ): bug fix - EQ needs to escape both th ebackslash as well as the double-quote.
+	1.1.1 - 2018-01-18 ( eshagdar ): bug fix - EQ needs to escape both the backslash as well as the double-quote.
 	1.1 - 2017-10-26 ( eshagdar ): return an empty string if no delimitedData is passed in.
 	1.0 - 2015-09-14 ( eshagdar ): first created.
 */
