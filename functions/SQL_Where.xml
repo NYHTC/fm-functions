@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="410" functionArity="3" visible="True" parameters="fieldRef;operator;someValue" name="SQL_Where">
 		<Calculation><![CDATA[// SQL_Where ( fieldRef ; operator ; someValue )
-// version 1.2.1, Daniel A. Shockley, Erik Shagdar, NYHTC
+// version 1.2.2, Daniel A. Shockley, Erik Shagdar, NYHTC
 
 /* 
 	Gets a 'where' clause ( for use following WHERE, AND, OR ) with the quoted short field name of the field reference, the operator, and then properly escape ( or not ) the value based on the field's Type. 
@@ -15,6 +15,7 @@ REQUIRE:
 	SQL_Timestamp 
 
 HISTORY: 
+	1.2.2 - 2018-02-06 ( eshagdar ): check value of empty-ness instead of length. '=' and '≠' characters are the same for FM ( but firrent case? ), so we need to use exact. prefix of tilde ( ~ )  in the operator is used for case insensitive queries. next version is going change equals to be case-sensitive, but we need this version to do the conversion.
 	1.2.1 - 2018-01-17 ( eshagdar ): the equal sign now does a case-insensitive query. In order to do a case-sensitive query, use '=='. The 'IN' operator works on lists of numbers.
 	1.2 - 2018-01-11 ( eshagdar ): convert FM operators to SQL-compatible operators
 	1.1 - 2017-05-16 ( eshagdar ): added support for 'IN' operator.
@@ -26,32 +27,34 @@ Let ( [
 		signEqual = "=" ;
 		signNotEqual = "<>" ;
 		signDoubleEqual = "==" ;
+		signTilde = "~" ;
 
 		operator = Trim ( operator ) ;
-		caseSensitive = ( operator = signDoubleEqual ) ;
+		caseInsensitive = Exact ( Left ( operator; 1 ) ; signTilde ) or Exact ( operator ; signEqual ) ;
 		operator = Substitute (
 			operator ;
 			[ "≠" ; signNotEqual ] ;
 			[ "≥" ; ">=" ] ;
 			[ "≤" ; "<=" ] ;
-			[ signDoubleEqual ; signEqual ]
+			[ signDoubleEqual ; signEqual ];
+			[ signTilde ; "" ]
 		) ;
 
 		fieldType = FieldType ( Get ( FileName ) ; GetFieldName ( fieldRef ) ) ;
 		fieldType_isText = Position ( fieldType ; "Text" ; 1 ; 1 ) ;
 
 
-		codeForField = If ( not caseSensitive and fieldType_isText
+		codeForField = If ( caseInsensitive and fieldType_isText
 			; "UPPER ( " & SQL_Field ( fieldRef ) & " )"
 			; SQL_Field ( fieldRef )
 		) ;
 
 
 		codeForOperation = Case ( 
-			Length ( someValue ) = 0 and Trim ( operator ) = signEqual
+			IsEmpty ( someValue ) and Exact ( operator ; signEqual )
 			; "IS NULL"
 			; 
-			Length ( someValue ) = 0 and Trim ( operator ) = signNotEqual
+			IsEmpty ( someValue ) and Exact ( operator ; signNotEqual )
 			; "IS NOT NULL"
 			; 
 			operator
@@ -59,7 +62,8 @@ Let ( [
 
 
 		codeForValue = Case ( 
-			Length ( someValue ) = 0 and ( operator = signEqual or operator = signNotEqual )
+			/* the null comparison is part of codeForOperation ( above ) */
+			IsEmpty ( someValue ) and ( Exact ( operator ; signEqual ) or Exact ( operator ; signNotEqual ) )
 			; ""
 			; 
 			operator = "LIKE"
@@ -68,11 +72,11 @@ Let ( [
 			operator = "IN" 
 			; If ( fieldType_isText
 				; "( " & SQL_EscapeList ( someValue ) & " )"
-				; "( " & substitute ( someValue ; [ ¶ ; ", " ] ) & " )"
+				; "( " & Substitute ( someValue ; [ ¶ ; ", " ] ) & " )"
 			)
 			; 
 			fieldType_isText 
-			; If ( not caseSensitive
+			; If ( caseInsensitive
 				; SQL_EscapeString ( Upper ( someValue ) )
 				; SQL_EscapeString ( someValue )
 			)
