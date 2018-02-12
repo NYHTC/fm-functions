@@ -1,0 +1,28 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="262" functionArity="1" visible="True" parameters="someISO8601" name="DateFromISO8601">
+		<Calculation><![CDATA[// DateFromISO8601 ( someISO8601 )
+// version 1.0, Daniel A. Shockley
+
+/*
+	Takes a date ( or timestamp ) in the standard format ( ISO 8601 ) and converts to a FileMaker Date ( NOT timestamp ). 
+
+
+HISTORY:
+	1.1 - 2018-02-12 ( eshagdar ): empty param should return empty result.
+	1.0 - 201x-xx-xx ( dshockley ): created
+*/
+
+
+If ( IsEmpty ( someISO8601 );
+	"" ;
+	Let ( [
+			someISO8601 = Trim ( someISO8601 ) ;
+			yearPart = Middle ( someISO8601; 1; 4 ) ;
+			monthPart = Middle ( someISO8601; 6; 2 ) ;
+			dayPart = Middle ( someISO8601; 9; 2 )
+		]; 
+		Date ( monthPart ; dayPart ; yearPart )
+	)
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

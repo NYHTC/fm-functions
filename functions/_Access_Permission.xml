@@ -1,0 +1,99 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="502" functionArity="1" visible="True" parameters="EventName" name="_Access_Permission">
+		<Calculation><![CDATA[// _Access_Permission ( EventName )
+// version 1.1, Erik Shagdar, NYHTC
+
+/*
+	Determine if the user has a permission for a particular action. Full-Access accounts always have access.
+
+
+REQUIRES:
+	DateFromISO8601
+	HTC_ExecuteFileSQL
+	SQL_Field
+	SQL_Table
+	SQL_Where
+
+
+HISTORY:
+
+	1.1 - 2018-02-12 ( dbeer ): updated to add developers to always allow list
+	1.0 - 2018-02-09 ( eshagdar ): first created.
+*/
+
+
+If ( _PrivSet_FullAccess or _PrivSet_Developer ;
+	True ;
+	Let ( [
+			sqlQuery = 
+			"SELECT " 
+				& SQL_Field ( Utility_PERMISSION::c00PJ_Status ) 
+				& ", " & SQL_Field ( Utility_PERMISSION::b00PJ_DateFrom ) 
+				& ", " & SQL_Field ( Utility_PERMISSION::b00PJ_DateTo ) 
+				& ¶
+
+			& " FROM " 
+				& SQL_Table ( Utility_PERMISSION::zAuto1 ) 
+				& ¶ 
+
+			& " WHERE " 
+				& SQL_Where ( Utility_PERMISSION::b00PJ_AccountName ; "=" ; Upper ( Get ( AccountName ) ) )
+				& ¶ 
+
+			& " AND " 
+				& SQL_Where ( Utility_PERMISSION::c00PJ_FileName ; "=" ; Upper ( Get ( FileName ) ) ) 
+				& ¶ 
+
+			& " AND " 
+				& SQL_Where ( Utility_PERMISSION::c00PJ_EventName ; "=" ; Upper ( EventName ) )
+				& ¶ 
+
+			& " ORDER BY " 
+				& SQL_Field ( Utility_PERMISSION::zModTStmp ) 
+				& " DESC"
+				& ¶ 
+
+			& " FETCH FIRST 1 ROWS ONLY" 
+			;
+
+
+			sqlResult = If ( IsEmpty ( EventName ) ;
+				"?" ;
+				HTC_ExecuteFileSQL ( sqlQuery; ""; ¶; ¶ )
+			) ;
+			sqlResult = If ( sqlResult = "?" ; 
+				"" ; 
+				sqlResult 
+			) ;
+
+
+			isStatusAllowed = GetValue ( sqlResult ; 1 ) ;
+			sql_dateFrom = GetValue ( sqlResult ; 2 ) ;
+			sql_dateTo = GetValue ( sqlResult ; 3 ) ;
+
+
+			dateToday = Get ( CurrentDate ) ;
+			dateFrom = If ( not IsEmpty ( sql_dateFrom );
+				DateFromISO8601 ( sql_dateFrom ) ;
+				dateToday
+			);
+			dateTo = If ( not IsEmpty ( sql_dateTo );
+				DateFromISO8601 ( sql_dateTo ) ;
+				dateToday
+			);
+
+
+			isAllowed = If ( not isStatusAllowed ;
+				False ;
+				dateFrom ≤ dateToday and dateToday ≤ dateTo
+			)
+		];
+
+		//sqlQuery & "¶==========¶¶" &
+		//sqlResult
+
+		isAllowed
+	)
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
