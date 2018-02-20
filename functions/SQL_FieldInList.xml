@@ -1,24 +1,48 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="52" functionArity="2" visible="True" parameters="theField;theList" name="SQL_FieldInList">
-		<Calculation><![CDATA[// SQL_FieldInList ( theField ; theList )
-// version: 1.1, Daniel A. Shockley, NYHTC
+		<Calculation><![CDATA[// SQL_FieldInList ( fieldRef ; theList )
+// version: 1.2, Erik Shagdar, NYHTC
 
 /*
-	Stub function (so it appears with other SQL functions) that calls the ThisFieldInListSQL function by Kevin Frank. 
-	See: http://www.filemakerhacks.com/?p=5013
+	Generartes the entire IN clause. Values are properly quoted  based on the field type.
 
 
 REQUIRES:
-	ThisFieldInListSQL
+	SQL_Field
 
 
 HISTORY:
-	1.1 - 2016-09-29 ( eshagdar ): added documentation
-	1.0 - 201x-xx-xx ( dshockley ): first created
+	1.2 - 2018-02-20 ( eshagdar ): logic is inpired by ThisFieldInListSQL function which this function used to a wrapper for. This function now additionally handles date and timestamp fields ( instead of just text and number ).
+	1.1 - 2016-09-29 ( eshagdar ): added documentation.
+	1.0 - 201x-xx-xx ( dshockley ): first created - wrapper for ThisFieldInListSQL.
 */
 
 
-ThisFieldInListSQL ( theField ; theList )]]>
+Let ( [ 
+		SQ = "'" ;
+
+		fieldType = FieldType ( Get ( FileName ) ; GetFieldName ( fieldRef ) ) ;
+
+		valPrefix = Case (
+			Position ( fieldType ; "text" ; 1 ; 1 ) ;
+			SQ ;
+
+			Position ( fieldType ; "date" ; 1 ; 1 ) ;
+			"DATE " & SQ ;
+
+			Position ( fieldType ; "timestamp" ; 1 ; 1 ) ;
+			"TIMESTAMP " & SQ ;
+
+			/* DEFAULT */
+			""
+		) ;
+		valSuffix = If ( IsEmpty ( valPrefix ) ; "" ; SQ ) ;
+		formattedList = valPrefix & Substitute ( theList ; [ ¶ ; valSuffix & "," & valPrefix ] ) & valSuffix
+	] ; 
+
+	SQL_Field ( fieldRef ) & " IN ( " & formattedList & " )"
+
+)]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
