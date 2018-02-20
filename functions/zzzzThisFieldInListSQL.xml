@@ -1,5 +1,5 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="59" functionArity="2" visible="True" parameters="theField;theList" name="ThisFieldInListSQL">
+	<CustomFunction id="59" functionArity="2" visible="True" parameters="theField;theList" name="zzzzThisFieldInListSQL">
 		<Calculation><![CDATA[// zzzzThisFieldInListSQL ( theField ; theList )
 // version 1.0, Kevin Frank
 
