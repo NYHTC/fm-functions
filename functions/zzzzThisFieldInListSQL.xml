@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="59" functionArity="2" visible="True" parameters="theField;theList" name="zzzzThisFieldInListSQL">
 		<Calculation><![CDATA[// zzzzThisFieldInListSQL ( theField ; theList )
-// version 1.0, Kevin Frank
+// version 1.0.1, Kevin Frank
 
 /* 
 	Generates the entire IN clause to follow a WHERE in a SQL query elements will be wrapped in quotes ONLY if the field is a TEXT field
 
 
 HISTORY:
+	1.0.1 - 2018-02-20 ( eshagdar ): mark as deprecated.
 	1.0 - 201x-xx-xx ( xxxxx ): taken from Kevin Frank.
 	0.0 - 2012-05-20 ( kfrank ): published.
 
