@@ -1,0 +1,59 @@
+<fmxmlsnippet type="FMObjectList">
+<CustomFunction id="79" functionArity="3" visible="True" parameters="_valueList;_valueIndex;_delimiter" name="GetValueByDelimiter">
+<Calculation>
+<![CDATA[// GetValueByDelimiter ( _valueList ; _valueIndex ; _delimiter )
+// version 1.3, Daniel A. Shockley, NYHTC
+
+// Similar to the GetValue function, but allows for lists delimited by a custom delimiter (can be multiple chars)
+
+
+/*
+HISTORY:
+       1.3 - 2016-04-04 ( eshagdar ): if the itemCount is 1, then ACTUALLY return the whole thing.
+       1.2 - 2011-xx-xx ( dshockley ): If the chosen index does not exist (too HIGH), returns empty string.
+       1.1 - 2011-xx-xx ( dshockley ): If the delimiter doesn't exist in the _valueList AT ALL and they asked for the 1st item, then return the whole thing. Changed from original version, which incorrectly returned "".
+*/
+
+
+Let ( [
+               itemCount = PatternCount ( _valueList; _delimiter ) + ( not IsEmpty ( _valueList ) )
+       ];
+
+       Case (  
+               itemCount = 0;    /* no string is passed is, so nothing to return */
+               ""; 
+
+               itemCount = 1;    /* string is specified, but the delim does not appear, so return the whole thing */
+               _valueList;
+
+               _valueIndex > itemCount;    /* trying to get item whose index is bigger than the number of items */
+               ""; 
+
+               _valueIndex = 1;    /* optimized to get the sub-string before the first delim */
+               Left ( 
+                       _valueList; 
+                       Position ( _valueList; _delimiter; 1; 1 ) - 1 
+               ); 
+
+               _valueIndex = itemCount;    /* optimized to get the sub-string after the last delim */
+               Right ( 
+                       _valueList; 
+                       Length ( _valueList ) - Position ( _valueList; _delimiter; 1; PatternCount( _valueList; _delimiter ) ) 
+               ); 
+
+/*
+DEFAULT: get the position of the delim by index. Get the substring after that delimiter.
+*/
+               Let ( 
+                       startPos = Position ( _valueList; _delimiter; 1; _valueIndex - 1 ) + 1; 
+                       Middle ( 
+                               _valueList; 
+                               startPos; 
+                               Position ( _valueList; _delimiter; 1; _valueIndex ) - startPos 
+                       )
+               )
+       )
+)]]>
+</Calculation>
+</CustomFunction>
+</fmxmlsnippet>
