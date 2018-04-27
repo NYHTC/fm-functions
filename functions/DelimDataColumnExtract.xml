@@ -1,0 +1,43 @@
+<fmxmlsnippet type="FMObjectList">
+<CustomFunction id="317" functionArity="5" visible="True" parameters="dataString;rowSep;colSep;colNumToExtract;startAtRow" name="DelimDataColumnExtract">
+<Calculation>
+<![CDATA[// DelimDataColumnExtract ( dataString; rowSep; colSep; colNumToExtract; startAtRow )
+// version 1.1, Daniel A. Shockley
+
+
+/* 
+       Extracts a specified column of data from a delimited data string. Uses the row separator for the resulting data.
+
+
+NOTE:
+       Recursive function
+
+
+REQUIRES:
+       GetValueByDelimiter
+
+
+HISTORY:
+       1.1 - 2017-03-21 ( eshagdar ): updated documentation.
+       1.0 - 201x-xx-xx ( dshockley ): created.
+*/
+
+Let( [
+                thisRowIndex = If ( IsEmpty ( startAtRow ); 1; startAtRow )
+
+               ; thisRowData = GetValueByDelimiter( dataString; thisRowIndex; rowSep )
+               ; thisColumnForRow = GetValueByDelimiter( thisRowData; colNumToExtract; colSep )
+       ];
+
+       If ( thisRowIndex ≥ ( PatternCount ( dataString; rowSep ) + 1 )
+
+               // We are on final row: 
+               ; thisColumnForRow
+
+               // ELSE: Need to get next row(s): 
+               ; Let ( $$GotToElse=True; "" )  & thisColumnForRow & rowSep & DelimDataColumnExtract ( dataString; rowSep; colSep; colNumToExtract; thisRowIndex + 1 ) 
+       )
+)]]>
+</Calculation>
+</CustomFunction>
+</fmxmlsnippet>
