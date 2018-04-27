@@ -1,30 +1,69 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="502" functionArity="1" visible="True" parameters="EventName" name="_Access_Permission">
-		<Calculation><![CDATA[// _Access_Permission ( EventName )
-// version 1.1, Erik Shagdar, NYHTC
+
+<CustomFunction id="502" functionArity="2" visible="True" parameters="EventNameList;EventKeyList" name="_Access_Permission">
+<Calculation>
+<![CDATA[// _Access_Permission ( EventNameList, EventKeyList )
+// version 1.2.1, Erik Shagdar, NYHTC
 
 /*
-	Determine if the user has a permission for a particular action. Full-Access accounts always have access.
+	Determine if the user has a permission for a particular action. Full-Access and developer accounts always have access.
+	Names take priority over keys. At least ONE of the params must have a value. The params can be return-delimited list.
 
 
 REQUIRES:
+	_PrivSet_FullAccess
+	_PrivSet_Developer
 	DateFromISO8601
 	HTC_ExecuteFileSQL
 	SQL_Field
+	SQL_FieldInList
 	SQL_Table
 	SQL_Where
 
 
 HISTORY:
-
-	1.1 - 2018-02-12 ( dbeer ): updated to add developers to always allow list
+	1.2.1 - 2018-04-27 ( eshagdar ): updated 'Requires' section of the documentation.
+	1.2 - 2018-03-23 ( eshagdar ): 'EventName' param renamed to 'EventNameList'. added 'EventKeyList' param. params can be return-delimited lists.
+	1.1 - 2018-02-12 ( dbeer ):  updated to add developers to always allow list
 	1.0 - 2018-02-09 ( eshagdar ): first created.
 */
 
 
-If ( _PrivSet_FullAccess or _PrivSet_Developer ;
+Case ( 
+	_PrivSet_FullAccess or _PrivSet_Developer ;
 	True ;
+
+	IsEmpty ( EventNameList ) or IsEmpty ( EventNameList ) ;
+	False ;
+
 	Let ( [
+
+			numNames = ValueCount ( EventNameList ) ;
+			numKeys = ValueCount ( EventKeyList ) ;
+			accountName = Get ( AccountName ) ;
+			dbName = Get ( FileName ) ;
+
+
+			whereCriteria = Case (
+				/* one or more NAMES specified */
+				not IsEmpty ( EventNameList ) ;
+				SQL_Where ( Utility_PERMISSION::c00PJ_FileName__UPPER ; "=" ; Upper ( dbName ) ) 
+					& "¶ AND " 
+					& If ( numNames = 1 ;
+						SQL_Where ( Utility_PERMISSION::c00PJ_EventName__UPPER ; "=" ; Upper ( EventNameList ) ) ;
+						SQL_FieldInList ( Utility_PERMISSION::c00PJ_EventName__UPPER ; Upper ( EventNameList ) )
+					);
+
+
+				/* one or more KEYS specified */
+				numKeys = 1 ;
+				SQL_Where ( Utility_PERMISSION::a00PJ_PermissionEventKey ; "=" ; EventKeyList ) ;
+
+				numKeys > 1 ;
+				SQL_FieldInList ( Utility_PERMISSION::a00PJ_PermissionEventKey ; EventKeyList ) ;
+			) ;
+
+
 			sqlQuery = 
 			"SELECT " 
 				& SQL_Field ( Utility_PERMISSION::c00PJ_Status ) 
@@ -37,16 +76,13 @@ If ( _PrivSet_FullAccess or _PrivSet_Developer ;
 				& ¶ 
 
 			& " WHERE " 
-				& SQL_Where ( Utility_PERMISSION::b00PJ_AccountName ; "=" ; Upper ( Get ( AccountName ) ) )
+				& SQL_Where ( Utility_PERMISSION::b00PJ_AccountName ; "=" ; Upper ( accountName ) )
 				& ¶ 
 
 			& " AND " 
-				& SQL_Where ( Utility_PERMISSION::c00PJ_FileName ; "=" ; Upper ( Get ( FileName ) ) ) 
+				& whereCriteria
 				& ¶ 
 
-			& " AND " 
-				& SQL_Where ( Utility_PERMISSION::c00PJ_EventName ; "=" ; Upper ( EventName ) )
-				& ¶ 
 
 			& " ORDER BY " 
 				& SQL_Field ( Utility_PERMISSION::zModTStmp ) 
@@ -57,11 +93,8 @@ If ( _PrivSet_FullAccess or _PrivSet_Developer ;
 			;
 
 
-			sqlResult = If ( IsEmpty ( EventName ) ;
-				"?" ;
-				HTC_ExecuteFileSQL ( sqlQuery; ""; ¶; ¶ )
-			) ;
-			sqlResult = If ( sqlResult = "?" ; 
+			sqlResult =HTC_ExecuteFileSQL ( sqlQuery; ""; ¶; ¶ ) ;
+			sqlResult = If ( sqlResult = "?"; 
 				"" ; 
 				sqlResult 
 			) ;
@@ -94,6 +127,8 @@ If ( _PrivSet_FullAccess or _PrivSet_Developer ;
 
 		isAllowed
 	)
-)]]></Calculation>
-	</CustomFunction>
+)]]>
+</Calculation>
+</CustomFunction>
+
 </fmxmlsnippet>
