@@ -30,12 +30,15 @@ HISTORY:
 
 
 Case ( 
+	/* full-access / devs are alwasy allowed */
 	_PrivSet_FullAccess or _PrivSet_Developer ;
 	True ;
 
-	IsEmpty ( EventNameList ) or IsEmpty ( EventNameList ) ;
+	/* name / ID must be specified */
+	IsEmpty ( EventNameList ) or IsEmpty ( EventKeyList ) ;
 	False ;
 
+	/* DEFAULT: check if current user is in the list */
 	Let ( [
 
 			numNames = ValueCount ( EventNameList ) ;
