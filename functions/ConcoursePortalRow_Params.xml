@@ -1,0 +1,31 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="286" functionArity="1" visible="True" parameters="options" name="ConcoursePortalRow_Params">
+		<Calculation><![CDATA[// ConcoursePortalRow_Params ( options )
+// version 1.0, Erik Shagdar, NYHTC
+
+/*
+	Params for the portal row.
+
+
+HISTORY:
+	1.0 - 2018-04-30 ( eshagdar ): First Created.
+*/
+
+
+
+Let ( [
+		extraParams = Utility_CONCOURSE::b00MC_ScriptParams ;
+		evalParams = If ( IsEmpty ( extraParams ) ;
+			"" ;
+			Evaluate ( extraParams )
+		)
+	];
+
+		# ( "LayoutID"; Utility_CONCOURSE::a00MC_LayoutID_Action )
+	&	# ( "ScriptID"; Utility_CONCOURSE::a00MC_ScriptID )
+	&	# ( "ScriptParams"; evalParams )
+
+	&	CallStack ( "" )
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

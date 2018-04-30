@@ -1,0 +1,24 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="285" functionArity="1" visible="True" parameters="tabName" name="ConcoursePortalRow_Filter">
+		<Calculation><![CDATA[// ConcoursePortalRow_Filter ( tabName )
+// version 1.1, Erik Shagdar, NYHTC
+
+/*
+	Use this to avoid having to separately edit the filter on each portal sub-section. 
+
+
+HISTORY:
+	1.1 - 2018-04-30 ( eshagdar ): remove DbID test since the concourse records are filtered by the connector
+	1.0 - 2018-03-07 ( eshagdar ): First Created.
+*/
+
+
+
+Utility_CONCOURSE::a00MC_LayoutID_Concourse = GetLayoutID ( "" )
+  and 
+If ( not IsEmpty ( tabName ) ;
+	Utility_CONCOURSE::b00MC_isBold__b = tabName ; 
+	True
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
