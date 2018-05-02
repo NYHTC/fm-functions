@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="38" functionArity="1" visible="True" parameters="fmPath" name="FMPathToPosixOrWinPath">
-		<Calculation><![CDATA[// FMPathToPosixOrWinPath ( fmPath )
-// version 1.1, Shockley/Shagdar, NYHTC
+	<CustomFunction id="38" functionArity="1" visible="True" parameters="fmPath" name="FMPathToSystemPath">
+		<Calculation><![CDATA[// FMPathToSystemPath ( fmPath )
+// version 1.2, Shockley/Shagdar, NYHTC
 
 /* 
 	Convert ANY FileMaker-style path to POSIX path (Mac) or Windows path (if on Windows):
@@ -11,10 +11,11 @@
 
 REQUIRES: 
 	FMPathToPosix
-	FMPathToOS
+	FMPathToWinPath
 
 
 HISTORY:
+	1.2 - 2018-05-02 ( dshockley ): Renamed this function. Renamed required function FMPathToWinPath. 
 	1.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.0 - 2015-02-23 ( dshockley ): first created. 
 
@@ -23,7 +24,7 @@ HISTORY:
 
 If ( Abs ( Get ( SystemPlatform ) ) = 1    /* OS Ⅹ */
 	; FMPathToPosix ( fmPath )
-	; FMPathToOS ( fmPath )
+	; FMPathToWinPath ( fmPath )
 )]]>
 		</Calculation>
 	</CustomFunction>

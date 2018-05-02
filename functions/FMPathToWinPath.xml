@@ -1,26 +1,15 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="36" functionArity="1" visible="True" parameters="fmPath" name="FMPathToOS">
-		<Calculation><![CDATA[// FMPathToOS ( fmPath )
-// version 1.6.1, Tom Robinson, http://www.tomrobinson.co.nz/
+	<CustomFunction id="36" functionArity="1" visible="True" parameters="fmPath" name="FMPathToWinPath">
+		<Calculation><![CDATA[// FMPathToWinPath ( fmPath )
+// version 1.6.2, Tom Robinson, http://www.tomrobinson.co.nz/
 
 /*
-	Convert from FileMaker filepath to OS filepath (HFS or NTFS)
+	Convert from FileMaker filepath to WINDOWS/DOS filepath (NTFS, with leading disk letter, not the new network path format).
 
-	Convert the results from Get(FilePath) (‘file:’), a path in a file container field (‘filemac:’, ‘filewin:’), or an image container field (‘imagemac:’, ‘imagewin:’) to a form suitable for AppleScript, DOS, etc.  Handles both absolute and relative paths.
+	Convert the results from Get(FilePath) (‘file:’), a path in a file container field (‘filewin:’), or an image container field (‘imagewin:’) to a form suitable for DOS, etc.  Handles both absolute and relative paths.
 
 
 EXAMPLE:
-	Container field on  OS Ⅹ (‘image:’ and ‘size:’ are ignored):
-		Input:	imagemac:/tom/Me Myself I/Programs/FileMaker Pro/Custom Functions/FilePathToOS/iphone%2F3g.jpg
-		Output:	tom:Me Myself I:Programs:FileMaker Pro:Custom Functions:FilePathToOS:iphone/3g.jpg
-
-	Get(FilePath) on OS Ⅹ:
-		Input:	file:/tom/Me Myself I/Programs/FileMaker Pro/Custom Functions/FilePathToOS/FilePathToOS%2FTest.fp7
-		Output:	tom:Me Myself I:Programs:FileMaker Pro:Custom Functions:FilePathToOS:FilePathToOS/Test.fp7
-
-	Get(TemporaryPath) on OS Ⅹ:
-		Input:	/Amphe/private/var/tmp/folders/501/TemporaryItems/FileMaker/
-		Output:	Amphe:private:var:tmp:folders:501:TemporaryItems:FileMaker:
 
 	Container field on Windows (‘image:’ and ‘size:’ are ignored):
 		Input:	imagewin:/C:/Documents and Settings/Administrator/My Documents/FilePathToOS/iphone3gwin.jpg
@@ -36,6 +25,7 @@ EXAMPLE:
 
 
 HISTORY:
+	1.6.2 - 2018-05-02 ( dshockley ): forked from FMPathToOS, since this now does ONLY Windows. 
 	1.6.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.6 - 2015-05-29 ( dshockley ): if there are TWO leading slashes, do NOT remove one - only remove leading slash when converting to Windows if it is alone. 
 	1.5 - 2015-02-23 ( eshagdar ): reformatted
@@ -48,62 +38,19 @@ HISTORY:
 */
 
 
-If ( Abs ( Get ( SystemPlatform ) ) = 1;  /* OS Ⅹ */
-	Let ( [
+Case ( 
+	IsEmpty ( fmPath )
+	; ""
+	; 
+
+	 /* OS Ⅹ */
+	Abs ( Get ( SystemPlatform ) ) = 1 
+	; ""
+
+	/* Else Windoze */
+	; Let ( [
 			sepfm = "/";
-			sepmac = ":";
-			modPath = fmPath; 
-	
-			pathpos = Case (
-				/* 1st choice */
-				"filemac:" = Left ( modPath; 8 )
-				; 8
-				;
-
-				/* 2nd choice */
-				"imagemac:" = Left ( modPath; 9 )
-				; 9
-				;
-
-				/* Last usual choice */
-				"file:" = Left ( modPath; 5 )
-				; 5
-				;
-
-				/* No identifier ( e.g. Get ( TemporaryPath ) ) */ 
-				0
-			);
-
-			/* Everything post identifier to end of string */
-			modPath = Right ( modPath; Length ( modPath ) - pathpos );
-
-			/* Reduce to first value in string */
-			modPath = GetValue ( modPath; 1 );
-
-			/* Switch leading slash ( FM absolute) for nothing (HFS absolute), and no leading slash (FM relative) for a colon (HFS relative) */
-			modPath = 
-				If ( Left ( modPath; 1 ) = sepfm
-					; Right ( modPath; Length ( modPath ) - 1 )
-					; sepmac & modPath 
-				);  
-
-			/* Convert slashes to colons, encoded slashes to slashes */
-			modPath = 
-				Substitute ( 
-					modPath
-					; [ sepfm; sepmac ]
-					; [ "%2F";"/" ]
-				)
-		]
-		; modPath
-	)
-
-
-;  /* Else Windoze */
-
-	Let ( [
-			sepfm = "/";
-			sepwin = "\\";
+			sepwin = Char ( 92 ) ; /* backslash */
 			modPath= fmPath;
 	
 			pathpos = Case (
