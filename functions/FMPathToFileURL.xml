@@ -1,15 +1,16 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="35" functionArity="1" visible="True" parameters="fmPath" name="FMPathToFileURL">
 		<Calculation><![CDATA[// FMPathToFileURL ( fmPath )
-// version 1.3.1, Shockley/Shagdar, NYHTC
+// version 1.4, Shockley/Shagdar, NYHTC
 
 /* 
-	Convert ANY FileMaker-style path to a FILE ULR (first converts to POSIX path):
-	handles file, filemac, filewin, image, imagemac, imagein
-	the 'fmPath' parameter MUST be an ABSOLUTE path, not relative, nor network URL
+	Convert ANY FileMaker-style path to a FILE URL (first converts to POSIX path):
+		handles file, filemac, filewin, image, imagemac, imagein
+		the 'fmPath' parameter MUST be an ABSOLUTE path, not relative, nor network URL
 
 
 HISTORY:
+	1.4 - 2018-05-02 ( dshockley ): use FMPathToPosix instead of doing the same thing here. Return empty string if fmPath is empty string. 
 	1.3.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.3 - 201x-xx-xx ( xxxxx ): Reformatted to match newer standards.
 	1.2 - 2015-02-23 ( eshagdar ): Reformatted
@@ -17,26 +18,10 @@ HISTORY:
 	1.0 - 201x-xx-xx ( xxxxx ): first created
 */
 
-
-Let( [
-		separator = "/" 
-		; prefix = Left ( fmPath; Position ( fmPath; ":"; 1; 1 ) )
-		; prefixLength = 
-			If ( PatternCount ( "¶file:¶filemac:¶filewin:¶image:¶imagemac:¶imagewin:¶"; "¶" & prefix & "¶") > 0
-				; Length ( prefix )
-				; 0 
-			)
-		; driveAndPath = Right ( fmPath; Length ( fmPath ) - prefixLength - 1 )
-		; driveName = Left ( driveAndPath; Position ( driveAndPath; separator; 1; 1 ) - 1 )
-		; pathAsPosix = 
-			If ( separator & driveName & separator <> Get ( SystemDrive )
-				; "/Volumes/" & driveName & Right ( driveAndPath; Length ( driveAndPath ) - Position ( driveAndPath; separator; 1; 1 ) + 1 )
-				; Right ( driveAndPath; Length ( driveAndPath ) - Position ( driveAndPath; separator; 1; 1 ) + 1 )
-			)
-	]; 
-
-	"file://" & Substitute ( GetAsURLEncoded ( pathAsPosix ); "%2F"; "/" )  // need to restore path delimiters after the URL-encoding
-
+If ( IsEmpty ( fmPath )
+	; ""
+	; "file://" & Substitute ( GetAsURLEncoded ( FMPathToPosix ( fmPath ) ); "%2F"; "/" )  // need to restore path delimiters after the URL-encoding
+	)
 )]]>
 		</Calculation>
 	</CustomFunction>
