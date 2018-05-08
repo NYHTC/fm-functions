@@ -3,7 +3,7 @@
 <CustomFunction id="502" functionArity="2" visible="True" parameters="EventNameList;EventKeyList" name="_Access_Permission">
 <Calculation>
 <![CDATA[// _Access_Permission ( EventNameList, EventKeyList )
-// version 1.2.1, Erik Shagdar, NYHTC
+// version 1.2.2, Erik Shagdar, NYHTC
 
 /*
 	Determine if the user has a permission for a particular action. Full-Access and developer accounts always have access.
@@ -22,6 +22,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.2.2 - 2018-05-08 ( eshagdar ): False if BOTH lists are empty, not if either one is.
 	1.2.1 - 2018-04-27 ( eshagdar ): updated 'Requires' section of the documentation.
 	1.2 - 2018-03-23 ( eshagdar ): 'EventName' param renamed to 'EventNameList'. added 'EventKeyList' param. params can be return-delimited lists.
 	1.1 - 2018-02-12 ( dbeer ):  updated to add developers to always allow list
@@ -35,7 +36,7 @@ Case (
 	True ;
 
 	/* name / ID must be specified */
-	IsEmpty ( EventNameList ) or IsEmpty ( EventKeyList ) ;
+	IsEmpty ( EventNameList ) and IsEmpty ( EventKeyList ) ;
 	False ;
 
 	/* DEFAULT: check if current user is in the list */
