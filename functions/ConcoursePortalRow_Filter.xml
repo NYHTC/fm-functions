@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="285" functionArity="1" visible="True" parameters="options" name="ConcoursePortalRow_Filter">
+	<CustomFunction id="221" functionArity="1" visible="True" parameters="options" name="ConcoursePortalRow_Filter">
 		<Calculation><![CDATA[// ConcoursePortalRow_Filter ( options )
-// version 1.1, Erik Shagdar, NYHTC
+// version 1.2, Erik Shagdar, NYHTC
 
 /*
 	Use this to avoid having to separately edit the filter on each portal sub-section. 
@@ -10,9 +10,11 @@
 REQUIRES:
 	_Access_Permission
 	GetLayoutID
+	ValueIsInList
 
 
 HISTORY:
+	1.2 - 2018-05-09 ( eshagdar ): Limit row by user group as well.
 	1.1 - 2018-04-30 ( eshagdar ): removed filtering by tabName; param renamed to options
 	1.0 - 2018-03-07 ( eshagdar ): First Created.
 */
@@ -22,16 +24,19 @@ HISTORY:
 Let ( [
 		dbID = Utility_CONCOURSE::a00MC_DbID_Concourse ;
 		layoutID = Utility_CONCOURSE::a00MC_LayoutID_Concourse ;
-		permissionIDList = Utility_CONCOURSE::a00MC_PermissionEventID
+		permissionIDList = Utility_CONCOURSE::a00MC_PermissionEventID ;
+		accountNameList = Utility_CONCOURSE::c00MC_GroupLogins
 	];
 
 	dbID = $$DbID
 	  and 
 	layoutID = GetLayoutID ( "" )
 	  and 
+	ValueIsInList ( accountNameList ; Get ( AccountName ) )
+	  and 
 	If ( IsEmpty ( permissionIDList ) ;
-		True ; 
-		_Access_Permission ( "" ; permissionIDList )
+		 True ; 
+		 _Access_Permission ( "" ; permissionIDList )
 	)
 )]]></Calculation>
 	</CustomFunction>
