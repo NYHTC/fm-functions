@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="221" functionArity="1" visible="True" parameters="options" name="ConcoursePortalRow_Filter">
 		<Calculation><![CDATA[// ConcoursePortalRow_Filter ( options )
-// version 1.2, Erik Shagdar, NYHTC
+// version 1.2.1, Erik Shagdar, NYHTC
 
 /*
 	Use this to avoid having to separately edit the filter on each portal sub-section. 
@@ -9,11 +9,13 @@
 
 REQUIRES:
 	_Access_Permission
+	_PrivSet_FullAccess
 	GetLayoutID
 	ValueIsInList
 
 
 HISTORY:
+	1.2.1 - 2018-06-15 ( eshagdar ): full-access accounts ignore user group limitation.
 	1.2 - 2018-05-09 ( eshagdar ): Limit row by user group as well.
 	1.1 - 2018-04-30 ( eshagdar ): removed filtering by tabName; param renamed to options
 	1.0 - 2018-03-07 ( eshagdar ): First Created.
@@ -32,7 +34,10 @@ Let ( [
 	  and 
 	layoutID = GetLayoutID ( "" )
 	  and 
-	ValueIsInList ( accountNameList ; Get ( AccountName ) )
+	If ( _PrivSet_FullAccess ;
+		True ;
+		ValueIsInList ( accountNameList ; Get ( AccountName ) )
+	)
 	  and 
 	If ( IsEmpty ( permissionIDList ) ;
 		 True ; 
