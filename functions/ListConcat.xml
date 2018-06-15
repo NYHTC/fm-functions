@@ -1,10 +1,11 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="422" functionArity="3" visible="True" parameters="firstList;secondList;options" name="ListConcat">
 		<Calculation><![CDATA[// ListConcat ( firstList; secondList; options )
-// version 1.1.1, Erik Shagdar
+// version 1.1.2, Erik Shagdar
 
 /*
 	Given 2 lists, concat their values
+
 
 
 EXAMPLE:
@@ -20,18 +21,19 @@ REQUIRES:
 
 
 HISTORY ( recent at top ):
-	1.1.1 - 2017-08-24 ( eshagdar ): added example to documentation.
-	1.1 - 2017-04-17 ( eshagdar ): use ValueRemoveIndex instead of ValueRemove since lists should be allowed to have duplicate items
-	1.0 - 2016-09-19 ( eshagdar ): Created
+	1.1.2 - 2018-06-14 ( dshockley ): Clarify documentation. 
+	1.1.1 - 2017-08-24 ( eshagdar ): Added example to documentation. 
+	1.1 - 2017-04-17 ( eshagdar ): Use ValueRemoveIndex instead of ValueRemove since lists should be allowed to have duplicate items. 
+	1.0 - 2016-09-19 ( eshagdar ): First created. 
 */
 
 
 
 If ( options = "help" or DictGet ( options; "help" );
 	List ( 
-		"This functions takes 2 lists and concatenates them. Below are optional keys that can be specified in the 'options' param:";
-		"  rowSep - output string between each row";
-		"  colSep - string between the two value";
+		"This functions takes 2 RETURN-delimited lists and concatenates them. Below are optional keys that can be specified in the 'options' param:";
+		"  rowSep - string between each row of OUTPUT";
+		"  colSep - string between the two values of OUTPUT";
 		"  prefix - string before each value of the first list";
 		"  suffix - string after the second value in the second list";
 		" ";
