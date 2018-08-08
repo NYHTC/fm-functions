@@ -1,22 +1,27 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="16" functionArity="1" visible="True" parameters="options" name="CallStack">
 		<Calculation><![CDATA[// CallStack ( options )
-// version 1.5, Shockley/Shagdar, NYHTC
+// version 1.6, Shockley/Shagdar, NYHTC
 
-/* 
-	Append this to params when calling ANY script. It sends in the callstack of scripts so a script knows the entire stack of parent scripts that called it. Note that in typical use the 'options' parameter will be empty. 
+/*
+	Append this to params when calling ANY script.
+	It sends in the callstack of scripts so a script knows the entire stack of parent scripts that called it.
+
+
+NOTE:
+	In typical use the 'options' parameter will be empty.
 
 
 REQUIRES:
 	#
 	DatabaseID_SetGlobalVar
-	DictContains
 	DictGet
 	FM_Name_ID
 	ListConcat
-
+	ValueOrDefault
 
 HISTORY:
+	1.6 - 2018-08-08 ( eshagdar ): cleaned up code - combined multiple if-tests into ValueOrDefault. ScriptSection always show if specified. Test for value of subroutine instead of existence of key. DatabaseID_SetGlobalVar now returns the dbID instead of boolean, so use it.
 	1.5 - 2017-04-19 ( eshagdar ): allow passing a SFR-dict with a key of 'Subroutine' the value is appended to the calling script name.
 	1.4 - 2016-10-31 ( eshagdar ): added 'CallingIDStack' key to stack. added 'SetScriptVars' option. sets $$DbID if not already set.
 	1.3 - 2016-10-03 ( dshockley ): added "NotMe" option to get the stack so far but NOT including the current script/file.
@@ -28,96 +33,77 @@ HISTORY:
 
 
 Case (
-
 	/* help: display available options. */
-	options = "help"
-	; List ( 
-		"Below is a list of available commands";
-		" ";
-		"'DisplayCurrent' - display the callstack in a human-friendly list";
-		"'NotMe' - display incoming callstack";
-		"'SetScriptVars' - set local variable";
-		" # ( \"Subroute\"; «string to append to the name of the script name» ) - appends a new call to the stack with a subroutine value in the script name";
+	options = "help" ;
+	List (
+		"Below is a list of available commands" ;
+		" " ;
+		"'DisplayCurrent' - display the callstack in a human-friendly list" ;
+		"'NotMe' - display incoming callstack" ;
+		"'SetScriptVars' - set local variable" ;
+		" # ( \"Subroutine\" ; «description» ) - appends a «description» with a new call on the stack" ;
 		"default: empty string - put a new call to the stack"
-	)
-	;
+	) ;
 
 
 	/* DisplayCurrent: display the current callstack (including THIS script/file) in a human-friendly way */
-	options = "DisplayCurrent"
-	; If ( IsEmpty ( $CallingFileName ) 
-		; DictGet ( CallStack ( "" ); "CallingFileName" ) & " - " & DictGet ( CallStack ( "" ); "CallingScriptName" )
-		; ListConcat (  $CallingFileName; $CallingScriptName ; " - " )
-		)
+	options = "DisplayCurrent" ;
+	If ( IsEmpty ( $CallingFileName ) ;
+		DictGet ( CallStack ( "" ) ; "CallingFileName" ) & " - " & DictGet ( CallStack ( "" ) ; "CallingScriptName" ) ;
+		ListConcat (  $CallingFileName; $CallingScriptName ; " - " )
+	) ;
+
+
+	/* NotMe: returns the incoming callstack WITHOUT the current script. */
+	options = "NotMe" ;
+			# ( "CallingFileName" ; $CallingFileName )
+		&	# ( "CallingScriptName" ; $CallingScriptName )
+		&	# ( "CallingIDStack" ; $CallingIDStack )
 	;
 
 
-	/* NotMe: returns the INCOMING callstack WITHOUT the current script. */
-	options = "NotMe"
-	; # ( "CallingFileName"; $CallingFileName )  
-		& # ( "CallingScriptName"; $CallingScriptName )
-		& # ( "CallingIDStack"; $CallingIDStack )
-	;
-
-
-	/* SetScriptVars: instantiate script variables calling callstack */
-	options = "SetScriptVars"
-	; Let ( [
-			$CallingScriptName = DictGet ( $params; "CallingScriptName" );
-			$CallingFileName = DictGet ( $params; "CallingFileName" );
+	/* SetScriptVars: instantiate script variables */
+	options = "SetScriptVars" ;
+	Let ( [
+			$CallingScriptName = DictGet ( $params; "CallingScriptName" ) ;
+			$CallingFileName = DictGet ( $params; "CallingFileName" ) ;
 			$CallingIDStack = DictGet ( $params; "CallingIDStack" )
-
-		];
+		] ;
 		True
-	)
-	;
+	) ;
 
 
 	/* Default: append current script/file to incoming callstack. */
 	Let ( [
+			fileName = Get ( FileName ) ;
+			layoutName = Get ( LayoutName ) ;
+			scriptName = Get ( ScriptName ) ;
 
-			fileName = Get ( FileName );
-			layoutName = Get ( LayoutName );
-			scriptName = Get ( ScriptName );
+			dbID = DatabaseID_SetGlobalVar ;
+			scriptID = If ( not IsEmpty ( scriptName ) ;
+				FM_Name_ID ( scriptName ; "S" ; "" ; "" ) ;
+				"L" & FM_Name_ID ( layoutName ; "L" ; "" ; "" )
+			) ;
+			scriptSection = DictGet ( options; "Subroutine" ) ;
+			scriptSection = If ( not IsEmpty ( scriptSection ) ;
+				" [ " & scriptSection & " ]" ;
+				""
+			) ;
 
-			ensureDbID = DatabaseID_SetGlobalVar;
-			scriptID = 
-				If ( not IsEmpty ( scriptName ) ;
-					FM_Name_ID ( scriptName ; "S" ; "" ; "" );
-					"L" & FM_Name_ID ( layoutName ; "L" ; "" ; "" )
-				);
-			scriptSection = 
-				If ( DictContains ( options; "Subroutine" );
-					" [ " & DictGet ( options; "Subroutine" ) & " ]";
-					""
-				);
-
-			fileNameStack = 
-				List ( 
-					fileName;
-					$CallingFileName 
-				);
-			scriptNameStack = 
-				GetValue ( 
-					List ( 
-						If ( not IsEmpty ( scriptName ); 
-							scriptName & scriptSection; 
-							"" 
-						); 
-						"[L] " & layoutName
-					); 
-					1 
-				); 
-			ScriptStack = 
-				List (
-					$$DbID & "-" & scriptID;
-					$CallingIDStack
-				)
+			fileNameStack = List (
+				fileName ;
+				$CallingFileName
+			) ;
+			scriptIDStack = List (
+				dbID & "-" & scriptID ;
+				$CallingIDStack
+			) ;
+			scriptNameStack = ValueOrDefault ( scriptName ; "[L] " & layoutName ) & scriptSection
 		];
 
-			# ( "CallingFileName"; fileNameStack )
-		&	# ( "CallingScriptName"; scriptNameStack )
-		&	# ( "CallingIDStack"; ScriptStack )
+			# ( "CallingFileName" ; fileNameStack )
+		&	# ( "CallingScriptName" ; scriptNameStack )
+		&	# ( "CallingIDStack" ; scriptIDStack )
 	)
 )]]>
 		</Calculation>

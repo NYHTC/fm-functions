@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="428" functionArity="0" visible="True" parameters="" name="DatabaseID_SetGlobalVar">
 		<Calculation><![CDATA[// DatabaseID_SetGlobalVar
-// version 1.1, Erik Shagdar, NYHTC
+// version 1.2, Erik Shagdar, NYHTC
 
 /*
 	Set a global variable for the databaseID of this file
@@ -12,16 +12,17 @@ REQUIRES:
 
 
 HISTORY:
+	1.2 - 2018-08-08 ( eshagdar ): return $$DbID
 	1.1 - 2016-12-08 ( eshagdar ): just look at the dict in the external ZZ_PREFS table.
 	1.0 - 2016-10-24 ( eshagdar ): first created
 */
 
 
-If ( not IsEmpty ( $$DbID );
-	True;
+If ( not IsEmpty ( $$DbID ) ;
+	$$DbID ;
 	Let ( 
-		$$DbID = DictGet ( _ext_00ZZ_PREFS::gDatabase_Dict; Get ( FileName ) );
-		True
+		$$DbID = DictGet ( _ext_00ZZ_PREFS::gDatabase_Dict ; Get ( FileName ) ) ;
+		$$DbID
 	)
 )]]>
 		</Calculation>
