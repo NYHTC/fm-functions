@@ -1,0 +1,29 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="135" functionArity="1" visible="True" parameters="SomeString" name="TextReverse">
+		<Calculation><![CDATA[// TextReverse ( SomeString )
+// version 1.0, Erik Shagdar
+
+/* 
+	Revereses the provided string of text.
+
+
+WARNING:
+	Recursive
+
+
+REQUIRES:
+	TextRemoveRight
+
+
+VERSION HISTORY: 
+	1.0 - 2018-08-10 ( eshagdar ): first created. 
+
+*/ 
+
+
+If ( IsEmpty ( SomeString ) ;
+	"" ;
+	Right ( SomeString ; 1 ) & TextReverse ( TextRemoveRight ( SomeString ; 1 )  )
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
