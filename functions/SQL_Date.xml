@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="49" functionArity="1" visible="True" parameters="someDate" name="SQL_Date">
 		<Calculation><![CDATA[// SQL_Date ( someDate )
-// version 1.2.1, NYHTC
+// version 1.3, NYHTC
 
 /*
 	Convert FileMaker date to format used in SQL Where clause.
 
 
 HISTORY:
+	1.3 - 2018-08-13 ( eshagdar ): return empty string if someDate is not specified.
 	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.2 - 2016-09-29 ( eshagdar ): added documentation.
 	1.1 - 201x-xx-xx ( xxxxx ):
@@ -15,11 +16,12 @@ HISTORY:
 */
 
 
-Let ( [ SQ = "'" /* single-quote */ ]; 
+Let ( [ SQ = "'" /* single-quote */ ] ;
 
-	"DATE " & SQ & Year ( someDate ) & "-" & Right ( "0" & Month( someDate ); 2 )  & "-" & Right ( "0" & Day ( someDate ); 2 ) & SQ
-
-)]]>
-		</Calculation>
+	If ( IsEmpty ( someDate ) ;
+		"" ;
+		"DATE " & SQ & Year ( someDate ) & "-" & Right ( "0" & Month ( someDate ) ; 2 )  & "-" & Right ( "0" & Day ( someDate ) ; 2 ) & SQ
+	)
+)]]></Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
