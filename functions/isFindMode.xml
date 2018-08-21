@@ -1,0 +1,18 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="999" functionArity="0" visible="True" parameters="" name="isFindMode">
+		<Calculation><![CDATA[// isFindMode
+// version 1.0, Daniel A. Shockley, NYHTC
+
+/*
+	Is current window in Find Mode? Returns boolean. 
+
+
+HISTORY:
+	1.0 - 2018-08-21 ( dshockley ): First created. 
+*/
+
+
+Get ( WindowMode ) = 1]]>
+		</Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
