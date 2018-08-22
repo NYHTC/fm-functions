@@ -1,17 +1,18 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="254" functionArity="1" visible="True" parameters="_list" name="ValueMax">
-		<Calculation><![CDATA[// ValueMax ( _list )
-// version 1.1, Erik Shagdar
+		<Calculation><![CDATA[// ValueMax_Text ( _list )
+// version 1.1.1, Erik Shagdar
 
 /*
-	Takes a list of values and returns the 'max' of them. Works across ints and strings. 
-
+	Takes a list of values and returns the 'max' (sorted by TEXT comparison) of them. So, "10" is smaller than "7". 
 
 NOTE:
 	Recursive.
-	This should be much faster if the list mostly have duplicate values. Fr a list that's mostly unique, get the last value of the sorted list.
+	If your list is mostly unique values, do NOT use this function - instead, just sort the list and get the last value.
+	This function is only faster if the list mostly has duplicate values. 
 
 HISTORY:
+	1.1.1 - 2018-08-22 ( dshockley ): Renamed to make it clear this does NOT treat the values as numbers. This is pure Text comparison. 
 	1.1 - 2017-04-19 ( eshagdar ): updated documentation.
 	1.0 - 201x-xx-xx ( eshagdar ): first created.
 */
@@ -27,9 +28,9 @@ Let ( [
 		If ( firstValue > $$_CF_ValueMax;
 			Let ( 
 				$$_CF_ValueMax = firstValue;
-				ValueMax ( ValueRemove ( _list ; firstValue ) )
+				ValueMax_Text ( ValueRemove ( _list ; firstValue ) )
 			);
-			ValueMax ( ValueRemove ( _list ; firstValue ) )
+			ValueMax_Text ( ValueRemove ( _list ; firstValue ) )
 		);
 
 		/* base case */
