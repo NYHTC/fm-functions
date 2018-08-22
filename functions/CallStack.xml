@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="16" functionArity="1" visible="True" parameters="options" name="CallStack">
 		<Calculation><![CDATA[// CallStack ( options )
-// version 1.6, Shockley/Shagdar, NYHTC
+// version 1.6.1, Shockley/Shagdar, NYHTC
 
 /*
 	Append this to params when calling ANY script.
@@ -14,14 +14,15 @@ NOTE:
 
 REQUIRES:
 	#
-	DatabaseID_SetGlobalVar
+	_DbID
 	DictGet
 	FM_Name_ID
 	ListConcat
 	ValueOrDefault
 
 HISTORY:
-	1.6 - 2018-08-08 ( eshagdar ): cleaned up code - combined multiple if-tests into ValueOrDefault. ScriptSection always show if specified. Test for value of subroutine instead of existence of key. DatabaseID_SetGlobalVar now returns the dbID instead of boolean, so use it.
+	1.6.1 - 2018-08-14 ( eshagdar ): updated documentation due to updating a required function call ( _DbID ).
+	1.6 - 2018-08-08 ( eshagdar ): cleaned up code - combined multiple if-tests into ValueOrDefault. ScriptSection always show if specified. Test for value of subroutine instead of existence of key. _DbID now returns the dbID instead of boolean, so use it.
 	1.5 - 2017-04-19 ( eshagdar ): allow passing a SFR-dict with a key of 'Subroutine' the value is appended to the calling script name.
 	1.4 - 2016-10-31 ( eshagdar ): added 'CallingIDStack' key to stack. added 'SetScriptVars' option. sets $$DbID if not already set.
 	1.3 - 2016-10-03 ( dshockley ): added "NotMe" option to get the stack so far but NOT including the current script/file.
@@ -79,7 +80,7 @@ Case (
 			layoutName = Get ( LayoutName ) ;
 			scriptName = Get ( ScriptName ) ;
 
-			dbID = DatabaseID_SetGlobalVar ;
+			dbID = _DbID ;
 			scriptID = If ( not IsEmpty ( scriptName ) ;
 				FM_Name_ID ( scriptName ; "S" ; "" ; "" ) ;
 				"L" & FM_Name_ID ( layoutName ; "L" ; "" ; "" )
