@@ -21,7 +21,7 @@ Let ( [
 	  keyForLink = 
 		If ( not IsEmpty ( keyForLink )
 			; keyForLink
-			; 99991206367072599384400236226114503752185  /* This identifies the "junk" record (it was made using UniqueID, but now only one "junk" record will be created). */
+			; 99991206367072599384400236226114503752185  /* This identifies the "junk" record (it was made using UniqueID, but now only one "junk" record will be created - or not, since the auto-enter key prevents record from successfully being created, but this will 'edit/access' a non-existent record instead of whichever was previously selected). */
 			) 
 	; fieldName_Link = GetFieldName ( fieldRef_Link )
 	; fieldName_Link = 
