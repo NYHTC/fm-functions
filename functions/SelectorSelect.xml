@@ -1,13 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="405" functionArity="2" visible="True" parameters="fieldRef_Link;keyForLink" name="SelectorSelect">
 		<Calculation><![CDATA[// SelectorSelect ( fieldRef_Link; keyForLink )
-// version 1.4, Daniel A. Shockley, Erik Shagdar, NYHTC
+// version 1.4.1, Daniel A. Shockley, Erik Shagdar, NYHTC
 
 /* 
 	This is used to set the local variable for selection/editing via Selector-Connector.
 
 
 HISTORY:
+	1.4.1 - 2018-09-04 ( dshockley ): When the list of keys is more than 1000 items, they CANNOT have spaces, since preserving spaces within keys only works for 1000 items or less. 
 	1.4 - 2018-08-24 ( dshockley, eshagdar ): when keyForLink is empty, at least pick a UUID (numeric) to avoid just reading/writing to whatever record was previously selected. This may create a junk record, but that is better. Some warning notice will be added to this function later (warning will set/check a global variable to avoid warning more than once per X minutes for a specific script).  
 	1.3 - 2017-11-08 ( dshockley, eshagdar ): added ability to pass in a string of the link fieldname instead of a direct reference, checking that the string is a valid field name to avoid code injection vulnerability. Updated attribution. 
 	1.2.1 - 2016-09-29 ( eshagdar ): updated documentation.
@@ -43,9 +44,15 @@ Let ( [
 	; varName = varPrefix & fieldNameWithoutLinkSuffix
 	; codeTemplate = "Let ( " & varName & " = __VALUES__; True ) " 
 	; charDQ = "\""
-	; keyValueOrList = If ( ValueCount ( keyForLink ) = 1 
+	; keyValueOrList = 
+		Case ( 
+			ValueCount ( keyForLink ) = 1 
 			; Quote ( keyForLink )
+			; 
+			ValueCount ( keyForLink ) ≤ 1000 
 			; "List ( " & charDQ & Substitute ( keyForLink ; [ "¶" ; charDQ & "; " & charDQ ] ) & charDQ & " )"
+			; 
+			Substitute ( Quote ( keyForLink ) ; [ " " ; "¶" ] )
 			)
 	; codeToSetVar = Substitute ( codeTemplate ; "__VALUES__" ; keyValueOrList )
 	; setVarToKey = Evaluate ( codeToSetVar )
