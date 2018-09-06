@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="52" functionArity="2" visible="True" parameters="theField;theList" name="SQL_FieldInList">
+	<CustomFunction id="52" functionArity="2" visible="True" parameters="fieldRef;theList" name="SQL_FieldInList">
 		<Calculation><![CDATA[// SQL_FieldInList ( fieldRef ; theList )
-// version: 1.2, Erik Shagdar, NYHTC
+// version: 1.2.1, Erik Shagdar, NYHTC
 
 /*
 	Generartes the entire IN clause. Values are properly quoted  based on the field type.
@@ -12,6 +12,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.2.1 - 2018-09-06 ( eshagdar ): updated parameters attribute ( XML ).
 	1.2 - 2018-02-20 ( eshagdar ): logic is inpired by ThisFieldInListSQL function which this function used to a wrapper for. This function now additionally handles date and timestamp fields ( instead of just text and number ).
 	1.1 - 2016-09-29 ( eshagdar ): added documentation.
 	1.0 - 201x-xx-xx ( dshockley ): first created - wrapper for ThisFieldInListSQL.

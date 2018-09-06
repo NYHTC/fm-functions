@@ -1,11 +1,12 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="61" functionArity="0" visible="True" parameters="" name="UUIDTimeDevice">
 		<Calculation><![CDATA[// UUIDTimeDevice ( )
-// version 1.1, Jeremy Bante, http://scr.im/jbante
+// version 1.1.1, Jeremy Bante, http://scr.im/jbante
 
 
 /*
 HISTORY:
+	1.1.1 - 2018-09-06 ( eshagdar ): removed FM12 code
 	1.1 - 2015-11-16 ( eshagdar ): made Fm12 backwards compatible. See ~now variable
 	1.0 - 2013-12-13 ( eshagdar ): taken from Jeremy Bante.
 
@@ -107,11 +108,7 @@ Case (
 			~lastTimestamp = GetValue ( $$~UUID.DATA ; 2 ) ;
 			~serial = GetAsNumber ( GetValue ( $$~UUID.DATA ; 3 ) ) ;
 
-			~now =
-				If ( GetAsNumber ( Get ( ApplicationVersion ) ) < 13;
-					Mod ( Get ( UTCmSecs ) ; 165208454460000 ) ;
-					Mod ( Evaluate ( "Get ( CurrentTimeUTCMilliseconds )" ) ; 165208454460000 )
-				);
+			~now =Mod ( Get ( CurrentTimeUTCMilliseconds ) ; 165208454460000 );
 			~session =
 				Case (
 					IsEmpty ( ~session ) ;	// new session
