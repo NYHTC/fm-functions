@@ -1,0 +1,41 @@
+<fmxmlsnippet type="FMObjectList">
+<CustomFunction id="265" functionArity="1" visible="True" parameters="someDate" name="DateNextWorkDay">
+<Calculation>
+<![CDATA[// DateNextWorkDay ( someDate )
+// version 1.0, Erik Shagdar
+
+/*
+	Takes a date and returns the next work day. Uses today's date if one is not specified.
+
+
+REQUIRES:
+	ValueOrDefault 
+
+
+HISTORY:
+	1.0 - 2018-09-19 ( eshagdar ): created
+*/
+
+
+Let ( [ 
+		_date = ValueOrDefault ( someDate ; Get ( CurrentDate ) ) ;
+		_day = DayOfWeek ( _date ) ;
+		_daysToAdd = Case ( 
+			/* date is Friday, so add 3 to make it Monday */
+			_day = 6 ;
+			3 ;
+
+			/* date is Saturday, so add 3 to make it Monday */
+			_day = 7 ;
+			2 ;
+
+			/* DEFAULT: add one day */
+			1
+		)
+	] ;
+
+	_date + _daysToAdd
+)]]>
+</Calculation>
+</CustomFunction>
+</fmxmlsnippet>
