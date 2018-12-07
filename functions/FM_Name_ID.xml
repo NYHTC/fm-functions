@@ -37,17 +37,17 @@ If ( _TLFSV = "T::F"
 		& "::"
 		& FM_Name_ID ( _Name_ID ; "F" ; _fileName ; _layoutName )
 	; Let ( [ 
-			  CR = Char ( 13 )  // carriage return
-			; tfSep = "::"  // table-field separator
-			; DQ = char ( 34 )  // doublequote
+			  CR = Char ( 13 )  /* carriage return */
+			; tfSep = "::"  /* table-field separator */
+			; DQ = char ( 34 )  /* doublequote */
  
-			// _fileName is optional - leave it blank and the design functions use current database.
+			/* _fileName is optional - leave it blank and the design functions use current database. */
 	
 			; _layoutName = 
 				If ( IsEmpty ( _layoutName ) 
 					; If ( PatternCount ( _Name_ID ; tfSep ) 
 						; GetValue ( Substitute ( _Name_ID ; tfSep ; CR ) ; 1 ) 
-						; ""  // with empty string, the design functions use the current layout name
+						; ""  /* with empty string, the design functions use the current layout name */
 						) 
 					; _layoutName 
 					) 
@@ -56,24 +56,25 @@ If ( _TLFSV = "T::F"
 					; FM_Name_ID ( _layoutName ; "T" ; _fileName ; "" ) 
 					; _layoutName 
 					) 
-			; _t = Left ( _TLFSV ; 1 )      // allow _TLFSV to be only the first character (T,L,F,S,V)
+			/* allow _TLFSV to be only the first character (T,L,F,S,V) */
+			; _t = Left ( _TLFSV ; 1 ) 
 			; _t = Case ( _t = "T" ; "Table" ; _t = "L" ; "Layout" ; _t = "F" ; "Field" ; _t = "S" ; "Script" ; _t = "V" ; "ValueList" ) 
 
-			// remove the repetition number:
+			/* remove the repetition number: */
 			; _Name_ID = 
 				If ( _t = "Field" and PatternCount ( _Name_ID ; "[" ) 
 					; Left ( _Name_ID ; Position ( _Name_ID ; "[" ; 10000 ; -1 ) - 1 ) 
 					; _Name_ID 
 					) 
 
-			// for fields, do not take TO: 
+			/* for fields, do not take TO: */
 			; _Name_ID = 
 				If ( _t = "Field" and PatternCount ( _Name_ID ; tfSep ) 
 					; GetValue ( Substitute ( _Name_ID ; tfSep ; CR ) ; 2 ) 
 					; _Name_ID 
 					) 
 
-			// for TO, do not take field name: 
+			/* for TO, do not take field name: */
 			; _Name_ID = 
 				If ( _t = "Table" and PatternCount ( _Name_ID ; tfSep ) 
 					; GetValue ( Substitute ( _Name_ID ; tfSep ; CR ) ; 1 ) 
@@ -87,26 +88,26 @@ If ( _TLFSV = "T::F"
 		];
 
 		If ( _Name_ID = GetAsNumber ( _Name_ID ) 
-			// ID -> Name		
+			/* ID -> Name */
 			; If ( not IsEmpty ( FilterValues ( _Name_ID ; _ids ) ) 
 				; GetValue ( 
 					_names 
 					; Let ( [ _text = _ids ; _item = _Name_ID ; _adj = CR & _text & CR ] ; PatternCount ( Left ( _adj ; Position ( _adj ; CR & _item & CR ; 1 ; 1 ) + 1 ) ; CR ))
 					)
-				; ""  // failed to find
+				; ""  /* failed to find */
 				) 
-			// Name -> ID
+			/* Name -> ID */
 			; If ( not IsEmpty ( FilterValues ( _Name_ID ; _names ) ) 
 				; GetValue ( 
 					_ids 
 					; Let ( [ _text = _names ; _item = _Name_ID ; _adj = CR & _text & CR ] ; PatternCount ( Left ( _adj ; Position ( _adj ; CR & _item & CR ; 1 ; 1 ) + 1 ) ; CR ))
 					)
-				; ""  // failed to find
+				; ""  /* failed to find */
 				)
 
-			)  // End If.
-		)  // End Let.
-	)  // End If.
+			)  /* End If. */
+		)  /* End Let. */
+	)  /* End If. */
 ]]>
 		</Calculation>
 	</CustomFunction>
