@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="221" functionArity="1" visible="True" parameters="options" name="ConcoursePortalRow_Filter">
 		<Calculation><![CDATA[// ConcoursePortalRow_Filter ( options )
-// version 1.2.2, Erik Shagdar, NYHTC
+// version 1.3, Erik Shagdar, NYHTC
 
 /*
 	Use this to avoid having to separately edit the filter on each portal sub-section. 
@@ -10,12 +10,11 @@
 REQUIRES:
 	_Access_Permission
 	_PrivSet_FullAccess
-	GetLayoutID
 	ValueIsInList
 
 
 HISTORY:
-	1.2.2 - 2018-12-07 ( eshagdar ): renamed TO.	
+	1.3 - 2018-07-10 ( eshagdar ): removed DbID/LayoutID test since that is now part of the TO-relationship.
 	1.2.1 - 2018-06-15 ( eshagdar ): full-access accounts ignore user group limitation.
 	1.2 - 2018-05-09 ( eshagdar ): Limit row by user group as well.
 	1.1 - 2018-04-30 ( eshagdar ): removed filtering by tabName; param renamed to options
@@ -25,16 +24,10 @@ HISTORY:
 
 
 Let ( [
-		dbID = ZZ.00MC_CONCOURSE::a00MC_DbID_Concourse ;
-		layoutID = ZZ.00MC_CONCOURSE::a00MC_LayoutID_Concourse ;
-		permissionIDList = ZZ.00MC_CONCOURSE::a00MC_PermissionEventID ;
-		accountNameList = ZZ.00MC_CONCOURSE::c00MC_GroupLogins
+		accountNameList = ZZ.00MC_CONCOURSE::c00MC_GroupLogins ;
+		permissionIDList = ZZ.00MC_CONCOURSE::a00MC_PermissionEventID
 	];
 
-	dbID = $$DbID
-	  and 
-	layoutID = GetLayoutID ( "" )
-	  and 
 	If ( _PrivSet_FullAccess ;
 		True ;
 		ValueIsInList ( accountNameList ; Get ( AccountName ) )
