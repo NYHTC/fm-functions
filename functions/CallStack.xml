@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="16" functionArity="1" visible="True" parameters="options" name="CallStack">
 		<Calculation><![CDATA[// CallStack ( options )
-// version 1.7, Shockley/Shagdar, NYHTC
+// version 1.8, Shagdar/Shockley, NYHTC
 
 /*
 	Append this to params when calling ANY script.
@@ -21,6 +21,7 @@ REQUIRES:
 	ValueOrDefault
 
 HISTORY:
+	1.8 - 2019-01-04 ( dshockley, eshagdar ): BUG-FIX: $CallingScriptName was not stacking. BUG-FIX: when using ListConcat, the colSep option must be specified as a dictionary. NEW: added initCallStack to default behavior so that variables get set if forgotten in script. 
 	1.7 - 2018-08-30 ( dshockley ): Added ability to return the $CallingScriptName and $CallingFileName variables, rather than accessing them directly, just call this function. 
 	1.6.1 - 2018-08-14 ( eshagdar ): updated documentation due to updating a required function call ( _DbID ).
 	1.6 - 2018-08-08 ( eshagdar ): cleaned up code - combined multiple if-tests into ValueOrDefault. ScriptSection always show if specified. Test for value of subroutine instead of existence of key. _DbID now returns the dbID instead of boolean, so use it.
@@ -64,7 +65,7 @@ Case (
 	options = "DisplayCurrent" ;
 	If ( IsEmpty ( $CallingFileName ) ;
 		DictGet ( CallStack ( "" ) ; "CallingFileName" ) & " - " & DictGet ( CallStack ( "" ) ; "CallingScriptName" ) ;
-		ListConcat (  $CallingFileName; $CallingScriptName ; " - " )
+		ListConcat (  $CallingFileName ; $CallingScriptName ; # ( "colSep" ; " - " ) )
 	) ;
 
 
@@ -89,6 +90,8 @@ Case (
 
 	/* Default: append current script/file to incoming callstack. */
 	Let ( [
+			initCallStack = If ( IsEmpty ( $CallingScriptName ) ; CallStack ( "SetScriptVars" ) ; True ) ;
+			
 			fileName = Get ( FileName ) ;
 			layoutName = Get ( LayoutName ) ;
 			scriptName = Get ( ScriptName ) ;
@@ -104,15 +107,23 @@ Case (
 				""
 			) ;
 
+			/* modify the scriptName to use Layout if no callingScript and to potentially append the scriptSection: */
+			scriptName = ValueOrDefault ( scriptName ; "[L] " & layoutName ) & scriptSection ; 
+
 			fileNameStack = List (
 				fileName ;
 				$CallingFileName
 			) ;
+
+			scriptNameStack = List ( 
+				scriptName ; 
+				$CallingScriptName
+				) ;
+
 			scriptIDStack = List (
 				dbID & "-" & scriptID ;
 				$CallingIDStack
-			) ;
-			scriptNameStack = ValueOrDefault ( scriptName ; "[L] " & layoutName ) & scriptSection
+			) 
 		];
 
 			# ( "CallingFileName" ; fileNameStack )
