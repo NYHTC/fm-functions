@@ -3,7 +3,7 @@
 <CustomFunction id="502" functionArity="2" visible="True" parameters="EventNameList;EventKeyList" name="_Access_Permission">
 <Calculation>
 <![CDATA[// _Access_Permission ( EventNameList, EventKeyList )
-// version 1.2.2, Erik Shagdar, NYHTC
+// version 1.3, Erik Shagdar, NYHTC
 
 /*
 	Determine if the user has a permission for a particular action. Full-Access and developer accounts always have access.
@@ -22,6 +22,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.3 - 2019-03-14 ( eshagdar ): devevelops do not automatically have access - it is determined by the checkbox on the permission event, and checked against in the status. clean up code formatting/whitespace.
 	1.2.2 - 2018-05-08 ( eshagdar ): False if BOTH lists are empty, not if either one is.
 	1.2.1 - 2018-04-27 ( eshagdar ): updated 'Requires' section of the documentation.
 	1.2 - 2018-03-23 ( eshagdar ): 'EventName' param renamed to 'EventNameList'. added 'EventKeyList' param. params can be return-delimited lists.
@@ -31,8 +32,8 @@ HISTORY:
 
 
 Case ( 
-	/* full-access / devs are alwasy allowed */
-	_PrivSet_FullAccess or _PrivSet_Developer ;
+	/* full-access */
+	_PrivSet_FullAccess ;
 	True ;
 
 	/* name / ID must be specified */
@@ -41,7 +42,6 @@ Case (
 
 	/* DEFAULT: check if current user is in the list */
 	Let ( [
-
 			numNames = ValueCount ( EventNameList ) ;
 			numKeys = ValueCount ( EventKeyList ) ;
 			accountName = Get ( AccountName ) ;
@@ -51,12 +51,14 @@ Case (
 			whereCriteria = Case (
 				/* one or more NAMES specified */
 				not IsEmpty ( EventNameList ) ;
-				SQL_Where ( Utility_PERMISSION::c00PJ_FileName__UPPER ; "=" ; Upper ( dbName ) ) 
-					& "¶ AND " 
-					& If ( numNames = 1 ;
+				List ( 
+					SQL_Where ( Utility_PERMISSION::c00PJ_FileName__UPPER ; "=" ; Upper ( dbName ) ) ;
+					" AND " ;
+					If ( numNames = 1 ;
 						SQL_Where ( Utility_PERMISSION::c00PJ_EventName__UPPER ; "=" ; Upper ( EventNameList ) ) ;
 						SQL_FieldInList ( Utility_PERMISSION::c00PJ_EventName__UPPER ; Upper ( EventNameList ) )
-					);
+					)
+				) ;
 
 
 				/* one or more KEYS specified */
@@ -68,40 +70,31 @@ Case (
 			) ;
 
 
-			sqlQuery = 
-			"SELECT " 
-				& SQL_Field ( Utility_PERMISSION::c00PJ_Status ) 
-				& ", " & SQL_Field ( Utility_PERMISSION::b00PJ_DateFrom ) 
-				& ", " & SQL_Field ( Utility_PERMISSION::b00PJ_DateTo ) 
-				& ¶
+			sqlQuery = List (
+				"SELECT " ;
+					SQL_Field ( Utility_PERMISSION::c00PJ_Status ) ;
+					", " & SQL_Field ( Utility_PERMISSION::b00PJ_DateFrom ) ;
+					", " & SQL_Field ( Utility_PERMISSION::b00PJ_DateTo ) ;
 
-			& " FROM " 
-				& SQL_Table ( Utility_PERMISSION::zAuto1 ) 
-				& ¶ 
+				" FROM " ;
+					SQL_Table ( Utility_PERMISSION::zAuto1 ) ;
 
-			& " WHERE " 
-				& SQL_Where ( Utility_PERMISSION::b00PJ_AccountName ; "=" ; Upper ( accountName ) )
-				& ¶ 
+				" WHERE " ;
+					SQL_Where ( Utility_PERMISSION::b00PJ_AccountName ; "=" ; Upper ( accountName ) ) ;
 
-			& " AND " 
-				& whereCriteria
-				& ¶ 
+				" AND " ;
+					whereCriteria ;
 
+				" ORDER BY " ;
+					SQL_Field ( Utility_PERMISSION::zModTStmp ) ;
+					" DESC" ;
 
-			& " ORDER BY " 
-				& SQL_Field ( Utility_PERMISSION::zModTStmp ) 
-				& " DESC"
-				& ¶ 
-
-			& " FETCH FIRST 1 ROWS ONLY" 
-			;
-
-
-			sqlResult =HTC_ExecuteFileSQL ( sqlQuery; ""; ¶; ¶ ) ;
-			sqlResult = If ( sqlResult = "?"; 
-				"" ; 
-				sqlResult 
+				" FETCH FIRST 1 ROWS ONLY" ;
 			) ;
+
+
+			sqlResult =HTC_ExecuteFileSQL ( sqlQuery ; "" ; Char ( 13 ) ; Char ( 13 ) ) ;
+			sqlResult = If ( sqlResult = "?" ; "" ; sqlResult ) ;
 
 
 			isStatusAllowed = GetValue ( sqlResult ; 1 ) ;
