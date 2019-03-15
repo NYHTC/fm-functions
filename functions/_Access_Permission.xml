@@ -6,7 +6,7 @@
 // version 1.3.1, Erik Shagdar, NYHTC
 
 /*
-	Determine if the user/developer has a permission for a particular action. Full-Access accounts always have access.
+	Determine if the user has a permission for a particular action. Full-Access and developer accounts always have access.
 	Names take priority over keys. At least ONE of the params must have a value. The params can be return-delimited list.
 
 
@@ -43,12 +43,12 @@ Case (
 
 	/* developer */
 	_PrivSet_Developer ;
-	let ( [
+	Let ( [
 			numNames = ValueCount ( EventNameList ) ;
 			numKeys = ValueCount ( EventKeyList ) ;
 
 
-			whereCriteria = case (
+			whereCriteria = Case (
 				/* one or more NAMES specified */
 				not IsEmpty ( EventNameList ) ;
 				List ( 
@@ -71,20 +71,16 @@ Case (
 				""
 			) ;
 
-
 			sqlQuery = List ( 
 				"SELECT " ;
 					SQL_Field ( Utility_PERMISSION_EVENT::b00PE_AllowDeveloper__b ) ;
+
 				" FROM " ;
 					SQL_Table ( Utility_PERMISSION_EVENT::zAuto1 ) ;
-				" WHERE " ;
-					whereCriteria ;
-				" ORDER BY " ;
-					SQL_Field ( Utility_PERMISSION_EVENT::b00PE_AllowDeveloper__b ) ;
-					" DESC" ;
-				" FETCH FIRST 1 ROWS ONLY"
-			) ;
 
+				" WHERE " ;
+					whereCriteria
+			) ;
 
 			sqlResult =HTC_ExecuteFileSQL ( sqlQuery ; "" ; Char ( 13 ) ; Char ( 13 ) ) ;
 			sqlResult = If ( sqlResult = "?" ; "" ; sqlResult )
@@ -93,6 +89,7 @@ Case (
 		sqlResult
 	) ;
 	
+
 
 	/* DEFAULT: check if current useris in the list */
 	Let ( [
@@ -129,15 +126,20 @@ Case (
 					SQL_Field ( Utility_PERMISSION::c00PJ_Status ) ;
 					", " & SQL_Field ( Utility_PERMISSION::b00PJ_DateFrom ) ;
 					", " & SQL_Field ( Utility_PERMISSION::b00PJ_DateTo ) ;
+
 				" FROM " ;
 					SQL_Table ( Utility_PERMISSION::zAuto1 ) ;
+
 				" WHERE " ;
 					SQL_Where ( Utility_PERMISSION::b00PJ_AccountName ; "=" ; Upper ( Get ( AccountName ) ) ) ;
+
 				" AND " ;
 					whereCriteria ;
+
 				" ORDER BY " ;
 					SQL_Field ( Utility_PERMISSION::zModTStmp ) ;
 					" DESC" ;
+
 				" FETCH FIRST 1 ROWS ONLY" ;
 			) ;
 
