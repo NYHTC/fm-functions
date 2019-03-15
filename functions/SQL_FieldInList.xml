@@ -1,17 +1,19 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="52" functionArity="2" visible="True" parameters="fieldRef;theList" name="SQL_FieldInList">
 		<Calculation><![CDATA[// SQL_FieldInList ( fieldRef ; theList )
-// version: 1.2.1, Erik Shagdar, NYHTC
+// version: 1.2.2, Erik Shagdar, NYHTC
 
 /*
-	Generartes the entire IN clause. Values are properly quoted  based on the field type.
+	Generates the entire IN clause. Values are properly quoted based on the field type.
 
 
 REQUIRES:
+	SQL_EscapeList
 	SQL_Field
 
 
 HISTORY:
+	1.2.2 - 2019-03-14 ( dshockley ): Replaced pilcrow with Char ( 13 ). Remove FileName call (not needed). Uses SQL_EscapeList for text, so that internal single-quotes are handled properly. 
 	1.2.1 - 2018-09-06 ( eshagdar ): updated parameters attribute ( XML ).
 	1.2 - 2018-02-20 ( eshagdar ): logic is inpired by ThisFieldInListSQL function which this function used to a wrapper for. This function now additionally handles date and timestamp fields ( instead of just text and number ).
 	1.1 - 2016-09-29 ( eshagdar ): added documentation.
@@ -22,11 +24,10 @@ HISTORY:
 Let ( [ 
 		SQ = "'" ;
 
-		fieldType = FieldType ( Get ( FileName ) ; GetFieldName ( fieldRef ) ) ;
+		fieldType = FieldType ( "" ; GetFieldName ( fieldRef ) ) ;
 
+		/* prefix needed for dates/times: */
 		valPrefix = Case (
-			Position ( fieldType ; "text" ; 1 ; 1 ) ;
-			SQ ;
 
 			Position ( fieldType ; "date" ; 1 ; 1 ) ;
 			"DATE " & SQ ;
@@ -38,7 +39,11 @@ Let ( [
 			""
 		) ;
 		valSuffix = If ( IsEmpty ( valPrefix ) ; "" ; SQ ) ;
-		formattedList = valPrefix & Substitute ( theList ; [ ¶ ; valSuffix & "," & valPrefix ] ) & valSuffix
+		formattedList = If ( Position ( fieldType ; "text" ; 1 ; 1 ) ;
+			SQL_EscapeList ( theList ) ;
+			valPrefix & Substitute ( theList ; [ Char ( 13 ) ; valSuffix & "," & valPrefix ] ) & valSuffix
+			)
+		
 	] ; 
 
 	SQL_Field ( fieldRef ) & " IN ( " & formattedList & " )"
