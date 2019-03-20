@@ -1,28 +1,36 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="286" functionArity="1" visible="True" parameters="options" name="ConcoursePortalRow_Params">
 		<Calculation><![CDATA[// ConcoursePortalRow_Params ( options )
-// version 1.0, Erik Shagdar, NYHTC
+// version 1.1, Erik Shagdar, NYHTC
 
 /*
-	Params for the portal row.
+	Parameters for portal row on the Concourse layout.
+
+
+REQUIRES:
+	#
+	DictGet
+	CallStack
 
 
 HISTORY:
-	1.0 - 2018-04-30 ( eshagdar ): First Created.
+	1.1 - 2019-03-20 ( eshagdar ): added ScriptDbName.
+	1.0 - 2018-04-30 ( eshagdar ): first Created.
 */
 
 
 
 Let ( [
-		extraParams = Utility_CONCOURSE::b00MC_ScriptParams ;
+		extraParams = ZZ.00MC_CONCOURSE::b00MC_ScriptParams ;
 		evalParams = If ( IsEmpty ( extraParams ) ;
 			"" ;
 			Evaluate ( extraParams )
 		)
 	];
 
-		# ( "LayoutID"; Utility_CONCOURSE::a00MC_LayoutID_Action )
-	&	# ( "ScriptID"; Utility_CONCOURSE::a00MC_ScriptID )
+		# ( "LayoutID"; ZZ.00MC_CONCOURSE::a00MC_LayoutID_Action )
+	&	# ( "ScriptDbName"; DictGet ( _ext_00ZZ_PREFS::gDatabase_Dict ; ZZ.00MC_CONCOURSE::a00MC_DbID_Action ) )
+	&	# ( "ScriptID"; ZZ.00MC_CONCOURSE::a00MC_ScriptID )
 	&	# ( "ScriptParams"; evalParams )
 
 	&	CallStack ( "" )
