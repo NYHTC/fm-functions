@@ -1,0 +1,17 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="547" functionArity="2" visible="True" parameters="stringToTest;stringIfTestIsEmpty" name="WhenEmpty">
+		<Calculation><![CDATA[// WhenEmpty ( stringToTest ; stringIfTestIsEmpty )
+// version 1.0, Daniel A. Shockley
+
+/*
+	Returns stringIfTestIsEmpty if stringToTest is EMPTY. 
+
+
+HISTORY:
+	1.0 - 2019-03-29 ( dshockley ): First created. 
+*/
+
+
+If ( IsEmpty ( stringToTest ) ; stringIfTestIsEmpty ; "" )]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
