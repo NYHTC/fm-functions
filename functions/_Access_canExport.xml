@@ -8,9 +8,7 @@
 
 
 REQUIRES:
-	_PrivSet_Developer
-	_PrivSet_FullAccess
-	ValueIsInList
+	_Access_Permission
 
 
 HISTORY:
