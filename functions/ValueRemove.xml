@@ -1,42 +1,43 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="63" functionArity="2" visible="True" parameters="valueList;itemValue" name="ValueRemove">
-		<Calculation><![CDATA[// ValueRemove ( valueList; itemValue )
-// version 1.2, Daniel Shockley, NYHTC
+		<Calculation><![CDATA[// ValueRemove ( valueList ; itemValue )
+// version 1.3, Erik Shagdar
 
 /*
-	Removes every occurrence of itemValue from valueList. 
-
+	Removes every occurrence of itemValue from valueList. RECURSIVE. 
 
 HISTORY: 
-	1.2 - 2016-04-21 ( eshagdar ): fixed memory leak bug if both the list and value are empty.
-	1.1 - 2015-10-16 ( eshagdar ): fixed bug where consecutive items were not removed.
-	1.0 - xxxx-xx-xx ( dshockley ): first created.
+	1.3 - 2019-03-29 ( dshockley ): Changed pilcrow character into Char ( 13 ). Reformatted. 
+	1.2 - 2016-04-21 ( eshagdar ): Fixed memory leak bug if both the list and value are empty. 
+	1.1 - 2015-10-16 ( eshagdar ): Fixed bug where consecutive items were not removed. 
+	1.0 - xxxx-xx-xx ( dshockley ): First created
 */
 
 
-If ( IsEmpty ( valueList ) and IsEmpty ( itemValue );
-	"";
-	Let ( [
-			cleanedListPadded = 
+
+If ( IsEmpty ( valueList ) and IsEmpty ( itemValue )
+	; ""
+	; Let ( [
+			  CR = Char ( 13 )
+			; cleanedListPadded = 
 				Substitute ( 
-					"¶" & valueList & "¶";  
-					[ "¶" & itemValue & "¶"; "¶" ]
-				);
-			cleanedList = 
+					CR & valueList & CR 
+					; [ CR & itemValue & CR ; CR ]
+					)
+			; cleanedList = 
 				Middle ( 
-					cleanedListPadded; 
-				2; 
-				Length ( cleanedListPadded ) - 2
-			)
-				
+					cleanedListPadded 
+					; 2  
+					; Length ( cleanedListPadded ) - 2
+					)
 		]; 
 
-		If ( Position ( ¶ & cleanedList & ¶; ¶ & itemValue & ¶; 1; 1 );
-			ValueRemove ( cleanedList; itemValue );
-			cleanedList
+			If ( Position ( CR & cleanedList & CR ; CR & itemValue & CR ; 1 ; 1 ) 
+				; ValueRemove ( cleanedList ; itemValue ) 
+				; cleanedList
+				)
 		)
-	)
-)]]>
+	)]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
