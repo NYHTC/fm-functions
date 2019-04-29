@@ -8,54 +8,18 @@
 
 
 REQUIRES:
+	_PrivSet_Developer
+	_PrivSet_FullAccess
 	ValueIsInList
 
 
 HISTORY:
-	2.0 - 2019-04-29 ( eshagdar ): query the permission table
+	2.0 - 2018-11-05 ( dbeer ):  updated to use _access_permission
+	1.1 - 2017-07-14 ( eshagdar ): developer/fullAccess privSets moved into _PrivSet_Developer function
 	1.0 - 2017-05-25 ( eshagdar ): first created.
 */
 
-
-Let ( [
-		rowSep = ";" ;
-		colSep = Char ( 13 ) ;
-
-		event = Upper ( "CanExport" ) ;
-		dbName = Upper ( Get ( FileName ) ) ;
-		user = Upper ( Get ( AccountName ) ) ;
-
-		isAllow_Full = _PrivSet_FullAccess ;
-		isAllow_Dev = If ( _PrivSet_Developer ;
-			HTC_ExecuteFileSQL ( 
-				List ( 
-					"SELECT " & SQL_Field ( Utility_PERMISSION_EVENT::b00PE_AllowDeveloper__b ) ;
-					" FROM " & SQL_Table ( Utility_PERMISSION_EVENT::zAuto1 ) ;
-					" WHERE " & SQL_Where ( Utility_PERMISSION_EVENT::c00PE_EventName__UPPER ; "=" ; event ) ;
-					" AND " & SQL_Where ( Utility_PERMISSION_EVENT::c00PE_FileName__UPPER ; "=" ; dbName ) ;
-				); 
-				_ext_00ZZ_PREFS::gDatabase_MainName ;
-				colSep ;
-				rowSep
-			) ;
-			False
-		) ;
-		isAllow_User = HTC_ExecuteFileSQL ( 
-			List ( 
-				"SELECT " & SQL_Field ( Utility_PERMISSION::c00PJ_Status__b ) ;
-				" FROM " & SQL_Table ( Utility_PERMISSION::zAuto1 ) ;
-				" WHERE " & SQL_Where ( Utility_PERMISSION::b00PJ_AccountName__UPPER__ae ; "=" ; user ) ;
-				" AND " & SQL_Where ( Utility_PERMISSION::c00PJ_EventName__UPPER ; "=" ; event ) ;
-				" AND " & SQL_Where ( Utility_PERMISSION::c00PJ_FileName__UPPER ; "=" ; Upper ( Get ( FileName ) ) ) ;
-			); 
-			_ext_00ZZ_PREFS::gDatabase_MainName ;
-			colSep ;
-			rowSep
-		)
-	] ;
-
-	isAllow_Full or isAllow_Dev or isAllow_User
-)]]>
+_Access_Permission ( "CanExport" ; "" )]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
