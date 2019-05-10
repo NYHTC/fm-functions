@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="4" functionArity="0" visible="True" parameters="" name="_Access_SyncServerPro_isActive">
 		<Calculation><![CDATA[// _Access_SyncServerPro_isActive
-// version 1.4.2, NYHTC
+// version 1.5, NYHTC
 
 /*   
 	Returns if SyncServerPro is turned on for the current table by querying the MT_MetaTable table in a00_TimesSq.
@@ -17,6 +17,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.5 - 2019-05-10 ( dshockley ): actually get the current table's BaseFileName instead of assuming it is THIS file (so that this works for external TOs). 
 	1.4.2 - 2017-11-30 ( eshagdar ): added requirements doc.
 	1.4.1 - 2016-11-18 ( eshagdar ): renamed global variable from '__FilePrefs__' to '__FilePrefs_byTable__'. added comment
 	1.4 - 2016-11-17 ( eshagdar ): Returns ( and caches into a SFR-dict ) whether or not the current table is audited by SyncServer.
@@ -36,6 +37,19 @@ If ( DictContains ( $$__FilePrefs_byTable__; "isAudit_" & Get ( LayoutTableName 
 			_sourceFieldDb = FM_Name_ID ( _sourceTableID & "::15" ; "F" ; _sourceDbName ; "" );    /* MT_META_TABLE::c00MT_DbName */
 			_sourceFieldTable = FM_Name_ID ( _sourceTableID & "::3" ; "F" ; _sourceDbName ; "" );    /* MT_META_TABLE::b00MT_TableName */
 			_sourceFieldAudit = FM_Name_ID ( _sourceTableID & "::42" ; "F" ; _sourceDbName ; "" );    /* MT_META_TABLE::c00MT_isSyncServer_Sync__b */
+			
+			currentTableBaseFileName = ExecuteSQL ( 
+				"SELECT BaseFileName FROM FileMaker_Tables WHERE TableName = ?" ;
+				Char ( 9 ) ; 
+				Char ( 13 ) ; 
+				Get ( LayoutTableName )  
+			) ;
+			hostPrefix = " (" ; 
+			currentTableBaseFileName = If ( Position ( currentTableBaseFileName ; hostPrefix ; 1 ; 1 ) ;
+				TextBefore ( currentTableBaseFileName ; hostPrefix ) ;
+				currentTableBaseFileName
+			) ;
+
 
 			isTableAudited = 
 				HTC_ExecuteFileSQL ( 
@@ -46,7 +60,7 @@ If ( DictContains ( $$__FilePrefs_byTable__; "isAudit_" & Get ( LayoutTableName 
 							SQL_EscapeString ( Get ( LayoutTableName ) ) &
 						" AND " & _sourceFieldDb & 
 							" = " & 
-							SQL_EscapeString ( Get ( FileName ) );
+							SQL_EscapeString ( currentTableBaseFileName );
 	 				_sourceDbName ; 
 					";" ; 
 					¶ 
