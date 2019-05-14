@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="19" functionArity="1" visible="True" parameters="text" name="URLDecode">
 		<Calculation><![CDATA[// URLDecode ( text )
-// version 1.0
+// version 1.1
 
 /*
 	Translates URL-encoded text back to regular characters. Reverse of the built-in function GetAsURLEncoded ( text ).
@@ -13,6 +13,7 @@ NOTE:
 
 
 HISTORY:
+	1.1 - 2019-05-13 ( dshockley ): Converted to use Char instead of literal character strings. 
 	1.0 - 2016-11-08 ( eshagdar ): added formatting.
 	0.0 - 201x-xx-xx ( xxxxx ): created
 */
@@ -20,197 +21,191 @@ HISTORY:
 
 Substitute ( 
 	text 
-	; [ "%09" ; char ( 9 ) ]    /* horizontal tab */
-	; [ "%0A" ; char ( 10 ) ]    /* line feed */
-	; [ "%0B" ; char ( 11 ) ]    /* vertical tab */
-	; [ "%0C" ; char ( 12 ) ]    /* form feed */
-	; [ "%0D" ; char ( 13 ) ]    /* carriage return */
+	; [ "%09" ; Char ( 9 ) ]    /* horizontal tab */
+	; [ "%0A" ; Char ( 10 ) ]    /* line feed */
+	; [ "%0B" ; Char ( 11 ) ]    /* vertical tab */
+	; [ "%0C" ; Char ( 12 ) ]    /* form feed */
+	; [ "%0D" ; Char ( 13 ) ]    /* carriage return */
 
-	; [ "%1E" ; char ( 30 ) ]    /* record separator */
-	; [ "%1F" ; char ( 31 ) ]    /* unit separator */
+	; [ "%1E" ; Char ( 30 ) ]    /* record separator */
+	; [ "%1F" ; Char ( 31 ) ]    /* unit separator */
 
-	; [ "%20" ; " " ]    /* space */
-	; [ "%21" ; "!" ] 
-	; [ "%22" ; "\"" ] 
-	; [ "%23" ; "#" ] 
-	; [ "%24" ; "$" ] 
-	; [ "%25" ; "%" ] 
-	; [ "%26" ; "&" ] 
-	; [ "%27" ; "'" ] 
-	; [ "%28" ; "(" ] 
-	; [ "%29" ; ")" ] 
-	; [ "%2A" ; "*" ] 
-	; [ "%2B" ; "+" ] 
-	; [ "%2C" ; "," ] 
-	; [ "%2D" ; "-" ] 
-	; [ "%2E" ; "." ] 
-	; [ "%2F" ; "/" ] 
+	; [ "%20" ; Char ( 32 ) ]    /* space */
+	; [ "%21" ; Char ( 33 ) ]    /* exclamation point */ 
+	; [ "%22" ; Char ( 34 ) ]    /* straight double quote */ 
+	; [ "%23" ; Char ( 35 ) ]    /* pound/hash */ 
+	; [ "%24" ; Char ( 36 ) ]    /* US currency (dollar) */ 
+	; [ "%25" ; Char ( 37 ) ]    /* percent */ 
+	; [ "%26" ; Char ( 38 ) ]    /* ampersand */ 
+	; [ "%27" ; Char ( 39 ) ]    /* straight single quote */ 
+	; [ "%28" ; Char ( 40 ) ]    /* open round parenthesis */ 
+	; [ "%29" ; Char ( 41 ) ]    /* close round parenthesis */ 
+	; [ "%2A" ; Char ( 42 ) ]    /* asterisk */ 
+	; [ "%2B" ; Char ( 43 ) ]    /* plus */ 
+	; [ "%2C" ; Char ( 44 ) ]    /* comma */ 
+	; [ "%2D" ; Char ( 45 ) ]    /* dash/minus */ 
+	; [ "%2E" ; Char ( 46 ) ]    /* period */ 
+	; [ "%2F" ; Char ( 47 ) ]    /* forward slash */ 
 
-	// 30 - 39 are the base-ten numbers
+	// "%30" - "%39" (chars 48-57) are the hex representations of the base-ten numeric digits
 
-	; [ "%3A" ; ":" ] 
-	; [ "%3B" ; ";" ] 
-	; [ "%3C" ; "<" ] 
-	; [ "%3D" ; "=" ] 
-	; [ "%3E" ; ">" ] 
-	; [ "%3F" ; "?" ] 
+	; [ "%3A" ; Char ( 58 ) ]    /* colon */ 
+	; [ "%3B" ; Char ( 59 ) ]    /* semi-colon */ 
+	; [ "%3C" ; Char ( 60 ) ]    /* less-than */ 
+	; [ "%3D" ; Char ( 61 ) ]    /* equals */ 
+	; [ "%3E" ; Char ( 62 ) ]    /* greater-than */ 
+	; [ "%3F" ; Char ( 63 ) ]    /* question mark */ 
+	; [ "%40" ; Char ( 64 ) ]    /* at sign */ 
 
-	; [ "%40" ; "@" ] 
+	// "%41" - "%5A" (chars 65-90) are the uppercase alphabet
 
-	// 41 - 5A are the uppercase alphabet
+	; [ "%5B" ; Char ( 91 ) ]    /* open square bracket */ 
+	; [ "%5C" ; Char ( 92 ) ]    /* backslash */ 
+	; [ "%5D" ; Char ( 93 ) ]    /* close square bracket */ 
+	; [ "%5E" ; Char ( 94 ) ]    /* caret/circumflex */ 
+	; [ "%5F" ; Char ( 95 ) ]    /* underscore */ 
+	; [ "%60" ; Char ( 96 ) ]    /* backtick/grave accent */ 
 
-	; [ "%5B" ; "[" ] 
-	; [ "%5C" ; "\\" ] 
-	; [ "%5D" ; "]" ] 
-	; [ "%5E" ; "^" ] 
-	; [ "%5F" ; "_" ] 
+	// "%61" - "%7A" (chars 97-122) are the lowercase alphabet
 
-	; [ "%60" ; "`" ] 
+	; [ "%7B" ; Char ( 123 ) ]    /* Left Curly Bracket */ 
+	; [ "%7C" ; Char ( 124 ) ]    /* Vertical Line / Vertical Pipe */ 
+	; [ "%7D" ; Char ( 125 ) ]    /* Right Curly Bracket */ 
+	; [ "%7E" ; Char ( 126 ) ]    /* Tilde */ 
+	; [ "%7F" ; Char ( 32 ) ]    /* technically DEL, so represent with SPACE */ 
 
-	// 61 - 7A are the lowercase alphabet
+	; [ "%80" ; Char ( 8364 ) ]    /* Euro currency */
+	; [ "%81" ; Char ( 32 ) ]        /* NOT DEFINED, so use SPACE */ 
+	; [ "%82" ; Char ( 8218 ) ]    /* Single Low-9 Quotation Mark */
+	; [ "%83" ; Char ( 402 ) ]    /* Latin Small Letter F With Hook */
+	; [ "%84" ; Char ( 8222 ) ]    /* Double Low-9 Quotation Mark */
+	; [ "%85" ; Char ( 8230 ) ]    /* Horizontal Ellipsis */ 
+	; [ "%86" ; Char ( 8224 ) ]    /* Dagger */
+	; [ "%87" ; Char ( 8225 ) ]    /* Double Dagger */
+	; [ "%88" ; Char ( 710 ) ]    /* Modifier Letter Circumflex Accent */ 
+	; [ "%89" ; Char ( 8240 ) ]    /* Per Mille Sign */ 
+	; [ "%8A" ; Char ( 352 ) ]    /* Latin Capital Letter S With Caron */
+	; [ "%8B" ; Char ( 8249 ) ]    /* Single Left-Pointing Angle Quotation Mark */
+	; [ "%8C" ; Char ( 338 ) ]    /* Latin Capital Ligature Oe */ 
+	; [ "%8D" ; Char ( 32 ) ]    /* NOT DEFINED, so use SPACE */ 
+	; [ "%8E" ; Char ( 381 ) ]    /* Latin Capital Letter Z With Caron */ 
+	; [ "%8F" ; Char ( 32 ) ]    /* NOT DEFINED, so use SPACE */ 
 
-	; [ "%7B" ; "{" ] 
-	; [ "%7C" ; "|" ] 
-	; [ "%7D" ; "}" ] 
-	; [ "%7E" ; "~" ] 
-	; [ "%7F" ; " " ] 
+	; [ "%90" ; Char ( 32 ) ]    /* NOT DEFINED, so use SPACE */ 
+	; [ "%91" ; Char ( 8216 ) ]    /* Left Single Quotation Mark */ 
+	; [ "%92" ; Char ( 8217 ) ]    /* Right Single Quotation Mark */ 
+	; [ "%93" ; Char ( 8220 ) ]    /* Left Double Quotation Mark */ 
+	; [ "%94" ; Char ( 8221 ) ]    /* Right Double Quotation Mark */ 
+	; [ "%95" ; Char ( 8226 ) ]    /* Bullet */ 
+	; [ "%96" ; Char ( 8211 ) ]    /* En Dash */ 
+	; [ "%97" ; Char ( 8212 ) ]    /* Em Dash */ 
+	; [ "%98" ; Char ( 732 ) ]    /* Small Tilde */ 
+	; [ "%99" ; Char ( 8482 ) ]    /* Trade Mark Sign */ 
+	; [ "%9A" ; Char ( 353 ) ]    /* Latin Small Letter S With Caron */ 
+	; [ "%9B" ; Char ( 8250 ) ]    /* Single Right-Pointing Angle Quotation Mark */ 
+	; [ "%9C" ; Char ( 339 ) ]    /* Latin Small Ligature Oe */ 
+	; [ "%9D" ; Char ( 32 ) ]    /* NOT DEFINED, so use SPACE */ 
+	; [ "%9E" ; Char ( 382 ) ]    /* Latin Small Letter Z With Caron */ 
+	; [ "%9F" ; Char ( 376 ) ]    /* Latin Capital Letter Y With Diaeresis */ 
 
-	; [ "%80" ; "€" ] 
-	; [ "%81" ; " " ] 
-	; [ "%82" ; "‚" ] 
-	; [ "%83" ; "ƒ" ] 
-	; [ "%84" ; "\„" ] 
-	; [ "%85" ; "…" ] 
-	; [ "%86" ; "†" ] 
-	; [ "%87" ; "‡" ] 
-	; [ "%88" ; "ˆ" ] 
-	; [ "%89" ; "‰" ] 
-	; [ "%8A" ; "Š" ] 
-	; [ "%8B" ; "‹" ] 
-	; [ "%8C" ; "Œ" ] 
-	; [ "%8D" ; " " ] 
-	; [ "%8E" ; "Ž" ] 
-	; [ "%8F" ; " " ] 
-
-	; [ "%90" ; " " ] 
-	; [ "%91" ; "‘" ] 
-	; [ "%92" ; "’" ] 
-	; [ "%93" ; "\“" ] 
-	; [ "%94" ; "\”" ] 
-	; [ "%95" ; "•" ] 
-	; [ "%96" ; "–" ] 
-	; [ "%97" ; "—" ] 
-	; [ "%98" ; "˜" ] 
-	; [ "%99" ; "™" ] 
-	; [ "%9A" ; "š" ] 
-	; [ "%9B" ; "›" ] 
-	; [ "%9C" ; "œ" ] 
-	; [ "%9D" ; " " ] 
-	; [ "%9E" ; "ž" ] 
-	; [ "%9F" ; "Ÿ" ] 
-
-	; [ "%A0" ; " " ] 
-	; [ "%A1" ; "¡" ] 
-	; [ "%A2" ; "¢" ] 
-	; [ "%A3" ; "£" ] 
-	; [ "%A4" ; "¤" ] 
-	; [ "%A5" ; "¥" ] 
-	; [ "%A6" ; "|" ] 
-	; [ "%A7" ; "§" ] 
-	; [ "%A8" ; "¨" ] 
-	; [ "%A9" ; "©" ] 
-	; [ "%AA" ; "ª" ] 
-	; [ "%AB" ; "«" ] 
-	; [ "%AC" ; "¬" ] 
-	; [ "%AD" ; "¯" ] 
-	; [ "%AE" ; "®" ] 
-	; [ "%AF" ; "¯" ] 
-
-	; [ "%B0" ; "°" ] 
-	; [ "%B1" ; "±" ] 
-	; [ "%B2" ; "²" ] 
-	; [ "%B3" ; "³" ] 
-	; [ "%B4" ; "´" ] 
-	; [ "%B5" ; "µ" ] 
-	; [ "%B6" ; "¶" ] 
-	; [ "%B7" ; "·" ] 
-	; [ "%B8" ; "¸" ] 
-	; [ "%B9" ; "¹" ] 
-	; [ "%BA" ; "º" ] 
-	; [ "%BB" ; "»" ] 
-	; [ "%BC" ; "¼" ] 
-	; [ "%BD" ; "½" ] 
-	; [ "%BE" ; "¾" ] 
-	; [ "%BF" ; "¿" ] 
-
-	; [ "%C0" ; "À" ] 
-	; [ "%C1" ; "Á" ] 
-	; [ "%C2" ; "Â" ] 
-	; [ "%C3" ; "Ã" ] 
-	; [ "%C4" ; "Ä" ] 
-	; [ "%C5" ; "Å" ] 
-	; [ "%C6" ; "Æ" ] 
-	; [ "%C7" ; "Ç" ] 
-	; [ "%C8" ; "È" ] 
-	; [ "%C9" ; "É" ] 
-	; [ "%CA" ; "Ê" ] 
-	; [ "%CB" ; "Ë" ] 
-	; [ "%CC" ; "Ì" ] 
-	; [ "%CD" ; "Í" ] 
-	; [ "%CE" ; "Î" ] 
-	; [ "%CF" ; "Ï" ] 
-
-	; [ "%D0" ; "Ð" ] 
-	; [ "%D1" ; "Ñ" ] 
-	; [ "%D2" ; "Ò" ] 
-	; [ "%D3" ; "Ó" ] 
-	; [ "%D4" ; "Ô" ] 
-	; [ "%D5" ; "Õ" ] 
-	; [ "%D6" ; "Ö" ] 
-	; [ "%D7" ; "×" ] 
-	; [ "%D8" ; "Ø" ] 
-	; [ "%D9" ; "Ù" ] 
-	; [ "%DA" ; "Ú" ] 
-	; [ "%DB" ; "Û" ] 
-	; [ "%DC" ; "Ü" ] 
-	; [ "%DD" ; "Ý" ] 
-	; [ "%DE" ; "Þ" ] 
-	; [ "%DF" ; "ß" ] 
-
-	; [ "%E0" ; "à" ] 
-	; [ "%E1" ; "á" ] 
-	; [ "%E2" ; "â" ] 
-	; [ "%E3" ; "ã" ] 
-	; [ "%E4" ; "ä" ] 
-	; [ "%E5" ; "å" ] 
-	; [ "%E6" ; "æ" ] 
-	; [ "%E7" ; "ç" ] 
-	; [ "%E8" ; "è" ] 
-	; [ "%E9" ; "é" ] 
-	; [ "%EA" ; "ê" ] 
-	; [ "%EB" ; "ë" ] 
-	; [ "%EC" ; "ì" ] 
-	; [ "%ED" ; "í" ] 
-	; [ "%EE" ; "î" ] 
-	; [ "%EF" ; "ï" ] 
-	; [ "%F0" ; "ð" ] 
-
-	; [ "%F1" ; "ñ" ] 
-	; [ "%F2" ; "ò" ] 
-	; [ "%F3" ; "ó" ] 
-	; [ "%F4" ; "ô" ] 
-	; [ "%F5" ; "õ" ] 
-	; [ "%F6" ; "ö" ] 
-	; [ "%F7" ; "÷" ] 
-	; [ "%F8" ; "ø" ] 
-	; [ "%F9" ; "ù" ] 
-	; [ "%FA" ; "ú" ] 
-	; [ "%FB" ; "û" ] 
-	; [ "%FC" ; "ü" ] 
-	; [ "%FD" ; "ý" ] 
-	; [ "%FE" ; "þ" ] 
-	; [ "%FF" ; "ÿ" ] 
-)]]>
+	; [ "%A0" ; Char ( 32 ) ]    /* NON-BREAKING SPACE, so use SPACE */ 
+	; [ "%A1" ; Char ( 161 ) ]    /* Inverted Exclamation Mark */ 
+	; [ "%A2" ; Char ( 162 ) ]    /* Cent Sign */ 
+	; [ "%A3" ; Char ( 163 ) ]    /* Pound Sign */ 
+	; [ "%A4" ; Char ( 164 ) ]    /* Currency Sign */ 
+	; [ "%A5" ; Char ( 165 ) ]    /* Yen Sign */ 
+	; [ "%A6" ; Char ( 124 ) ]    /* Vertical Line */ 
+	; [ "%A7" ; Char ( 167 ) ]    /* Section Sign */ 
+	; [ "%A8" ; Char ( 168 ) ]    /* Diaeresis */ 
+	; [ "%A9" ; Char ( 169 ) ]    /* Copyright Sign */ 
+	; [ "%AA" ; Char ( 170 ) ]    /* Feminine Ordinal Indicator */ 
+	; [ "%AB" ; Char ( 171 ) ]    /* Left-Pointing Double Angle Quotation Mark */ 
+	; [ "%AC" ; Char ( 172 ) ]    /* Not Sign */ 
+	; [ "%AD" ; Char ( 175 ) ]    /* Macron */ 
+	; [ "%AE" ; Char ( 174 ) ]    /* Registered Sign */ 
+	; [ "%AF" ; Char ( 175 ) ]    /* Macron */ 
+	; [ "%B0" ; Char ( 176 ) ]    /* Degree Sign */ 
+	; [ "%B1" ; Char ( 177 ) ]    /* Plus-Minus Sign */ 
+	; [ "%B2" ; Char ( 178 ) ]    /* Superscript Two */ 
+	; [ "%B3" ; Char ( 179 ) ]    /* Superscript Three */ 
+	; [ "%B4" ; Char ( 180 ) ]    /* Acute Accent */ 
+	; [ "%B5" ; Char ( 181 ) ]    /* Micro Sign */ 
+	; [ "%B6" ; Char ( 13 ) ]    /* CARRIAGE RETURN */
+	; [ "%B7" ; Char ( 183 ) ]    /* Middle Dot */ 
+	; [ "%B8" ; Char ( 184 ) ]    /* Cedilla */ 
+	; [ "%B9" ; Char ( 185 ) ]    /* Superscript One */ 
+	; [ "%BA" ; Char ( 186 ) ]    /* Masculine Ordinal Indicator */ 
+	; [ "%BB" ; Char ( 187 ) ]    /* Right-Pointing Double Angle Quotation Mark */ 
+	; [ "%BC" ; Char ( 188 ) ]    /* Vulgar Fraction One Quarter */ 
+	; [ "%BD" ; Char ( 189 ) ]    /* Vulgar Fraction One Half */ 
+	; [ "%BE" ; Char ( 190 ) ]    /* Vulgar Fraction Three Quarters */ 
+	; [ "%BF" ; Char ( 191 ) ]    /* Inverted Question Mark */ 
+	; [ "%C0" ; Char ( 192 ) ]    /* Latin Capital Letter A With Grave */ 
+	; [ "%C1" ; Char ( 193 ) ]    /* Latin Capital Letter A With Acute */ 
+	; [ "%C2" ; Char ( 194 ) ]    /* Latin Capital Letter A With Circumflex */ 
+	; [ "%C3" ; Char ( 195 ) ]    /* Latin Capital Letter A With Tilde */ 
+	; [ "%C4" ; Char ( 196 ) ]    /* Latin Capital Letter A With Diaeresis */ 
+	; [ "%C5" ; Char ( 197 ) ]    /* Latin Capital Letter A With Ring Above */ 
+	; [ "%C6" ; Char ( 198 ) ]    /* Latin Capital Letter Ae */ 
+	; [ "%C7" ; Char ( 199 ) ]    /* Latin Capital Letter C With Cedilla */ 
+	; [ "%C8" ; Char ( 200 ) ]    /* Latin Capital Letter E With Grave */ 
+	; [ "%C9" ; Char ( 201 ) ]    /* Latin Capital Letter E With Acute */ 
+	; [ "%CA" ; Char ( 202 ) ]    /* Latin Capital Letter E With Circumflex */ 
+	; [ "%CB" ; Char ( 203 ) ]    /* Latin Capital Letter E With Diaeresis */ 
+	; [ "%CC" ; Char ( 204 ) ]    /* Latin Capital Letter I With Grave */ 
+	; [ "%CD" ; Char ( 205 ) ]    /* Latin Capital Letter I With Acute */ 
+	; [ "%CE" ; Char ( 206 ) ]    /* Latin Capital Letter I With Circumflex */ 
+	; [ "%CF" ; Char ( 207 ) ]    /* Latin Capital Letter I With Diaeresis */ 
+	; [ "%D0" ; Char ( 208 ) ]    /* Latin Capital Letter Eth */ 
+	; [ "%D1" ; Char ( 209 ) ]    /* Latin Capital Letter N With Tilde */ 
+	; [ "%D2" ; Char ( 210 ) ]    /* Latin Capital Letter O With Grave */ 
+	; [ "%D3" ; Char ( 211 ) ]    /* Latin Capital Letter O With Acute */ 
+	; [ "%D4" ; Char ( 212 ) ]    /* Latin Capital Letter O With Circumflex */ 
+	; [ "%D5" ; Char ( 213 ) ]    /* Latin Capital Letter O With Tilde */ 
+	; [ "%D6" ; Char ( 214 ) ]    /* Latin Capital Letter O With Diaeresis */ 
+	; [ "%D7" ; Char ( 215 ) ]    /* Multiplication Sign */ 
+	; [ "%D8" ; Char ( 216 ) ]    /* Latin Capital Letter O With Stroke */ 
+	; [ "%D9" ; Char ( 217 ) ]    /* Latin Capital Letter U With Grave */ 
+	; [ "%DA" ; Char ( 218 ) ]    /* Latin Capital Letter U With Acute */ 
+	; [ "%DB" ; Char ( 219 ) ]    /* Latin Capital Letter U With Circumflex */ 
+	; [ "%DC" ; Char ( 220 ) ]    /* Latin Capital Letter U With Diaeresis */ 
+	; [ "%DD" ; Char ( 221 ) ]    /* Latin Capital Letter Y With Acute */ 
+	; [ "%DE" ; Char ( 222 ) ]    /* Latin Capital Letter Thorn */ 
+	; [ "%DF" ; Char ( 223 ) ]    /* Latin Small Letter Sharp S */ 
+	; [ "%E0" ; Char ( 224 ) ]    /* Latin Small Letter A With Grave */ 
+	; [ "%E1" ; Char ( 225 ) ]    /* Latin Small Letter A With Acute */ 
+	; [ "%E2" ; Char ( 226 ) ]    /* Latin Small Letter A With Circumflex */ 
+	; [ "%E3" ; Char ( 227 ) ]    /* Latin Small Letter A With Tilde */ 
+	; [ "%E4" ; Char ( 228 ) ]    /* Latin Small Letter A With Diaeresis */ 
+	; [ "%E5" ; Char ( 229 ) ]    /* Latin Small Letter A With Ring Above */ 
+	; [ "%E6" ; Char ( 230 ) ]    /* Latin Small Letter Ae */ 
+	; [ "%E7" ; Char ( 231 ) ]    /* Latin Small Letter C With Cedilla */ 
+	; [ "%E8" ; Char ( 232 ) ]    /* Latin Small Letter E With Grave */ 
+	; [ "%E9" ; Char ( 233 ) ]    /* Latin Small Letter E With Acute */ 
+	; [ "%EA" ; Char ( 234 ) ]    /* Latin Small Letter E With Circumflex */ 
+	; [ "%EB" ; Char ( 235 ) ]    /* Latin Small Letter E With Diaeresis */ 
+	; [ "%EC" ; Char ( 236 ) ]    /* Latin Small Letter I With Grave */ 
+	; [ "%ED" ; Char ( 237 ) ]    /* Latin Small Letter I With Acute */ 
+	; [ "%EE" ; Char ( 238 ) ]    /* Latin Small Letter I With Circumflex */ 
+	; [ "%EF" ; Char ( 239 ) ]    /* Latin Small Letter I With Diaeresis */ 
+	; [ "%F0" ; Char ( 240 ) ]    /* Latin Small Letter Eth */ 
+	; [ "%F1" ; Char ( 241 ) ]    /* Latin Small Letter N With Tilde */ 
+	; [ "%F2" ; Char ( 242 ) ]    /* Latin Small Letter O With Grave */ 
+	; [ "%F3" ; Char ( 243 ) ]    /* Latin Small Letter O With Acute */ 
+	; [ "%F4" ; Char ( 244 ) ]    /* Latin Small Letter O With Circumflex */ 
+	; [ "%F5" ; Char ( 245 ) ]    /* Latin Small Letter O With Tilde */ 
+	; [ "%F6" ; Char ( 246 ) ]    /* Latin Small Letter O With Diaeresis */ 
+	; [ "%F7" ; Char ( 247 ) ]    /* Division Sign */ 
+	; [ "%F8" ; Char ( 248 ) ]    /* Latin Small Letter O With Stroke */ 
+	; [ "%F9" ; Char ( 249 ) ]    /* Latin Small Letter U With Grave */ 
+	; [ "%FA" ; Char ( 250 ) ]    /* Latin Small Letter U With Acute */ 
+	; [ "%FB" ; Char ( 251 ) ]    /* Latin Small Letter U With Circumflex */ 
+	; [ "%FC" ; Char ( 252 ) ]    /* Latin Small Letter U With Diaeresis */ 
+	; [ "%FD" ; Char ( 253 ) ]    /* Latin Small Letter Y With Acute */ 
+	; [ "%FE" ; Char ( 254 ) ]    /* Latin Small Letter Thorn */ 
+	; [ "%FF" ; Char ( 255 ) ]    /* Latin Small Letter Y With Diaeresis */ 
+	)
+]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
