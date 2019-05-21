@@ -1,6 +1,6 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="68" functionArity="1" visible="True" parameters="_list" name="ValueUnique">
-		<Calculation><![CDATA[// ValueUnique( _list )
+		<Calculation><![CDATA[// ValueUnique ( _list )
 // version 1.2, Erik Wegweiser, Boston, MA
 
 /*

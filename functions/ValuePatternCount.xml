@@ -1,0 +1,42 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="129" functionArity="2" visible="True" parameters="valueList;itemValue" name="ValuePatternCount">
+		<Calculation><![CDATA[// ValuePatternCount ( valueList ; itemValue )
+// version 1.1, NYHTC 
+
+
+/* 
+	Returns the number of times itemValue appears in the valueList. 
+
+	NOTE: This will NOT accurately count "blank" (empty string) itemValue occurrences at the end (or beginning?) of the valueList. It will correctly count empties within the list, but not at the end(s). 
+
+	DEV NOTE: You need the double line-returns in the list you are checking because PatternCount won't "re-use" a character that ends one match and begins another. Looking for a blank string requires similar treatment. 
+
+HISTORY:
+	1.1 -2019-05-21 ( dshockley ): Updated to use Char13 instead of literal pilcrow character. Reformatted and modernized comments. 
+	1.0 - 201?-??-?? ( dshockley ): First created. Date unknown. 
+
+*/
+
+
+If ( IsEmpty ( itemValue )
+	/* to count the number of "empty" items, still need to wrap with returns and convert single-returns into two */
+	; PatternCount ( 
+			Substitute ( 
+				valueList 
+				; [ Char ( 13 ) ; Char ( 13 ) & Char ( 13 ) ] 
+		  		) 
+		/* so, an "empty" item will be 3 returns in a row: */
+		; Char ( 13 ) & Char ( 13 ) & Char ( 13 ) 
+		) 
+	/* to count a normal item, just wrap with returns and convert single-returns into two */
+	; PatternCount ( 
+			Substitute ( 
+				Char ( 13 ) & valueList & Char ( 13 ) 
+				; [ Char ( 13 ) ; Char ( 13 ) & Char ( 13 ) ] 
+				) 
+		/* so, count the "item" wrapped with its own returns: */
+		; Char ( 13 ) & itemValue & Char ( 13 ) 
+		) 
+	)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
