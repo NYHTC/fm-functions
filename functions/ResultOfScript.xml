@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="151" functionArity="2" visible="True" parameters="resultType;resultDescription" name="ResultOfScript">
+	<CustomFunction id="219" functionArity="2" visible="True" parameters="resultType;resultDescription" name="ResultOfScript">
 		<Calculation><![CDATA[// ResultOfScript ( resultType; resultDescription )
-// version 1.1.6, Daniel A. Shockley & Erik Shagdar, NYHTC
+// version 1.1.7, Daniel A. Shockley & Erik Shagdar, NYHTC
 
 /*
 	Quickly provide script result (for use in Exit Script) to return this script's result in dictionary form, using NYHTC standards.
@@ -13,6 +13,7 @@ REQUIRES:
 
 
 HISTORY:
+	1.1.7 - 2019-06-25 ( dshockley, eshagdar ): Added the "TestRequiredParams" resultType, as well as the new additional behavior for "MissingParams" to build the list itself.  
 	1.1.6 - 2018-03-16 ( eshagdar ): help message typo
 	1.1.5 - 2017-11-29 ( eshagdar ): add devMsg only if the tag is used.
 	1.1.4 - 2017-11-15 ( eshagdar ): fix incorrectly specified resultType.
@@ -38,13 +39,15 @@ If ( resultType = "help" or resultDescription = "help";
 
 	/* return a dictionary */
 	Let ( [
-			SQ = "'";
+			SQ = Char ( 39 ) ;  /* single-quote character */
+			placeHolderDevMsg = "#DEVMSG" ;
 			devMsg = "Please contact your database administrator and give them the following information.¶CallStack:¶" & CallStack ( "DisplayCurrent" );
 			str_ScriptAndFile = SQ & Get ( ScriptName ) & SQ & " script in " & SQ & Get ( FileName ) & SQ & " file";
 
 
+
 			/* capture incorrectly specified resultType */
-			resultType = if ( resultType = "MissingParam"; 
+			resultType = If ( resultType = "MissingParam"; 
 				"MissingParams"; 
 				resultType 
 			);
@@ -58,13 +61,28 @@ If ( resultType = "help" or resultDescription = "help";
 
 				"Success"
 			);
+
 			_description = Case ( 
-				resultType = "MissingParams";
+
+				resultType = "MissingParams" ;
 				str_ScriptAndFile & " was called without required parameters" & 
-						If ( not IsEmpty ( resultDescription );
-								": " & Substitute ( resultDescription; [ ¶; ", " ] );
-								""
-						) &
+						If ( not IsEmpty ( $paramKeysRequiredList ) and ( IsEmpty ( resultDescription ) or ( resultDescription = placeHolderDevMsg ) );
+							": " & 
+							Substitute ( 
+								ValueRemoveEmpty ( 
+									ValueApplyToList ( 
+										"If ( IsEmpty ( DictGet ( $params ; [t] ) ) ; [t] ) "
+										; $paramKeysRequiredList 
+										; Char ( 13 ) 
+										)
+									)
+								; [ Char ( 13 ) ; ", " ] 
+								) & ". " & resultDescription ;
+								If ( not IsEmpty ( resultDescription ) ;
+										": " & Substitute ( resultDescription ; [ Char ( 13 ) ; ", " ] );
+										""
+								)
+							) &
 						". ";
 
 				not IsEmpty ( resultDescription ); 
@@ -81,21 +99,38 @@ If ( resultType = "help" or resultDescription = "help";
 
 				"Unable to set result description because a non-standard ResultType was specified without a ResultDescription."
 			);
+
 			_description = 
 				Substitute ( 
 					_description; 
-					[ "#DEVMSG"; devMsg ]
-				)
+					[ placeHolderDevMsg ; devMsg ]
+				) ; 
+				
+			_resultDict = 
+					# ( "Result"; _result ) 
+				&	# ( "ResultDescription"; _description )
+				&	# ( "FileName" ; Get ( FileName ) ) 
+				&	# ( "ScriptName" ; Get ( ScriptName ) ) 
+				&	# ( "ExecutionTimestamp" ; Get ( CurrentTimestamp ) )
+				&	# ( "ExecutionAccount" ; Get ( AccountName ) )
+
 		];
 
-			# ( "Result"; _result ) 
-		&	# ( "ResultDescription"; _description )
-		&	# ( "FileName" ; Get ( FileName ) ) 
-		&	# ( "ScriptName" ; Get ( ScriptName ) ) 
-		&	# ( "ExecutionTimestamp" ; Get ( CurrentTimestamp ) )
-		&	# ( "ExecutionAccount" ; Get ( AccountName ) )
+		If ( resultType = "TestRequiredParams";
+				not IsEmpty ( 
+					ValueRemoveEmpty ( 
+						ValueApplyToList ( 
+							"If ( IsEmpty ( DictGet ( $params ; [t] ) ) ; [t] ) "
+							; $paramKeysRequiredList 
+							; Char ( 13 ) 
+							)
+						)
+				);
+			_resultDict
+		)
+
+
 	)
-)]]>
-		</Calculation>
+)]]></Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
