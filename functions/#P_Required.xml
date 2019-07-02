@@ -1,0 +1,21 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="327" functionArity="1" visible="True" parameters="name" name="#P_Required">
+		<Calculation><![CDATA[// #P_Required ( name )
+// version 1.0, Daniel A. Shockley
+
+/*
+	Used to run a normal #P, but also puts that key into a local variable, $paramKeysRequiredList, which indicates that the param is REQUIRED. 
+
+
+HISTORY:
+	1.0 - 2019-06-25 ( dshockley ): First created. 
+*/
+
+
+Let ( [ 
+		$paramKeysRequiredList = List ( $paramKeysRequiredList ; name )
+	]; 
+	#P ( name )
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
