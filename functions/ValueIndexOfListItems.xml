@@ -1,0 +1,38 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="332" functionArity="2" visible="True" parameters="_listToFindIndexesIn;_listOfItemsToFind" name="ValueIndexOfListItems">
+		<Calculation><![CDATA[// ValueIndexOfListItems ( _listToFindIndexesIn ; _listOfItemsToFind )
+// version 1.0, Erik Shagdar, NYHTC
+
+/* 
+	Returns a list of indexes where you can find each of the items from the second list, where they appear in the first list.
+	If an item from the second list does not appear in the first list, it doesn't get any index in the result.
+	If an item from the second list appears multiple times in the first list, it returns multiple the indexes of that value
+
+
+HISTORY:
+	1.0 - 2019-07-30 ( dshockley ): dictated description.
+	1.0 - 2019-07-30 ( eshagdar ): created
+
+
+REQUIRES:
+	IntersectionSet
+	ValueApplyToList
+	ValueIndexMultiple
+*/
+
+
+Let ( [
+		functionsUsedViaIndirection = If ( True ; True ; ValueIndexMultiple ( "" ; "" ) ) ;
+
+		indexList = ValueApplyToList ( 
+			"ValueIndexMultiple ( " & Quote ( _listToFindIndexesIn ) & " ; [t] )" ; 
+			IntersectionSet ( _listToFindIndexesIn ; _listOfItemsToFind ) ; 
+			Char ( 13 ) 
+		) ;
+		indexList = SortValues ( indexList )
+	] ;
+
+	indexList	
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

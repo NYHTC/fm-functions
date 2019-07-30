@@ -1,0 +1,35 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="554" functionArity="2" visible="True" parameters="_list;_value" name="ValueIndexMultiple">
+		<Calculation><![CDATA[// ValueIndexMultiple ( _list, _value )
+// version 1.0, Erik Shagdar, NYHTC
+
+/* 
+	Returns a list of indexes of a specified value within a specified list of return-delimited values. 
+	Properly wraps the list and value with returns to avoid false partial-value matches. 
+	Returns nothing if the value is not in the list at all. 
+
+
+HISTORY:
+	1.0 - 2019-07-30 ( eshagdar ): created. copied logic from ValueIndex
+*/
+
+
+Let ( [ 
+		$CF_ValueIndexMultiple_occurrence = $CF_ValueIndexMultiple_occurrence + 1 ;
+		CR = Char ( 13 ) ;
+
+		wrappedList = CR & _list & CR ;
+		wrappedValue = CR & _value & CR ;
+		valuePos = Position ( wrappedList ; wrappedValue ; 1 ; $CF_ValueIndexMultiple_occurrence )
+	];
+
+	If ( valuePos ; 
+		List ( 
+			PatternCount ( Left ( wrappedList; valuePos ) ; CR ) ;
+			ValueIndexMultiple ( _list; _value )
+		) ;
+		Let ( $CF_ValueIndexMultiple_occurrence = "" ; "" )
+	)
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
