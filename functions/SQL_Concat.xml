@@ -1,0 +1,36 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="552" functionArity="2" visible="True" parameters="itemList;itemDelimOrOptions" name="SQL_Concat">
+		<Calculation><![CDATA[// SQL_Concat ( itemList ; itemDelimOrOptions )
+// version 1.0, Daniel A. Shockley
+
+/*
+
+	 Returns SQL query syntax that concatenates (as a string) the itemList items (regardless of whether they are fields or literals, with the itemDelim specified. 
+
+NOTE: itemDelimOrOptions is named to indicate forward-compatibility/improvements. In version 1.0 it is just the item delimiter. 
+
+
+HISTORY:
+	1.0 - 2019-07-16 ( dshockley ): First created. 
+
+*/
+
+
+Let ( [ 
+	  itemDelim = itemDelimOrOptions
+	; beforeEachItem = "STRVAL ("
+	; afterEachItem = ")"
+	; betweenEachItem = " || " & If ( not IsEmpty ( itemDelimOrOptions ) ; SQL_EscapeString ( itemDelim ) & " || " )
+] ;
+
+	beforeEachItem
+	& Substitute ( 
+		  itemList
+		; [ Char ( 13 ) ;   afterEachItem & betweenEachItem & beforeEachItem  ]
+		)
+	& afterEachItem
+
+
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
