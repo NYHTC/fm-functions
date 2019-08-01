@@ -1,0 +1,35 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="556" functionArity="3" visible="True" parameters="_list;_index;_newValue" name="ValueIndexReplace">
+		<Calculation><![CDATA[// ValueIndexReplace ( _list ; _index ; _newValue )
+// version 2019-07-31, Erik Shagdar
+
+/*
+	Replaces an item in a list at the specified index
+
+
+NOTE:
+	LeftValues and RightValues leaves a trailing carriage return.
+	Use the one on the left to our advantage and trim the trailing return on the right
+
+
+HISTORY: 
+	2019-07-31 ( eshagdar ): created
+
+
+REQUIRES:
+	TextRemoveRight
+*/
+
+
+If ( IsEmpty ( _list ) ;
+	_newValue ;
+	Let ( [
+			_left = LeftValues ( _list ; _index - 1 ) ;
+			_right = RightValues ( _list ; ValueCount ( _list ) - _index ) ;
+			_right = TextRemoveRight ( _right ; 1 )
+		] ;
+		_left &  List ( _newValue ; _right )
+	)
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>

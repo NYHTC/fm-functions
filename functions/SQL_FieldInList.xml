@@ -1,18 +1,21 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="52" functionArity="2" visible="True" parameters="fieldRef;theList" name="SQL_FieldInList">
 		<Calculation><![CDATA[// SQL_FieldInList ( fieldRef ; theList )
-// version: 1.2.2, Erik Shagdar, NYHTC
+// version: 1.3, Erik Shagdar, NYHTC
 
 /*
 	Generates the entire IN clause. Values are properly quoted based on the field type.
 
 
 REQUIRES:
+	DateAsISO8601
 	SQL_EscapeList
 	SQL_Field
+	ValueApplyToList
 
 
 HISTORY:
+	1.3 - 2019-08-01 ( eshagdar ): change dates to ISO8601 format.
 	1.2.2 - 2019-03-14 ( dshockley ): Replaced pilcrow with Char ( 13 ). Remove FileName call (not needed). Uses SQL_EscapeList for text, so that internal single-quotes are handled properly. 
 	1.2.1 - 2018-09-06 ( eshagdar ): updated parameters attribute ( XML ).
 	1.2 - 2018-02-20 ( eshagdar ): logic is inpired by ThisFieldInListSQL function which this function used to a wrapper for. This function now additionally handles date and timestamp fields ( instead of just text and number ).
@@ -22,13 +25,15 @@ HISTORY:
 
 
 Let ( [ 
-		SQ = "'" ;
+		functionsUsedViaIndirection =  If ( True ; True ; DateAsISO8601 ( "" ) ) ;
 
+
+		SQ = "'" ;
+		CR = char ( 13 ) ;
 		fieldType = FieldType ( "" ; GetFieldName ( fieldRef ) ) ;
 
 		/* prefix needed for dates/times: */
 		valPrefix = Case (
-
 			Position ( fieldType ; "date" ; 1 ; 1 ) ;
 			"DATE " & SQ ;
 
@@ -38,16 +43,23 @@ Let ( [
 			/* DEFAULT */
 			""
 		) ;
-		valSuffix = If ( IsEmpty ( valPrefix ) ; "" ; SQ ) ;
+
+		/* dates need to be converted to ISO8601 format */
+		theList = If ( Position ( fieldType ; "date" ; 1 ; 1 );
+			ValueApplyToList ( "DateAsISO8601 ( [t] )" ; theList ; CR ) ;
+			theList
+		) ;
+		valSuffix = If ( IsEmpty ( valPrefix ) ; 
+			"" ; 
+			SQ 
+		) ;
 		formattedList = If ( Position ( fieldType ; "text" ; 1 ; 1 ) ;
 			SQL_EscapeList ( theList ) ;
-			valPrefix & Substitute ( theList ; [ Char ( 13 ) ; valSuffix & "," & valPrefix ] ) & valSuffix
-			)
-		
+			valPrefix & Substitute ( theList ; [ CR ; valSuffix & "," & valPrefix ] ) & valSuffix
+		)
 	] ; 
 
 	SQL_Field ( fieldRef ) & " IN ( " & formattedList & " )"
-
 )]]>
 		</Calculation>
 	</CustomFunction>
