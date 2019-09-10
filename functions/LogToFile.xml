@@ -1,69 +1,32 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="436" functionArity="2" visible="True" parameters="logMessage;options" name="LogToFile">
-		<Calculation><![CDATA[// LogToFile ( logMessage; options )
-// version 1.0, Erik Shagdar, NYHTC
+	<CustomFunction id="28" functionArity="2" visible="True" parameters="logFilePathFM;logMessage" name="LogToFile">
+		<Calculation><![CDATA[// LogToFile ( logFilePathFM ; logMessage )
+// version 1.1, NYHTC
 
 /* 
-	Write to a log file. options can be a dictionary that override default params, or a boolean ( false skips writing to the log file ).
+	Appends a log message to a specified log file. The message does NOT need to include a timestamp - that is prepended by this function.
 
+HISTORY:
 
-PLUGIN:
-	BaseElements
-
-
-REQUIRES:
-	DateTimeAsISO8601
-	DictContains
-	DictGet
-	FMPathToPosixOrWinPath
-
-
-HISTORY: 
-	1.1 - 2016-11-21 ( eshagdar ): reworked params. added documentation. 
+	1.1 - 2017-02-16 ( dshockley ): made cross-platform. 
 	1.0 - 2015-11-18 ( dshockley ): first created.
+
 */
 
+BE_FileWriteText ( 
 
-Case ( 
+	FMPathToSystemPath ( logFilePathFM ) 
 
-	/* display help options */
-	options = "help";
-	List ( 
-		"Append a logMessage a to a log file. Options is a dictionary whose keys override any of the default settings:";
-		" - LogFilePathFM: specify the fm path of the log file. Default is 'temp.log' on the desktop.";
-		" - Append: should the message append to the exisitng file or create a new file. Default is 'True'";
-		"Alternatively, if options is False, do not write to file."
-	);
+	; DateTimeAsISO8601 ( Get ( CurrentHostTimestamp ) ) 
+	& Char ( 9 ) 
+	& logMessage
+	& If ( PlatformIsWin 
+		; Char ( 13 ) & Char ( 10 ) 
+		; "¶"
+		)
 
+	; True /* should append */
 
-	/* do not log message. Use the string zero so that a single letter does not incorrectly coerce to false.8 */
-	Exact ( options; "0" )
-	; True
-
-
-	/* log message */
-	; Let ( [
-			_filepath_fm = 
-				If ( DictContains ( options; "LogFilePathFM" ); 
-					DictGet ( options; "LogFilePathFM" ); 
-					Get ( DesktopPath ) & "temp.log"
-				);
-			_filePath_system = FMPathToPosixOrWinPath ( _filepath_fm );
-
-
-			_fullMessage = DateTimeAsISO8601 ( Get ( CurrentHostTimeStamp ) ) & ": " & logMessage & ¶;
-
-
-			_appendLog = 
-				If ( DictContains ( options; "Append" ); 
-					DictGet ( options; "Append" ); 
-					True
-				)
-		];
-
-		BE_WriteTextToFile ( _filePath_system; _fullMessage; _appendLog )
-	) 
-)]]>
-		</Calculation>
+	)]]></Calculation>
 	</CustomFunction>
 </fmxmlsnippet>

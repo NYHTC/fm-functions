@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="416" functionArity="2" visible="True" parameters="someText;options" name="ClipboardSetText">
 		<Calculation><![CDATA[// ClipboardSetText ( someText ; options )
-// version 1.0.1, Daniel A. Shockley, NYHTC
+// version 1.1, Daniel A. Shockley, NYHTC
 
 /* 
 	Depending on the client platform, put the specified text into the clipboard. Returns True if succeeded, False if it did not. 
@@ -16,6 +16,7 @@ PLUGIN:
 
 
 HISTORY: 
+	1.1 - 2019-09-10 ( eshagdar ): updated to use new BaseElements plugin function.
 	1.0.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.0 - ( 2016-07-21-dshockley ): first created.
 */
@@ -37,16 +38,16 @@ Let ( [
 
 	Case ( 
 		isWin and sendRichText
-		; BE_SetClipboardText ( someText ; winRichText )
+		; BE_ClipboardSetText ( someText ; winRichText )
 		; 
 		isWin
-		; BE_SetClipboardText ( someText ; winUnicodeText )
+		; BE_ClipboardSetText ( someText ; winUnicodeText )
 		; 
 		isMac and sendRichText
-		; BE_SetClipboardText ( someText ; macRichText )
+		; BE_ClipboardSetText ( someText ; macRichText )
 		; 
 		isMac
-		; BE_SetClipboardText ( someText ; macPlainText )
+		; BE_ClipboardSetText ( someText ; macPlainText )
 		; 
 		False
 		)
