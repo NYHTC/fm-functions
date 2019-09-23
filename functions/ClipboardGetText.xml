@@ -1,10 +1,10 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="417" functionArity="1" visible="True" parameters="options" name="ClipboardGetText">
 		<Calculation><![CDATA[// ClipboardGetText ( options )
-// version 1.0.1, Daniel A. Shockley, NYHTC
+// version 1.1, Daniel A. Shockley, NYHTC
 
 /* 
-	Depending on the client platform, put the specified text into the clipboard. 
+	Depending on the client platform, get the text currently in the clipboard. 
 
 
 WARNING:
@@ -16,6 +16,7 @@ PLUGIN:
 
 
 HISTORY: 
+	1.1 - 2019-09-10 ( eshagdar ): updated to use new BaseElements plugin function.
 	1.0.1 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.0 - ( 2016-07-21-dshockley ): first created.
 */
@@ -43,25 +44,25 @@ Let ( [
 
 	Case ( 
 		isWin and tryToGetRichText and PatternCount ( paddedFormats ; "¶" & winRichText & "¶" )
-		; BE_ClipboardText ( winRichText )
+		; BE_ClipboardGetText ( winRichText )
 		; 
 		isWin and PatternCount ( paddedFormats ; "¶" & winUnicodeText & "¶" )
-		; BE_ClipboardText ( winUnicodeText )
+		; BE_ClipboardGetText ( winUnicodeText )
 		; 
 		isWin and PatternCount ( paddedFormats ; "¶" & winPlainText1 & "¶" )
-		; BE_ClipboardText ( winPlainText1 )
+		; BE_ClipboardGetText ( winPlainText1 )
 		; 
 		isWin and PatternCount ( paddedFormats ; "¶" & winPlainText2 & "¶" )
-		; BE_ClipboardText ( winPlainText2 )
+		; BE_ClipboardGetText ( winPlainText2 )
 		; 
 		isMac and tryToGetRichText and PatternCount ( paddedFormats ; "¶" & macRichText & "¶" )
-		; BE_ClipboardText ( macRichText )
+		; BE_ClipboardGetText ( macRichText )
 		; 
 		isMac and PatternCount ( paddedFormats ; "¶" & macPlainText1 & "¶" )
-		; BE_ClipboardText ( macPlainText1 )
+		; BE_ClipboardGetText ( macPlainText1 )
 		; 
 		isMac and PatternCount ( paddedFormats ; "¶" & macPlainText2 & "¶" )
-		; BE_ClipboardText ( macPlainText2 )
+		; BE_ClipboardGetText ( macPlainText2 )
 		; 
 		""
 		)
