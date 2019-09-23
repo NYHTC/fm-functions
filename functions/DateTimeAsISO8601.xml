@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="275" functionArity="1" visible="True" parameters="someTimestamp" name="DateTimeAsISO8601">
 		<Calculation><![CDATA[// DateTimeAsISO8601 ( someTimestamp )
-// version 1.2, Erik Shagdar, NYHCT
+// version 1.2, Erik Shagdar, NYHTC
 
 /*
 	Takes a timestamp and returns as an ISO8601 formatted string
