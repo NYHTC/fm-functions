@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="275" functionArity="1" visible="True" parameters="someTimestamp" name="DateTimeAsISO8601">
 		<Calculation><![CDATA[// DateTimeAsISO8601 ( someTimestamp )
-// version 1.1, Erik Shagdar, NYHCT
+// version 1.2, Erik Shagdar, NYHCT
 
 /*
 	Takes a timestamp and returns as an ISO8601 formatted string
@@ -12,20 +12,34 @@ REQUIRES
 
 
 HISTORY
+	1.2 - 2019-09-23 ( dshockley ): Properly handle when timestamp includes fractional seconds. 
 	1.1 - 2016-11-21 ( eshagdar ): added documentation. return empty string if one isn't passed in. reformatted to remove let-statement.
 	1.0 - 201x-xx-xx ( eshagdar ): created.
 */
 
-if ( IsEmpty ( someTimestamp );
-	"";
-	DateAsISO8601 ( GetAsDate ( someTimestamp ) ) &
-		" " &
-		Right ( "00" & Hour ( someTimestamp ); 2 ) & 
-		":" &
-		Right ( "00" & Minute ( someTimestamp ); 2 ) &
-		":" &
-		Right ( "00" & Seconds ( someTimestamp ); 2 )
-)]]>
+Let ( [
+		secondsFromTS = Seconds ( someTimestamp ) 
+	];
+
+		If ( IsEmpty ( someTimestamp );
+			"";
+			DateAsISO8601 ( GetAsDate ( someTimestamp ) ) &
+				" " &
+				Right ( "00" & Hour ( someTimestamp ); 2 ) & 
+				":" &
+				Right ( "00" & Minute ( someTimestamp ); 2 ) &
+				":" &
+				Case ( 
+					secondsFromTS ≥ 10 ; 
+					"" ; 
+					secondsFromTS ≥ 1 ; 
+					"0" ; 
+					"00" 
+				) & 
+				secondsFromTS
+		)
+	)
+]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
