@@ -34,7 +34,9 @@ Let ( [
 					"" ; 
 					secondsFromTS ≥ 1 ; 
 					"0" ; 
-					"00" 
+					secondsFromTS > 0 ; 
+					"00" ; 
+					"0" 
 				) & 
 				secondsFromTS
 		)
