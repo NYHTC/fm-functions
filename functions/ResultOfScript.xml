@@ -1,13 +1,13 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="219" functionArity="2" visible="True" parameters="resultType;resultDescription" name="ResultOfScript">
 		<Calculation><![CDATA[// ResultOfScript ( resultType; resultDescription )
-// version 1.1.9, Daniel A. Shockley & Erik Shagdar, NYHTC
+// version 1.2, Daniel A. Shockley & Erik Shagdar, NYHTC
 
 /*
 	Quickly provide script result (for use in Exit Script) to return this script's result in dictionary form, using NYHTC standards.
 
 NOTE: 
-	TextRequiredParams looks ONLY at the incoming ScriptParameter ( $params ), not whether each variable is defined. If the script _can_ handle a param not being specified by providing a default value or a user input and setting the script variable, the parameter is NOT truly required. 
+	TestRequiredParams looks ONLY at the incoming ScriptParameter ( $params ), not whether each variable is defined. If the script _can_ handle a param not being specified by providing a default value or a user input and setting the script variable, the parameter is NOT truly required. 
 
 REQUIRES:
 	#
@@ -16,7 +16,8 @@ REQUIRES:
 
 
 HISTORY:
-	1.1.9 - 2019-08-19 ( dshockley ): Added comment that TextRequiredParams looks only at $params, not each var separately. 
+	1.2 - 2019-09-25 ( dshockley ): Fixed a typo in comments (TeXtRequiredParams should be TeStRequiredParams). Added TestRequiredParams to Help text.
+	1.1.9 - 2019-08-19 ( dshockley ): Added comment that TestRequiredParams looks only at $params, not each var separately. 
 	1.1.8 - 2019-08-14 ( dshockley ): Fix: added ValueApplyToList to the Requires list. 
 	1.1.7 - 2019-06-25 ( dshockley, eshagdar ): Added the "TestRequiredParams" resultType, as well as the new additional behavior for "MissingParams" to build the list itself.  
 	1.1.6 - 2018-03-16 ( eshagdar ): help message typo
@@ -38,7 +39,8 @@ If ( resultType = "help" or resultDescription = "help";
 		"    'ResultDescription' uses a pre-canned description for specified resultType, or passes through the specified string.";
 		" ";
 		"  NOTE: Specifying '#DEVMSG' tag in the resultDescription will append the description to notify the developers where the error occured.";
-		"  NOTE: resultType can use a special value of 'MissingParams' which will be converted to 'Error' type and with pre-canned description. You can optionally specify a comma-delimitted list of of missing params in the resultDescription to get them added to the description. the '#DEVMSG' tag is automatically appended for 'MissingParams'"
+		"  NOTE: resultType can use a special value of 'MissingParams' which will be converted to 'Error' type and with pre-canned description. You can optionally specify a comma-delimitted list of of missing params in the resultDescription to get them added to the description. the '#DEVMSG' tag is automatically appended for 'MissingParams'";
+		"  NOTE: resultType can also use a special value of 'TestRequiredParams' - this returns True if the incoming $params does not include a key specified with #P_Required. IMPORTANT: it ONLY checks $params, not each separate 'required' variable. If you can set a variable IN your script, it is NOT truly #P_Required, and you should test for it the old way. "
 	);
 
 
