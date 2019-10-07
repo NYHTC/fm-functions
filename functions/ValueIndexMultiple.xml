@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="554" functionArity="2" visible="True" parameters="_list;_value" name="ValueIndexMultiple">
 		<Calculation><![CDATA[// ValueIndexMultiple ( _list, _value )
-// version 1.0, Erik Shagdar, NYHTC
+// version 2019-10-07, Erik Shagdar, NYHTC
 
 /* 
 	Returns a list of indexes of a specified value within a specified list of return-delimited values. 
@@ -9,26 +9,39 @@
 	Returns nothing if the value is not in the list at all. 
 
 
+NOTE:
+	Recursive
+
+
 HISTORY:
-	1.0 - 2019-07-30 ( eshagdar ): created. copied logic from ValueIndex
+	2019-10-07 ( eshagdar ): bug fix: getting index of adjacent values
+	2019-07-30 ( eshagdar ): created. copied logic from ValueIndex
+
+
+REQUIRES:
+	NONE
 */
 
 
 Let ( [ 
-		$CF_ValueIndexMultiple_occurrence = $CF_ValueIndexMultiple_occurrence + 1 ;
 		CR = Char ( 13 ) ;
 
-		wrappedList = CR & _list & CR ;
-		wrappedValue = CR & _value & CR ;
-		valuePos = Position ( wrappedList ; wrappedValue ; 1 ; $CF_ValueIndexMultiple_occurrence )
+		_wrappedList = CR & _list & CR ;
+		_wrappedValue = CR & _value & CR ;
+		_valuePos = Position ( _wrappedList ; _wrappedValue ; 1 ; 1 ) ;
+		_remainingList = Right ( _list ; Length ( _list ) - _valuePos - 1 ) ;
+
+		/* need to set to a local var so that as we come out of the stack, we have an actual value ( not an empty global value ) */
+		_valueIndex = $$CF_ValueIndexMultiple_index + PatternCount ( Left ( _wrappedList; _valuePos ) ; CR ) ;
+		$$CF_ValueIndexMultiple_index = _valueIndex
 	];
 
-	If ( valuePos ; 
+	If ( _valuePos ; 
 		List ( 
-			PatternCount ( Left ( wrappedList; valuePos ) ; CR ) ;
-			ValueIndexMultiple ( _list; _value )
+			_valueIndex ;
+			ValueIndexMultiple ( _remainingList; _value )
 		) ;
-		Let ( $CF_ValueIndexMultiple_occurrence = "" ; "" )
+		Let ( $$CF_ValueIndexMultiple_index = "" ; "" )
 	)
 )]]></Calculation>
 	</CustomFunction>
