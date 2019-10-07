@@ -29,7 +29,9 @@ Let ( [
 		_wrappedList = CR & _list & CR ;
 		_wrappedValue = CR & _value & CR ;
 		_valuePos = Position ( _wrappedList ; _wrappedValue ; 1 ; 1 ) ;
-		_remainingList = Right ( _list ; Length ( _list ) - _valuePos - 1 ) ;
+
+		/* since using the length of the wrapped value, we need to add 2 instead of 1 */
+		_remainingList = Right ( _list ; Length ( _list ) - _valuePos - Length ( _wrappedValue ) + 2 ) ;
 
 		/* need to set to a local var so that as we come out of the stack, we have an actual value ( not an empty global value ) */
 		_valueIndex = $$CF_ValueIndexMultiple_index + PatternCount ( Left ( _wrappedList; _valuePos ) ; CR ) ;
