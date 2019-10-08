@@ -1,0 +1,32 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="341" functionArity="2" visible="True" parameters="_list;_indexList" name="ListFromIndexList">
+		<Calculation><![CDATA[// ListFromIndexList ( _list; _indexList )
+// version 2019-10-08, Erik Shagdar
+
+/*
+	Given a return-delimitted list of values and return-delimitted list of indexes, return a sublist of value at the specified indexes.
+
+
+NOTE:
+	Recursive
+
+
+REQUIRES:
+	ValueRemoveIndex
+
+
+HISTORY ( recent at top ):
+	2019-10-08 ( eshagdar ): First created. 
+*/
+
+
+
+If ( IsEmpty ( _list ) or IsEmpty ( _indexList ) ;
+	"" ;
+	List ( 
+		GetValue ( _list ; GetValue ( _indexList ; 1 ) ) ;
+		ListFromIndexList ( _list ; ValueRemoveIndex ( _indexList ; 1 ) )
+	)
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
