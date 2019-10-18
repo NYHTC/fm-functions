@@ -132,7 +132,7 @@ Case (
 					SQL_Table ( Utility_PERMISSION::zAuto1 ) ;
 
 				" WHERE " ;
-					SQL_Where ( Utility_PERMISSION::b00PJ_AccountName ; "=" ; Upper ( Get ( AccountName ) ) ) ;
+					SQL_Where ( Utility_PERMISSION::b00PJ_AccountName__UPPER__ae ; "=" ; Upper ( Get ( AccountName ) ) ) ;
 
 				" AND " ;
 					whereCriteria ;
