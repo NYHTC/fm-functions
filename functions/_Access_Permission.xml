@@ -124,7 +124,7 @@ Case (
 
 			sqlQuery = List (
 				"SELECT " ;
-					SQL_Field ( Utility_PERMISSION::c00PJ_Status ) ;
+					SQL_Field ( Utility_PERMISSION::c00PJ_Status__b ) ;
 					", " & SQL_Field ( Utility_PERMISSION::b00PJ_DateFrom ) ;
 					", " & SQL_Field ( Utility_PERMISSION::b00PJ_DateTo ) ;
 
