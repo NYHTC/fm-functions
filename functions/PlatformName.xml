@@ -1,33 +1,37 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="46" functionArity="0" visible="True" parameters="" name="PlatformName">
 		<Calculation><![CDATA[// PlatformName (  )
-// version 1.2, Daniel A. Shockley
+// version 2019-11-18, Daniel A. Shockley
 
 
 /* 
 HISTORY:
-	1.2 - 2016-09-29 ( eshagdar ): updated documentation.
-	1.1 - 201x-xx-xx ( xxxxx ): removed misleading "Server" result, since Platform is the OS. Server is the Application version, although it is perhaps useful for grouping for the PlatformIsServer custom function to return True based on the Application. You would then sometimes still need to know Mac versus Windows. 
+	2019-11-18 ( dshockley ): Updated to use Device to distinguish between iPhone and iPad, since ApplicationVersion should _not_ be relied upon to return some specific string. Reordered and added Android. 
+	2016-09-29 ( eshagdar ): updated documentation.
+	201x-xx-xx ( xxxxx ): removed misleading "Server" result, since Platform is the OS. Server is the Application version, although it is perhaps useful for grouping for the PlatformIsServer custom function to return True based on the Application. You would then sometimes still need to know Mac versus Windows. 
 	1.0 - 201x-xx-xx ( dshockley ): first created.
 */
 
 
 Case ( 
 
-	/* 2014-08-28-dshockley: should this and iPhone be combined into iOS? */
-	PatternCount ( Get ( ApplicationVersion ); "Go_iPad" )
-	; "iPad"
-	; 
-
-	PatternCount ( Get ( ApplicationVersion ); "Go" )
-	; "iPhone"
-	; 
-
-	Get ( SystemPlatform ) = 1
+	Get ( Device ) = 1
 	; "Mac"
 	;
 
-	Abs ( Get ( SystemPlatform ) ) = 2
+	Get ( Device ) = 2
+	; "Win"
+	;
+
+	Get ( Device ) = 3
+	; "iPhone"
+	; 
+
+	Get ( Device ) = 4
+	; "iPad"
+	; 
+
+	Get ( Device ) = 5
 	; "Win"
 	;
 
