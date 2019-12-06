@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="544" functionArity="0" visible="True" parameters="" name="UUIDbase10ViaFmUUID">
 		<Calculation><![CDATA[// UUIDbase10ViaFmUUID (  ) 
-// version 2019-02-22
+// version 2019-12-06
 
 /* 
 	Generates a decimal UUID number by converting FileMaker's Get ( UUID ) hex-as-text. 
@@ -12,7 +12,10 @@
 	
 
 HISTORY: 
+	2019-12-06 ( dshockley ): pad the numeric conversion of Get(UUID) into a 41-digit number to avoid issue with SyncServerPro converting the number into scientific notation. It seems that SSP respects all the digits if they are 41-digits long and begin with no more than 3 digits of '9' (999###… works, but 9999###… does not). So, our new standard is setto begin with '9' to indicate this is ours, not the Jerermy Bante functions that begin with "12" or "42" and map to the RFC 4122 standard. Ours is somewhat like the "42" pseudo-random RFC 4122, but does not map directly (and can't be converted back and forth).  
+		2019-12-03 ( dshockley ): force the output to be a numeric "string" instead of a pure number, since (WE SUSPECT!) the JDBC interface translates values that came as pure numbers into things it should represent as a text string as scientific notation, throwing away significant digits. 
 	2019-02-22 ( dshockley, eshagdar ): Based on HexUUIDToBase10, found at  https://community.filemaker.com/thread/183271
+
 */
 
 
@@ -21,39 +24,44 @@ Let ( [
 		; _hex = "0123456789ABCDEF"
 	] ;
 
-	(((((((((((((((((((((((((((((((
-	( Position ( _hex ; Middle ( _str ;  1 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ;  2 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ;  3 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ;  4 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ;  5 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ;  6 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ;  7 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ;  8 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ;  9 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 10 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 11 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 12 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 13 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 14 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 15 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 16 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 17 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 18 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 19 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 20 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 21 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 22 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 23 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 24 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 25 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 26 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 27 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 28 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 29 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 30 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 31 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
-	( Position ( _hex ; Middle ( _str ; 32 ; 1 ) ; 1 ; 1 ) - 1 )
+	Left ( 
+		"9" & Round ( 8 * Random ; 0 ) 
+			& (((((((((((((((((((((((((((((((
+			( Position ( _hex ; Middle ( _str ;  1 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ;  2 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ;  3 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ;  4 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ;  5 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ;  6 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ;  7 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ;  8 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ;  9 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 10 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 11 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 12 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 13 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 14 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 15 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 16 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 17 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 18 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 19 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 20 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 21 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 22 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 23 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 24 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 25 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 26 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 27 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 28 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 29 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 30 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 31 ; 1 ) ; 1 ; 1 ) - 1 ) ) * 16 +
+			( Position ( _hex ; Middle ( _str ; 32 ; 1 ) ; 1 ; 1 ) - 1 )
+			& Right ( Random ; 8 ) 
+		; 41 
+		)
 )]]></Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
