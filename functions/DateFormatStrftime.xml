@@ -1,0 +1,211 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="76" functionArity="2" visible="True" parameters="someTimeStamp;formatString" name="DateFormatStrftime">
+		<Calculation><![CDATA[// DateFormatStrftime ( someTimeStamp ; formatString )
+// version 1.1, Daniel A. Shockley
+
+/*
+	Formats a timestamp using the (slightly modified) format defined by the POSIX command 'strftime' 
+
+EXAMPLES:
+ 	(if the current timestamp is Wednesday, March 9, 2011 at 1:22:26 PM:
+
+	DateFormatStrftime ( Get ( CurrentTimestamp ) ; "%Y-%m-%d--%H-%M-%S" )
+	>>	Result: 2011-03-09--13-22-26
+
+	DateFormatStrftime ( Get ( CurrentTimestamp ) ; "%m/%d/%Y %H:%M:%S" )
+	>>	Result: 03/09/2011 13:22:26
+
+	DateFormatStrftime ( Get ( CurrentTimestamp ) ; "%-m/%-d/%y" )
+	>>	Result: 3/9/11
+
+
+	DateFormatStrftime ( Get ( CurrentTimestamp ) ; "DATE: %m/%d/%y%nTIME: %H:%M:%S" )
+	>>	Result: (see lines below, since the format string specified a line separator)
+			DATE: 03/09/11
+			TIME: 13:22:26
+
+	DateFormatStrftime ( Get ( CurrentTimestamp ) ; "%A, %B %e, %Y" )
+	>>	Result: Wednesday, March  9, 2011
+
+HISTORY ( recent at top ):
+	1.1 - 2019-12-12 ( dshockley ): Added the %-* option for relevant symbols (*) to turn off zero-padding (symbols are: CdHIjMmSUy). FIX: %I should be zero-padded. FIX: %C should be a zero-padded decimal number. Properly show %g and %G as not being implemented. FIX: %u is Monday=1. Improved documentation. 
+	1.0 - 2019-10-29 ( dshockley ): Modernized code format. Added "Help" param. Properly support a simple date (time component defaults to midnight). 
+	0.9 - 2011-05-23 ( dshockley ): Added comments. 
+	0.8 - 2011-02-08 ( dshockley ): First created. 
+	
+*/
+
+
+If ( someTimeStamp = "Help"
+	/* DISPLAY HELP INFO: */
+	; List ( 
+		  "DateFormatStrftime ( someTimeStamp ; formatString )"
+		; "Specify some date/timestamp, then also specify a format string, where the following symbols are replaced by part(s) or your specified date/timestamp: "
+		; "%a  >  Replaced by the abbreviated weekday name." 
+		; "%A  >  Replaced by the full weekday name." 
+		; "%b  >  Replaced by the abbreviated month name." 
+		; "%B  >  Replaced by the full month name." 
+		; "%c  >  Replaced by locale's representation of time and date." 
+		; "%C  >  Replaced by the century number (the year divided by 100 and truncated to an integer) as a decimal number [00-99]." 
+		; "%D  >  Equivalent to '%m/%d/%y'." 
+		; "%d  >  Replaced by the day of the month as a decimal number [01,31]." 
+		; "%e  >  Replaced by the day of the month as a decimal number [1,31]; a single digit is preceded by a space." 
+		; "%E* %O*  >  NOT IMPLEMENTED. " 
+		; "%F  >  Equivalent to '%Y-%m-%d'." 
+		; "%g  >  NOT IMPLEMENTED." 
+		; "%G  >  NOT IMPLEMENTED." 
+		; "%h  >  Equivalent to %b." 
+		; "%H  >  Replaced by the hour (24-hour clock) as a decimal number (00-23)." 
+		; "%I  >  Replaced by the hour (12-hour clock) as a decimal number (01-12)." 
+		; "%j  >  Replaced by the day of the year as a decimal number (001-366)." 
+		; "%k  >  Replaced by the hour (24-hour clock) as a decimal number (0-23); single digits are preceded by a space." 
+		; "%l  >  Replaced by the hour (12-hour clock) as a decimal number (1-12); single digits are preceded by a space." 
+		; "%m  >  Replaced by the month as a decimal number (01-12)." 
+		; "%M  >  Replaced by the minute as a decimal number (00-59)." 
+		; "%n  >  Replaced by a newline." 
+		; "%O*  >  NOT IMPLEMENTED." 
+		; "%p  >  Replaced by either 'ante meridiem' (a.m.)  or 'post meridiem' (p.m.)  as appropriate." 
+		; "%r  >  Equivalent to '%I:%M:%S %p'." 
+		; "%R  >  Equivalent to '%H:%M'." 
+		; "%s  >  Replaced by the number of seconds since the Epoch, UTC (see mktime(3))." 
+		; "%S  >  Replaced by the second as a decimal number (00-60)." 
+		; "%t  >  Replaced by a tab." 
+		; "%T  >  Equivalent to '%H:%M:%S'." 
+		; "%u  >  Replaced by the weekday (Monday as the first day of the week) as a decimal number (1-7)." 
+		; "%U  >  Replaced by the week number of the year (Sunday as the first day of the week) as a decimal number (00-53)." 
+		; "%v  >  Equivalent to '%e-%b-%Y'." 
+		; "%V  >  NOT IMPLEMENTED." 
+		; "%w  >  Replaced by the weekday (Sunday as the first day of the week) as a decimal number (0-6)." 
+		; "%W  >  NOT IMPLEMENTED." 
+		; "%x  >  Replaced by locale's representation of the date." 
+		; "%X  >  Replaced by locale's representation of the time." 
+		; "%y  >  Replaced by the year without century as a decimal number (00-99)." 
+		; "%Y  >  Replaced by the year with century as a decimal number." 
+		; "%z  >  NOT IMPLEMENTED." 
+		; "%Z  >  NOT IMPLEMENTED." 
+		; "%+  >  Replaced by the date and time (the format is similar to that produced by date(1))." 
+		; "%-*  >  Use instead of merely '%' with a symbol (*) to turn off padding for that symbol's output. (e.g. Use '%-d' to get the day of month as 1-31 instead of 01-31)" 
+		; "%_*  >  NOT IMPLEMENTED." 
+		; "%0*  >  NOT IMPLEMENTED." 
+		; "%%  >  Replaced by '%' (percentage sign, in case it is desired in the output)." 
+		)
+
+	/* RUN ACTUAL FORMATTING: */
+	; Let ( [
+			/* build various useful pieces, with abbreviated function names: */
+			
+			/* In case the incoming param is just a date or time, ensure it is a timestamp. 
+				Note: this will convert a simple date into a timestamp at MIDNIGHT of that date.
+				*/
+			  sTS = GetAsTimestamp ( someTimeStamp )
+
+			; dN = Day ( sTS )
+			; dN2 = Right ( "0" & dN ; 2 )
+			; dN_space = Right ( " " & dN ; 2 )
+			; dName = DayName ( sTS )
+			; dName3 = Left ( dName ; 3 )
+
+			; dOfWkN = DayOfWeek ( sTS )    /* FM's DayOfWeek gives Sunday as 1, Saturday as 7 */
+			; dOfWk_Mon_is_1 = If ( dOfWkN = 1 ; 7 ; dOfWkN - 1 )
+
+			; moN = Month ( sTS )
+			; moN2 = Right ( "0" & moN ; 2 )
+			; moName = MonthName ( sTS )
+			; moName3 = Left ( moName ; 3 )
+
+			; yN = Year ( sTS )
+			; yN2 = Right ( "0" & Right ( yN ; 2 ) ; 2 )
+			; century = Div ( yN ; 100 )
+			; century_padded = Right ( "0" & century ; 2 )
+
+			; hN = Hour ( sTS )
+			; hN2 = Right ( "0" & hN ; 2 )
+
+			; hN_space = Right ( " " & hN ; 2 )
+
+			; hN_clock = If ( hN > 12 ; hN - 12 ; hN )
+			; hN_clock2 = Right ( "0" & hN_clock ; 2 )
+
+			; hN_clock_space = Right ( " " & hN_clock ; 2 )
+
+			; amPm = If( hN >= 12; "PM" ; "AM" )
+
+			; minN = Minute ( sTS )
+			; minN2 = Right ( "0" & minN ; 2 )
+
+			; sN = Seconds ( sTS )
+			; sN2 = Right ( "0" & sN ; 2 )
+
+			; wN = WeekOfYear ( sTS )
+			; wN2 = Right ( "0" & wN ; 2 )
+
+			; locRepDate = moN2 & "/" & dN2 & "/" & yN2
+			; locRepTime = hN_clock & ":" & minN2 & ":" & sN2 & " " & amPm
+	]; 
+
+	/* Swap in the formatted pieces, replacing the format symbols: */
+	Substitute ( 
+		  formatString
+		; [ "%a" ; dName3 ] 
+		; [ "%A" ; dName ] 
+		; [ "%b" ; moName3 ] 
+		; [ "%B" ; moName ] 
+		; [ "%c" ; locRepTime & ", " & locRepDate ] 
+		; [ "%-C" ; century ] 
+		; [ "%C" ; century_padded ] 
+		; [ "%-d" ; dN ] 
+		; [ "%d" ; dN2 ] 
+		; [ "%D" ; moN2 & "/" & dN2 & "/" & yN2 ] 
+		; [ "%-d" ; dN ] 
+		; [ "%e" ; dN_space ] 
+		//; [ "%E" ; "POSIX locale extensions" ]    /* NOT IMPLEMENTED */
+		; [ "%F" ; yN & "-" & moN2 & "-" & dN2 ] 
+		//; [ "%g" ; "Same as %G, but without century." ]    /* NOT IMPLEMENTED */
+		//; [ "%G" ; "Year as decimal - year with greater part of week." ]    /* NOT IMPLEMENTED */
+		; [ "%-H" ; hN ] 
+		; [ "%H" ; hN2 ] 
+		; [ "%h" ; Left( moName; 3 ) ] 
+		; [ "%-I" ; hN_clock ] 
+		; [ "%I" ; hN_clock2 ] 
+		; [ "%-j" ; DayOfYear ( sTS ) ] 
+		; [ "%j" ; Right( "00" & DayOfYear ( sTS ); 3 ) ] 
+		; [ "%k" ; hN_space ] 
+		; [ "%l" ; hN_clock_space ] 
+		; [ "%-m" ; moN ] 
+		; [ "%m" ; moN2 ] 
+		; [ "%-M" ; minN ] 
+		; [ "%M" ; minN2 ] 
+		; [ "%n" ; Char ( 13 ) ] 
+		//; [ "%O" ; "Same as %E" ]    /* NOT IMPLEMENTED */
+		; [ "%p" ; amPm ] 
+		; [ "%r" ; hN_clock & ":" & minN2 & ":" & sN2 & " " & amPm ] 
+		; [ "%R" ; hN2 & ":" & minN2 ] 
+		; [ "%s" ; GetAsNumber ( Get ( CurrentTimestamp ) - Timestamp ( Date ( 12 ; 31 ; 1969 ) ; Time ( 19 ; 0 ; 0 ) ) ) ] 
+		; [ "%-S" ; sN ] 
+		; [ "%S" ; sN2 ] 
+		; [ "%t" ; Char ( 9 ) ] 
+		; [ "%T" ; hN2 & ":" & minN2 & ":" & sN2 ] 
+		; [ "%-U" ; wN ] 
+		; [ "%U" ; wN2 ] 
+		; [ "%u" ; dOfWk_Mon_is_1  ]
+		//; [ "%V" ; "Week number of year, but Jan 1 week might be 52"  ]    /* NOT IMPLEMENTED */
+		//; [ "%S" ; sN2  ]    /* NOT IMPLEMENTED */
+		; [ "%v" ; dN_space & "-" & moName3 & "-" & yN ] 
+		//; [ "%W" ; "Week number of year, 00-53"  ]    /* NOT IMPLEMENTED */
+		; [ "%w" ; dOfWkN - 1 ] 
+		; [ "%x" ; locRepDate ] 
+		; [ "%X" ; locRepTime ] 
+		; [ "%Y" ; yN ] 
+		; [ "%-y" ; yN ] 
+		; [ "%y" ; yN2 ] 
+		//; [ "%Z" ; "time zone name"  ]     /* NOT IMPLEMENTED */
+		//; [ "%Z" ; "time zone offset from UTC"  ]     /* NOT IMPLEMENTED */
+		; [ "%+" ; locRepDate & " " & locRepTime ] 
+		; [ "%%" ; "%" ] 
+	 	)
+
+	)
+
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
