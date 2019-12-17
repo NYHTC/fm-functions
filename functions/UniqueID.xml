@@ -12,7 +12,7 @@ NOTE:
 
 
 HISTORY:
-	2019-12-17 ( dshockley, eshagdar ): changed to (new) function UUID_HTC instead of UUIDbase10ViaFmUUID, since SyncServerPro was mangling those UUIDs into truncated scientific notation. 
+	2019-12-17 ( dshockley, eshagdar ): still calls UUIDbase10ViaFmUUID, but that function was changed to deal with SyncServerPro mangling those UUIDs into truncated scientific notation. 
 	2.0 - 2019-02-22 ( dshockley ): changed to a different decimal-generator custom function, where different values are more obviously different (random, instead of UUIDTimeDevice, so beginning/ending digits are now rarely the same). 
 	1.2 - 2016-09-29 ( eshagdar ): updated documentation.
 	1.1 - 2015-11-16 ( eshagdar ): updated from UUIDTimeNIC to UUIDTimeDevice.
@@ -21,7 +21,7 @@ HISTORY:
 
 
 /* change this to another UUID function if desired */
-UUID_HTC]]>
+UUIDbase10ViaFmUUID]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>

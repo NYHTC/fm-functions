@@ -1,10 +1,23 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="544" functionArity="0" visible="True" parameters="" name="UUIDbase10ViaFmUUID">
 		<Calculation><![CDATA[// UUIDbase10ViaFmUUID (  ) 
-// version 2019-12-06
+// version 2019-12-17
 
 /* 
-	Generates a decimal UUID number by converting FileMaker's Get ( UUID ) hex-as-text. 
+	Generates a 41-DIGIT decimal UUID number by converting FileMaker's Get ( UUID ) 
+	hex-as-text and then prepending/appending digits as needed. 
+
+
+NOTE: 
+	The reason we use EXACTLY 41 digits is so that the SyncServerPro auditing solution 
+	does not mangle large numbers into (truncated value) scientific notation for storage 
+	in the SSP AuditLog table. So, we take a guaranteed-UUID from FileMaker's built-in 
+	function, convert that to a decimal number, then pad the result. We (somewhat arbitrarily) 
+	chose to being with "9" just to indicate this is not one of Jeremy Bante's UUID functions. 
+	We _deliberately_ avoid having the next digit be a "9" so that we can be sure to never 
+	begin a UUID with "9999", which would ALSO break SSP. The other are random so that a user 
+	comparing two UUIDs can easily refer to either the first few digits or the last few digits 
+	to tell UUIDs apart. 
 
 	Calculation structure below is to add each higher-power converted-to-decimal digit 
 	to the next-lower decimal digit before multiplying by 16. This avoids the need to 
@@ -12,8 +25,8 @@
 	
 
 HISTORY: 
-	2019-12-06 ( dshockley ): pad the numeric conversion of Get(UUID) into a 41-digit number to avoid issue with SyncServerPro converting the number into scientific notation. It seems that SSP respects all the digits if they are 41-digits long and begin with no more than 3 digits of '9' (999###… works, but 9999###… does not). So, our new standard is setto begin with '9' to indicate this is ours, not the Jerermy Bante functions that begin with "12" or "42" and map to the RFC 4122 standard. Ours is somewhat like the "42" pseudo-random RFC 4122, but does not map directly (and can't be converted back and forth).  
-		2019-12-03 ( dshockley ): force the output to be a numeric "string" instead of a pure number, since (WE SUSPECT!) the JDBC interface translates values that came as pure numbers into things it should represent as a text string as scientific notation, throwing away significant digits. 
+	2019-12-06 ( dshockley ): pad the numeric conversion of Get(UUID) into a 41-digit number to avoid issue with SyncServerPro converting the number into scientific notation. It seems that SSP respects all the digits if they are 41-digits long and begin with no more than 3 digits of '9' (999###… works, but 9999###… does not). So, our new standard is set to begin with '9' to indicate this is ours, not the Jerermy Bante functions that begin with "12" or "42" and map to the RFC 4122 standard. Ours is somewhat like the "42" pseudo-random RFC 4122, but does not map directly (and can't be converted back and forth).  
+	2019-12-03 ( dshockley ): force the output to be a numeric "string" instead of a pure number, since (WE SUSPECT!) the JDBC interface translates values that came as pure numbers into things it should represent as a text string as scientific notation, throwing away significant digits. 
 	2019-02-22 ( dshockley, eshagdar ): Based on HexUUIDToBase10, found at  https://community.filemaker.com/thread/183271
 
 */
