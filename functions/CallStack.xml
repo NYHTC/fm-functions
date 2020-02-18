@@ -21,7 +21,7 @@ REQUIRES:
 	ValueOrDefault
 
 HISTORY:
-	1.9 - 2020-02-18 ( dshockley ): Added "CallingIDStack" options to get value of variable. 
+	1.9 - 2020-02-18 ( dshockley ): Added "CallingIDStack" option to get value of variable. 
 	1.8 - 2019-01-04 ( dshockley, eshagdar ): BUG-FIX: $CallingScriptName was not stacking. BUG-FIX: when using ListConcat, the colSep option must be specified as a dictionary. NEW: added initCallStack to default behavior so that variables get set if forgotten in script. 
 	1.7 - 2018-08-30 ( dshockley ): Added ability to return the $CallingScriptName and $CallingFileName variables, rather than accessing them directly, just call this function. 
 	1.6.1 - 2018-08-14 ( eshagdar ): updated documentation due to updating a required function call ( _DbID ).
