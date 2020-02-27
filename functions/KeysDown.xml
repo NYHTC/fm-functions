@@ -1,14 +1,14 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="385" functionArity="2" visible="True" parameters="theModifierKeyNames;ignoreCapsLock" name="KeysDown">
-		<Calculation><![CDATA[// KeysDown ( theModifierKeys ; ignoreCapsLock )
-// version 1.0, Peter Wagemans, SHpartners, http://www.shpartners.com
+		<Calculation><![CDATA[// KeysDown ( theModifierKeyNames ; ignoreCapsLock )
+// version 1.1, Peter Wagemans, SHpartners, http://www.shpartners.com
 
 /* 
 	User friendly version of Get ( ActiveModifierKeys ) - you send in a string of the names which command-key(s) you would like to know about, it returns a boolean.
 
 
 NOTE:
-	The custom function tests for each bit, each time comparing it with the presence of the modifier key in "theModifierKeys" (using XOR). All tests are put together using AND, so if one fails, all fail.
+	The custom function tests for each bit, each time comparing it with the presence of the modifier key in "theModifierKeyNames" (using XOR). All tests are put together using AND, so if one fails, all fail.
 	The Caps Lock test is only performed when ignoreCapsLock is False.
 
 
@@ -24,13 +24,24 @@ EXAMPLE:
 
 
 HISTORY: 
-	1.0 - 2016-04-19 ( dshockley ): reformatted for clarity, rename 1st param for clarity. taken from https://www.briandunning.com/cf/473
-	0.0 - 20xx-xx-xx ( pwagemans ): created
+	1.1 - 2020-02-27 ( dshockley ): Added synonyms for the key names to avoid having to memorize the names used here. 
+	1.0 - 2016-04-19 ( dshockley ): Reformatted for clarity, rename 1st param for clarity. taken from https://www.briandunning.com/cf/473
+	0.0 - 20xx-xx-xx ( pwagemans ): created.
 */
 
 
 Let ( [ 
-		activeModifierKeys = Get ( ActiveModifierKeys ) 
+		  activeModifierKeys = Get ( ActiveModifierKeys ) 
+		; theModifierKeyNames = 
+			Substitute ( 
+				  theModifierKeyNames
+				; [ "control" ; "ctrl" ]
+				; [ "option" ; "alt" ]
+				; [ "opt" ; "alt" ]
+				; [ "cmd" ; "command" ]
+				; [ "shft" ; "shift" ]
+				; [ "caps" ; "capslock" ]
+				)
 	];
 
 	( ( activeModifierKeys = 0 ) xor ( theModifierKeyNames ≠ "" ) ) 
