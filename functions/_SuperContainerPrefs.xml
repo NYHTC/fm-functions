@@ -1,6 +1,6 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="562" functionArity="1" visible="True" parameters="options" name="_SuperContainerPrefs">
-		<Calculation><![CDATA[// _SuperContainerPrefs
+		<Calculation><![CDATA[// _SuperContainerPrefs ( options )
 // version 2020-04-15, Dan Shockley
 
 /*
