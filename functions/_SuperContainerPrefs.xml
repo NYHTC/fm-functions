@@ -6,14 +6,13 @@
 /*
 	Returns useful values relating to SuperContainer Server. 
 
-
 REQUIRES:
 	SQL_Field
 	SQL_Table
 
-
 HISTORY:
-	2020-04-15 ( dshockley ): First created.
+	2020-04-15 ( dshockley ): First created. 
+
 */
 
 Let ( [ 
