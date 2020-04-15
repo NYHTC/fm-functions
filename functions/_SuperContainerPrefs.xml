@@ -1,0 +1,73 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="562" functionArity="1" visible="True" parameters="options" name="_SuperContainerPrefs">
+		<Calculation><![CDATA[// _SuperContainerPrefs
+// version 2020-04-15, Dan Shockley
+
+/*
+	Returns useful values relating to SuperContainer Server. 
+
+
+REQUIRES:
+	SQL_Field
+	SQL_Table
+
+
+HISTORY:
+	2020-04-15 ( dshockley ): First created.
+*/
+
+Let ( [ 
+	  fallbackHost = "supercontainer.nyhtc.org"
+	; fallbackPort = "42424"
+];
+
+	Case ( 
+		options = "Help"
+		; List ( "Returns useful values relating to SuperContainer Server. Available options are: " ; "Host" ; "Port" )
+		; 
+
+		options = "Host" and not IsEmpty ( $$SuperContainerHost )
+		; $$SuperContainerHost
+		; 
+
+		options = "Port" and not IsEmpty ( $$SuperContainerPort )
+		; $$SuperContainerPort
+		; 
+
+		options = "Host" and IsEmpty ( $$SuperContainerHost )
+		;  Let ( [ 
+			sqlQuery = 
+				"SELECT " 
+				& SQL_Field ( _ext_00ZZ_PREFS::bSuperContainerServer ) 
+				& " FROM " 
+				& SQL_Table ( _ext_00ZZ_PREFS::zAuto1 ) 
+			; sqlResult = ExecuteSQL ( sqlQuery ; Char ( 9 ) ; Char ( 13 ) )
+			; sqlResult = If ( sqlResult = "?" ; "" ; sqlResult )
+			; $$SuperContainerHost = If ( IsEmpty ( sqlResult ) ; fallbackHost ; sqlResult )
+			];
+				$$SuperContainerHost
+			)
+		; 
+
+		options = "Port" and IsEmpty ( $$SuperContainerPort )
+		;  Let ( [ 
+			sqlQuery = 
+				"SELECT " 
+				& SQL_Field ( _ext_00ZZ_PREFS::bSuperContainerServerPort ) 
+				& " FROM " 
+				& SQL_Table ( _ext_00ZZ_PREFS::zAuto1 ) 
+			; sqlResult = ExecuteSQL ( sqlQuery ; Char ( 9 ) ; Char ( 13 ) )
+			; sqlResult = If ( sqlResult = "?" ; "" ; sqlResult )
+			; $$SuperContainerPort = If ( IsEmpty ( sqlResult ) ; fallbackPort ; sqlResult )
+			];
+				$$SuperContainerPort
+			)
+
+		;
+
+		/* some other option that is NOT handled. */
+		"ERROR: unknown option (" & Quote ( options ) & ") for _SuperContainerPrefs custom function." 
+		)
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
