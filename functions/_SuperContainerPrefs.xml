@@ -22,7 +22,23 @@ Let ( [
 
 	Case ( 
 		options = "Help"
-		; List ( "Returns useful values relating to SuperContainer Server. Available options are: " ; "Host" ; "Port" )
+		; List ( "Returns useful values relating to SuperContainer Server. Available options are: " ; "BaseURL_RawData" ; "BaseURL_Files" ; "BaseURL" ; "Host" ; "Port" ; "HostPort" )
+		; 
+
+		options = "BaseURL_RawData"
+		; _SuperContainerPrefs ( "BaseURL" ) & "/SuperContainer/RawData/" 
+		; 
+
+		options = "BaseURL_Files"
+		; _SuperContainerPrefs ( "BaseURL" ) & "/SuperContainer/Files/" 
+		; 
+
+		options = "BaseURL"
+		; "http://" & _SuperContainerPrefs ( "Host" ) & ":" & _SuperContainerPrefs ( "Port" )
+		; 
+
+		options = "HostPort"
+		; _SuperContainerPrefs ( "Host" ) & ":" & _SuperContainerPrefs ( "Port" )
 		; 
 
 		options = "Host" and not IsEmpty ( $$SuperContainerHost )
