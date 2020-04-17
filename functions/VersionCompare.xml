@@ -55,7 +55,7 @@ HISTORY:
 Let ( [ 
 
 
-// TEST PARAMS: versionString1 = "10.10.1.7"; versionString2 = "10.10.2"; optionalVersionComponentSeparator = ""; 
+/* TEST PARAMS: versionString1 = "10.10.1.7"; versionString2 = "10.10.2"; optionalVersionComponentSeparator = ""; */
 
 
 		vcSep = Case ( 
@@ -152,7 +152,8 @@ Let ( [
 		/* DEFAULT */
 		False
 	)
-)]]>
+)
+]]>
 		</Calculation>
 	</CustomFunction>
 </fmxmlsnippet>
