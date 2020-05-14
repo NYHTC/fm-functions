@@ -2,8 +2,8 @@
 
 <CustomFunction id="502" functionArity="2" visible="True" parameters="EventNameList;EventKeyList" name="_Access_Permission">
 <Calculation>
-<![CDATA[// _Access_Permission ( EventNameList, EventKeyList )
-// version 1.3.2, Erik Shagdar, NYHTC
+<![CDATA[// _Access_Permission ( EventNameList ; EventKeyList )
+// version 1.3.3, Erik Shagdar, NYHTC
 
 /*
 	Determine if the user has a permission for a particular action. Full-Access and developer accounts always have access.
@@ -22,7 +22,8 @@ REQUIRES:
 
 
 HISTORY:
-	1.3.2 - 2019-03-15 ( eshagdar ): permission event table looks at the upper-version of eventName/DbName.
+	1.3.3 - 2020-05-14 ( dshockley ): Only do the special AllowDeveloper as an override - first see if they are allowed as if just a normal user given permission. 
+	1.3.2 - 2019-03-15 ( eshagdar ): Permission event table looks at the upper-version of eventName/DbName.
 	1.3.1 - 2019-03-15 ( eshagdar ): if developer, do a query to the permission event table.
 	1.3 - 2019-03-14 ( eshagdar ): devevelops do not automatically have access - it is determined by the checkbox on the permission event, and checked against in the status. clean up code formatting/whitespace.
 	1.2.2 - 2018-05-08 ( eshagdar ): False if BOTH lists are empty, not if either one is.
@@ -31,6 +32,13 @@ HISTORY:
 	1.1 - 2018-02-12 ( dbeer ):  updated to add developers to always allow list
 	1.0 - 2018-02-09 ( eshagdar ): first created.
 */
+
+
+
+
+
+
+
 
 
 Case ( 
@@ -42,57 +50,8 @@ Case (
 	IsEmpty ( EventNameList ) and IsEmpty ( EventKeyList ) ;
 	False ;
 
-	/* developer */
-	_PrivSet_Developer ;
-	Let ( [
-			numNames = ValueCount ( EventNameList ) ;
-			numKeys = ValueCount ( EventKeyList ) ;
 
-
-			whereCriteria = Case (
-				/* one or more NAMES specified */
-				not IsEmpty ( EventNameList ) ;
-				List ( 
-					SQL_Where ( Utility_PERMISSION_EVENT::c00PE_FileName__UPPER ; "=" ; Upper ( Get ( FileName ) ) ) ;
-					" AND " ;
-					If ( numNames = 1 ;
-						SQL_Where ( Utility_PERMISSION_EVENT::c00PE_EventName__UPPER ; "=" ; Upper ( EventNameList ) ) ;
-						SQL_FieldInList ( Utility_PERMISSION_EVENT::c00PE_EventName__UPPER ; Upper ( EventNameList ) )
-					)
-				) ;
-
-
-				/* one or more KEYS specified */
-				numKeys = 1 ;
-				SQL_Where ( Utility_PERMISSION_EVENT::a00PE__PermissionEventKey ; "=" ; EventKeyList ) ;
-
-				numKeys > 1 ;
-				SQL_FieldInList ( Utility_PERMISSION_EVENT::a00PE__PermissionEventKey ; EventKeyList ) ;
-
-				""
-			) ;
-
-			sqlQuery = List ( 
-				"SELECT " ;
-					SQL_Field ( Utility_PERMISSION_EVENT::b00PE_AllowDeveloper__b ) ;
-
-				" FROM " ;
-					SQL_Table ( Utility_PERMISSION_EVENT::zAuto1 ) ;
-
-				" WHERE " ;
-					whereCriteria
-			) ;
-
-			sqlResult = HTC_ExecuteFileSQL ( sqlQuery ; "" ; Char ( 13 ) ; Char ( 13 ) ) ;
-			sqlResult = If ( sqlResult = "?" ; "" ; sqlResult )
-		] ;
-
-		//sqlQuery & "¶---¶¶" & 
-		sqlResult
-	) ;
-
-
-	/* DEFAULT: check if current useris in the list */
+	/* Check whether ot not current user is in the list (including developers, although developers might get an override!) */
 	Let ( [
 			numNames = ValueCount ( EventNameList ) ;
 			numKeys = ValueCount ( EventKeyList ) ;
@@ -145,7 +104,7 @@ Case (
 			) ;
 
 
-			sqlResult =HTC_ExecuteFileSQL ( sqlQuery ; "" ; Char ( 13 ) ; Char ( 13 ) ) ;
+			sqlResult = HTC_ExecuteFileSQL ( sqlQuery ; "" ; Char ( 13 ) ; Char ( 13 ) ) ;
 			sqlResult = If ( sqlResult = "?" ; "" ; sqlResult ) ;
 
 
@@ -171,10 +130,70 @@ Case (
 			)
 		];
 
-		//sqlQuery & "¶==========¶¶" &
-		//sqlResult
+			//sqlQuery & char ( 13 ) & "==========" & char ( 13 ) &
+			//sqlResult & 
 
-		isAllowed
+			Case ( 
+				/* if Allowed, then return True */
+				isAllowed
+				; True
+				; 
+			
+				/* if not Allowed (and not a Developer), then return False */
+				not _PrivSet_Developer
+				; False
+				; 
+			
+				/* if Developer, do an additional check for override-access: */
+				_PrivSet_Developer
+				; Let ( [
+						numNames = ValueCount ( EventNameList ) ;
+						numKeys = ValueCount ( EventKeyList ) ;
+
+
+						whereCriteria = Case (
+							/* one or more NAMES specified */
+							not IsEmpty ( EventNameList ) ;
+							List ( 
+								SQL_Where ( Utility_PERMISSION_EVENT::c00PE_FileName__UPPER ; "=" ; Upper ( Get ( FileName ) ) ) ;
+								" AND " ;
+								If ( numNames = 1 ;
+									SQL_Where ( Utility_PERMISSION_EVENT::c00PE_EventName__UPPER ; "=" ; Upper ( EventNameList ) ) ;
+									SQL_FieldInList ( Utility_PERMISSION_EVENT::c00PE_EventName__UPPER ; Upper ( EventNameList ) )
+								)
+							) ;
+
+
+							/* one or more KEYS specified */
+							numKeys = 1 ;
+							SQL_Where ( Utility_PERMISSION_EVENT::a00PE__PermissionEventKey ; "=" ; EventKeyList ) ;
+
+							numKeys > 1 ;
+							SQL_FieldInList ( Utility_PERMISSION_EVENT::a00PE__PermissionEventKey ; EventKeyList ) ;
+
+							""
+						) ;
+
+						sqlQuery = List ( 
+							"SELECT " ;
+								SQL_Field ( Utility_PERMISSION_EVENT::b00PE_AllowDeveloper__b ) ;
+
+							" FROM " ;
+								SQL_Table ( Utility_PERMISSION_EVENT::zAuto1 ) ;
+
+							" WHERE " ;
+								whereCriteria
+						) ;
+
+						sqlResult = HTC_ExecuteFileSQL ( sqlQuery ; "" ; Char ( 13 ) ; Char ( 13 ) ) ;
+						sqlResult = If ( sqlResult = "?" ; "" ; sqlResult ) ;
+						sqlResult = 0 + GetAsNumber ( sqlResult )
+					] ;
+
+							//sqlQuery & char ( 13 ) & "==========" & char ( 13 ) &
+						sqlResult
+					)
+				)
 	)
 )]]>
 </Calculation>
