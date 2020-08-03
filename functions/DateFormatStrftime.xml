@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="76" functionArity="2" visible="True" parameters="someTimeStamp;formatString" name="DateFormatStrftime">
+	<CustomFunction id="59" functionArity="2" visible="True" parameters="someTimeStamp;formatString" name="DateFormatStrftime">
 		<Calculation><![CDATA[// DateFormatStrftime ( someTimeStamp ; formatString )
-// version 1.1, Daniel A. Shockley
+// version 1.2, Daniel A. Shockley
 
 /*
 	Formats a timestamp using the (slightly modified) format defined by the POSIX command 'strftime' 
@@ -28,6 +28,7 @@ EXAMPLES:
 	>>	Result: Wednesday, March  9, 2011
 
 HISTORY ( recent at top ):
+	1.2 - 2020-08-03 ( dshockley ): Added the special "File…NOW" options to make it EASY to get a NOW date-time slug for a file path (no slashes/colons).
 	1.1 - 2019-12-12 ( dshockley ): Added the %-* option for relevant symbols (*) to turn off zero-padding (symbols are: CdHIjMmSUy). FIX: %I should be zero-padded. FIX: %C should be a zero-padded decimal number. Properly show %g and %G as not being implemented. FIX: %u is Monday=1. Improved documentation. 
 	1.0 - 2019-10-29 ( dshockley ): Modernized code format. Added "Help" param. Properly support a simple date (time component defaults to midnight). 
 	0.9 - 2011-05-23 ( dshockley ): Added comments. 
@@ -41,6 +42,14 @@ If ( someTimeStamp = "Help"
 	; List ( 
 		  "DateFormatStrftime ( someTimeStamp ; formatString )"
 		; "Specify some date/timestamp, then also specify a format string, where the following symbols are replaced by part(s) or your specified date/timestamp: "
+		; " "
+		; "--- SPECIAL COMMANDS/OPTIONS (use instead of someTimestamp param, formatString is ignored): ---"
+		; "   Help  >  returns this documentation."
+		; "   File_NOW  >  Current Date/Time as YYYY-MM-DD-HHMMSS, equivalent to '%Y-%m-%d-%H%M%S'."
+		; "   File_AsNum_NOW  >  Current Date/Time as YYYYMMDDHHMMSS, equivalent to '%Y%m%d%H%M%S'."
+		; "   File_AsDateLine_NOW  >  Current Date/Time as 'MonthName DayNum, YYYY, HHMMSS', equivalent to '%b %M, %Y, %H%M%S'."
+		; " "
+		; "--- FORMAT STRING SYMBOLS: ---"
 		; "%a  >  Replaced by the abbreviated weekday name." 
 		; "%A  >  Replaced by the full weekday name." 
 		; "%b  >  Replaced by the abbreviated month name." 
@@ -97,7 +106,27 @@ If ( someTimeStamp = "Help"
 			/* In case the incoming param is just a date or time, ensure it is a timestamp. 
 				Note: this will convert a simple date into a timestamp at MIDNIGHT of that date.
 				*/
-			  sTS = GetAsTimestamp ( someTimeStamp )
+
+			  sTS = 
+				If ( PatternCount ( someTimeStamp ; "NOW" ) > 0
+					; Get ( CurrentHostTimestamp )
+					; GetAsTimestamp ( someTimeStamp )
+					)
+
+			; formatString = 
+				Case ( 
+					someTimeStamp = "File_NOW" 
+					; "%Y-%m-%d-%H%M%S"
+					; 
+					someTimeStamp = "File_AsNum_NOW" 
+					; "%Y%m%d%H%M%S"
+					; 
+					someTimeStamp = "File_AsDateLine_NOW" 
+					; "%b %M, %Y, %H%M%S"
+					; 
+					/* otherwise, just use what was specified: */
+					formatString
+					)
 
 			; dN = Day ( sTS )
 			; dN2 = Right ( "0" & dN ; 2 )
