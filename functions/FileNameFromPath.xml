@@ -1,0 +1,63 @@
+<fmxmlsnippet type="FMObjectList">
+	<CustomFunction id="104" functionArity="2" visible="True" parameters="somePath;pathDelim" name="FileNameFromPath">
+		<Calculation><![CDATA[// FileNameFromPath ( somePath; pathDelim )
+// version 1.2, Daniel A. Shockley
+
+/* 
+	Returns JUST the file name (with extension) from a given path, using the specified directory delimiter.
+
+HISTORY: 
+
+	1.2 - 2018-05-22 ( dshockley, eshagdar ): Modified to actually get name when path is to just a folder. Better format and clarity. 
+	1.1 - 2016-12-30 ( dshockley ): If obvious winPath, override path delimiter
+	1.0 - 2013-xx-xx ( dshockley ): First created. Date unknown.
+*/
+
+
+Let ( [
+
+	  charBS = Char ( 92 )   /* backslash */
+	; firstChar = Upper ( Left ( somepath; 1 ) )
+	; firstCharMightBeDrive = ( Position ( "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ; firstChar ; 1 ; 1 ) > 0 )
+	; secondCharIsColon = Exact ( Middle ( somePath; 2; 1 ) ; ":" )
+	; thirdCharIsBackslash = Exact ( Middle ( somePath; 3; 1 ) ; charBS )
+
+	; pathDelim = 
+		Case ( 
+			/* some Windows path: */
+			firstCharMightBeDrive and secondCharIsColon and thirdCharIsBackslash 
+			; charBS 
+			; 
+
+			/* was specified, so use: */
+			not IsEmpty ( pathDelim )
+			; pathDelim
+			; 
+
+			/* default is regular slash: */
+			"/" 
+			)
+
+	/* If the path ENDs with the delimiter, remove that trailing delimiter so we can get the "file" (actually a folder) name: */
+	; somePath = 
+		If ( Right ( somePath ; 1 ) = pathDelim 
+			; Left ( somePath ; Length ( somePath ) - 1 )
+			; somePath
+			)
+
+	; countDelim = PatternCount ( somePath ; pathDelim )
+
+];
+
+	If ( countDelim > 0
+		; Right ( 
+			somePath
+			; Length ( somePath ) 
+				- Position ( somePath ; pathDelim ; 1 ; countDelim )  
+			)
+		; somePath
+		)
+
+)]]></Calculation>
+	</CustomFunction>
+</fmxmlsnippet>
