@@ -1,5 +1,5 @@
 <fmxmlsnippet type="FMObjectList">
-	<CustomFunction id="59" functionArity="2" visible="True" parameters="someTimeStamp;formatString" name="DateFormatStrftime">
+	<CustomFunction id="76" functionArity="2" visible="True" parameters="someTimeStamp;formatString" name="DateFormatStrftime">
 		<Calculation><![CDATA[// DateFormatStrftime ( someTimeStamp ; formatString )
 // version 1.2, Daniel A. Shockley
 
@@ -47,7 +47,7 @@ If ( someTimeStamp = "Help"
 		; "   Help  >  returns this documentation."
 		; "   File_NOW  >  Current Date/Time as YYYY-MM-DD-HHMMSS, equivalent to '%Y-%m-%d-%H%M%S'."
 		; "   File_AsNum_NOW  >  Current Date/Time as YYYYMMDDHHMMSS, equivalent to '%Y%m%d%H%M%S'."
-		; "   File_AsDateLine_NOW  >  Current Date/Time as 'MonthName DayNum, YYYY, HHMMSS', equivalent to '%b %M, %Y, %H%M%S'."
+		; "   File_AsDateLine_NOW  >  Current Date/Time as 'MonthName DayNum, YYYY, HHMMSS', equivalent to '%b %-d, %Y, %H%M%S'."
 		; " "
 		; "--- FORMAT STRING SYMBOLS: ---"
 		; "%a  >  Replaced by the abbreviated weekday name." 
@@ -122,7 +122,7 @@ If ( someTimeStamp = "Help"
 					; "%Y%m%d%H%M%S"
 					; 
 					someTimeStamp = "File_AsDateLine_NOW" 
-					; "%b %M, %Y, %H%M%S"
+					; "%b %-d, %Y, %H%M%S"
 					; 
 					/* otherwise, just use what was specified: */
 					formatString
