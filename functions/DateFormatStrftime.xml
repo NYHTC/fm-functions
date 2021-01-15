@@ -1,7 +1,7 @@
 <fmxmlsnippet type="FMObjectList">
 	<CustomFunction id="76" functionArity="2" visible="True" parameters="someTimeStamp;formatString" name="DateFormatStrftime">
 		<Calculation><![CDATA[// DateFormatStrftime ( someTimeStamp ; formatString )
-// version 1.2, Daniel A. Shockley
+// version 1.2.1, Daniel A. Shockley
 
 /*
 	Formats a timestamp using the (slightly modified) format defined by the POSIX command 'strftime' 
@@ -28,6 +28,7 @@ EXAMPLES:
 	>>	Result: Wednesday, March  9, 2011
 
 HISTORY ( recent at top ):
+	1.2.1 - 2020-11-23 ( dshockley ): Added special "File_Friendly_NOW" to get a date-time slug without seconds that is easier for non-tech people to read. Added padding-off for e,j,k,l flags. Added %-p (NON-standard!) to get lower-case am/pm. 
 	1.2 - 2020-08-03 ( dshockley ): Added the special "File…NOW" options to make it EASY to get a NOW date-time slug for a file path (no slashes/colons).
 	1.1 - 2019-12-12 ( dshockley ): Added the %-* option for relevant symbols (*) to turn off zero-padding (symbols are: CdHIjMmSUy). FIX: %I should be zero-padded. FIX: %C should be a zero-padded decimal number. Properly show %g and %G as not being implemented. FIX: %u is Monday=1. Improved documentation. 
 	1.0 - 2019-10-29 ( dshockley ): Modernized code format. Added "Help" param. Properly support a simple date (time component defaults to midnight). 
@@ -45,9 +46,10 @@ If ( someTimeStamp = "Help"
 		; " "
 		; "--- SPECIAL COMMANDS/OPTIONS (use instead of someTimestamp param, formatString is ignored): ---"
 		; "   Help  >  returns this documentation."
-		; "   File_NOW  >  Current Date/Time as YYYY-MM-DD-HHMMSS, equivalent to '%Y-%m-%d-%H%M%S'."
-		; "   File_AsNum_NOW  >  Current Date/Time as YYYYMMDDHHMMSS, equivalent to '%Y%m%d%H%M%S'."
-		; "   File_AsDateLine_NOW  >  Current Date/Time as 'MonthName DayNum, YYYY, HHMMSS', equivalent to '%b %-d, %Y, %H%M%S'."
+		; "   File_NOW  >  Current Date/Time as YYYY-MM-DD-HHMMSS, equivalent to '%Y-%m-%d-%H%M%S'. "
+		; "   File_AsNum_NOW  >  Current Date/Time as YYYYMMDDHHMMSS, equivalent to '%Y%m%d%H%M%S'. "
+		; "   File_AsDateLine_NOW  >  Current Date/Time as 'MonthName DayNum, YYYY, HHMMSS', equivalent to '%b %-d, %Y, %H%M%S'.  (e.g. 'November 23, 2020, 174959')"
+		; "   File_Friendly_NOW  >  Current Date/Time as 'YYYY-MM-DD HHMM[AM/PM]', equivalent to '%Y-%m-%d %-l%M%-p'.  (e.g. '2020-11-23 549pm')"
 		; " "
 		; "--- FORMAT STRING SYMBOLS: ---"
 		; "%a  >  Replaced by the abbreviated weekday name." 
@@ -124,6 +126,9 @@ If ( someTimeStamp = "Help"
 					someTimeStamp = "File_AsDateLine_NOW" 
 					; "%b %-d, %Y, %H%M%S"
 					; 
+					someTimeStamp = "File_Friendly_NOW" 
+					; "%Y-%m-%d %-I%M%-p" 
+					; 
 					/* otherwise, just use what was specified: */
 					formatString
 					)
@@ -185,7 +190,7 @@ If ( someTimeStamp = "Help"
 		; [ "%-d" ; dN ] 
 		; [ "%d" ; dN2 ] 
 		; [ "%D" ; moN2 & "/" & dN2 & "/" & yN2 ] 
-		; [ "%-d" ; dN ] 
+		; [ "%-e" ; dN ] 
 		; [ "%e" ; dN_space ] 
 		//; [ "%E" ; "POSIX locale extensions" ]    /* NOT IMPLEMENTED */
 		; [ "%F" ; yN & "-" & moN2 & "-" & dN2 ] 
@@ -198,7 +203,9 @@ If ( someTimeStamp = "Help"
 		; [ "%I" ; hN_clock2 ] 
 		; [ "%-j" ; DayOfYear ( sTS ) ] 
 		; [ "%j" ; Right( "00" & DayOfYear ( sTS ); 3 ) ] 
+		; [ "%-k" ; hN ] 
 		; [ "%k" ; hN_space ] 
+		; [ "%-l" ; hN_clock ] 
 		; [ "%l" ; hN_clock_space ] 
 		; [ "%-m" ; moN ] 
 		; [ "%m" ; moN2 ] 
@@ -206,6 +213,7 @@ If ( someTimeStamp = "Help"
 		; [ "%M" ; minN2 ] 
 		; [ "%n" ; Char ( 13 ) ] 
 		//; [ "%O" ; "Same as %E" ]    /* NOT IMPLEMENTED */
+		; [ "%-p" ; Lower ( amPm ) ] 
 		; [ "%p" ; amPm ] 
 		; [ "%r" ; hN_clock & ":" & minN2 & ":" & sN2 & " " & amPm ] 
 		; [ "%R" ; hN2 & ":" & minN2 ] 
